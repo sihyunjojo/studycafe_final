@@ -23,8 +23,8 @@ public class CartController {
 
     // 장바구니 보여주기
     @GetMapping
-    public String cart(@Login Member member, Model model) {
-        List<CartProduct> cartProducts = cartService.findCartProducts(member);
+    public String cart(@Login Member loginmember, Model model) {
+        List<CartProduct> cartProducts = cartService.findCartProducts(loginmember);
         List<CartProductForm> cartProductForms = cartService.cartProductToCartProductForm(cartProducts);
         model.addAttribute("cartProducts", cartProductForms);
 
@@ -33,30 +33,30 @@ public class CartController {
 
     // 장바구니에 상품 추가
     @GetMapping("/{itemId}/add")
-    public String addCartProduct(@Login Member member, @PathVariable long itemId) {
-        cartService.addCartProduct(member, itemId);
+    public String addCartProduct(@Login Member loginmember, @PathVariable long itemId) {
+        cartService.addCartProduct(loginmember, itemId);
         return "redirect:/product/" + itemId;
     }
 
     @GetMapping("/{itemId}/edit/up")
-    public String editUp(@Login Member member, @PathVariable long itemId) {
-        cartService.editUpQuantityCartProduct(member, itemId);
+    public String editUp(@Login Member loginmember, @PathVariable long itemId) {
+        cartService.editUpQuantityCartProduct(loginmember, itemId);
         return "redirect:/cart";
         // 여기도 비동기 코드도 해야할거 같기도하고,,
         // 좋아요 같이 해야할거같은데
     }
 
     @GetMapping("/{itemId}/edit/down")
-    public String editDown(@Login Member member, @PathVariable long itemId) {
-        cartService.editDownQuantityCartProduct(member, itemId);
+    public String editDown(@Login Member loginmember, @PathVariable long itemId) {
+        cartService.editDownQuantityCartProduct(loginmember, itemId);
         return "redirect:/cart";
         // 여기도 비동기 코드도 해야할거 같기도하고,,
         // 좋아요 같이 해야할거같은데
     }
 
     @GetMapping("/{itemId}/delete")
-    public String delete(@Login Member member,@PathVariable long itemId) {
-        cartService.deleteCartProduct(member, itemId);
+    public String delete(@Login Member loginmember,@PathVariable long itemId) {
+        cartService.deleteCartProduct(loginmember, itemId);
         return "redirect:/cart";
         // 여기도 비동기 코드도 해야할거 같기도하고,,
         // 좋아요 같이 해야할거같은데

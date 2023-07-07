@@ -72,8 +72,6 @@
         <div style="display: flex; align-items: center;">
             <form th:action="@{/comment}" method="post">
                 <input type="hidden" th:name="boardId" th:value="${board.id}"/>
-                <input type="hidden" th:name="userLoginId" th:value="${loginMember != null ? loginMember.userLoginId : ''}"/>
-                <input type="hidden" th:name="userName"th:value="${loginMember != null ? loginMember.name : ''}"/>
                 <input type="hidden" th:name="memberId"th:value="${loginMember != null ? loginMember.id : ''}"/>
                 <textarea name="content" placeholder="댓글을 입력하세요"></textarea>
                 <button type="submit">댓글 작성</button>
@@ -86,11 +84,11 @@
             </div>
             <th:block th:if="${comment != null}" style="display: flex; align-items: center;">
                 <form th:action="@{/reply}" method="post">
-                    <input type="hidden" th:name="comment" th:value="${comment.id}" />
-                    <input type="hidden" th:name="userLoginId" th:value="${loginMember != null ? loginMember.id : ''}"/>
-                    <input type="hidden" th:name="userName" th:value="${loginMember != null ? loginMember.name : ''}"/>
+                    <input type="hidden" th:name="boardId" th:value="${board.id}"/>
+                    <input type="hidden" th:name="commentId" th:value="${comment.id}" />
+                    <input type="hidden" th:name="memberId" th:value="${loginMember != null ? loginMember.id : ''}"/>
                     <textarea name="content" placeholder="답변을 입력하세요"></textarea>
-                    <button style="" type="submit">답변 작성</button>
+                    <button type="submit">답변 작성</button>
                 </form>
             </th:block>
         </div>

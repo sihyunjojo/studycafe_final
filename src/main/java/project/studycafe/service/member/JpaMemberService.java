@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import project.studycafe.domain.Member;
 import project.studycafe.repository.member.JpaMemberRepository;
-import project.studycafe.repository.member.dto.MemberUpdateForm;
+import project.studycafe.contoller.form.MemberUpdateForm;
 
 import java.util.Optional;
 

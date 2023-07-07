@@ -64,4 +64,23 @@ public class Member extends BaseTimeEntity{
         this.cart = cart;
         cart.setMember(this);
     }
+
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", userLoginId='" + userLoginId + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address=" + address +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birth='" + birth + '\'' +
+                ", provider='" + provider + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", memberLevel=" + memberLevel +
+                '}';
+    }
 }

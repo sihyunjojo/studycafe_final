@@ -2,10 +2,11 @@ package project.studycafe.repository.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import project.studycafe.domain.Member;
 
-@Getter
-@Setter
+@Getter @Setter
+@ToString
 public class MemberProfile {
     private String name;
     private String email;

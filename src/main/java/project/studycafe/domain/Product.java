@@ -8,10 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
+@Getter @Setter
+@NoArgsConstructor
 public class Product extends BaseTimeEntity {
 
     @Id

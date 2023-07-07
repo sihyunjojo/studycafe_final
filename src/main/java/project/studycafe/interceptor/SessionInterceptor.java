@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
-// 안쓰는걸로
 @Slf4j
 public class SessionInterceptor implements HandlerInterceptor {
     @Override
@@ -20,9 +19,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
         if (session != null && session.getAttribute(LOGIN_MEMBER) != null) {
             Member loginMember = (Member) session.getAttribute(LOGIN_MEMBER);
-            request.setAttribute(LOGIN_MEMBER, loginMember);
-            // loginMember를 어디든지 꺼내 쓸 수 있는거?
-            // 근데 이거 쓰려면 @Login쓰던걸 httpServletRequest 이 큰걸 가져와야하는데??
+            request.setAttribute(LOGIN_MEMBER, loginMember); // 넣어줌으로 계속적으로 넣어줘야하는 값 자동으로 넣어줌.
         }
 
         return true;

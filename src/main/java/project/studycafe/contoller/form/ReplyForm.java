@@ -2,12 +2,10 @@ package project.studycafe.contoller.form;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-
 @Data
-public class CommentForm {
-
+public class ReplyForm {
     private Long boardId;
+    private Long commentId;
     private Long memberId;
     private String content;
 }

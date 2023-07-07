@@ -1,7 +1,7 @@
 package project.studycafe.service.member;
 
 import project.studycafe.domain.Member;
-import project.studycafe.repository.member.dto.MemberUpdateForm;
+import project.studycafe.contoller.form.MemberUpdateForm;
 
 import java.util.Optional;
 

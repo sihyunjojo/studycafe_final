@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.contoller.form.ReplyForm;
 import project.studycafe.domain.Comment;
 import project.studycafe.domain.Reply;
 import project.studycafe.repository.board.comment.JpaCommentRepository;
 import project.studycafe.repository.board.reply.JpaReplyRepository;
+import project.studycafe.repository.member.JpaMemberRepository;
 
 import java.util.List;
 
@@ -19,19 +21,24 @@ import java.util.List;
 public class ReplyService {
 
     private final JpaReplyRepository replyRepository;
+    private final JpaMemberRepository memberRepository;
+    private final JpaCommentRepository commentRepository;
 
     public List<Reply> findReplys() {
         return replyRepository.findAll();
     }
 
 
-    public void addReply(Reply reply) {
+    public void addReply(ReplyForm form) {
+        Reply reply = new Reply();
+        reply.setComment(commentRepository.findById(form.getCommentId()).orElseThrow());
+        reply.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
+        reply.setContent(form.getContent());
         replyRepository.save(reply);
     }
 
     public void editReply(Long replyId, Reply updateReply) {
         Reply findReply = replyRepository.findById(replyId).orElseThrow();
-
         findReply.setContent(updateReply.getContent());
     }
 

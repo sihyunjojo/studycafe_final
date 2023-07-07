@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@ToString
 public class Board extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

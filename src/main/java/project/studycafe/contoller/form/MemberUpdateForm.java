@@ -1,4 +1,4 @@
-package project.studycafe.repository.member.dto;
+package project.studycafe.contoller.form;
 
 import lombok.Data;
 import project.studycafe.domain.Address;

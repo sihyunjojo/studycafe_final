@@ -78,7 +78,7 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public String board(@Login Member loginMember, @PathVariable long boardId, Model model) {
+    public String board(@PathVariable long boardId, Model model) {
         Board board = boardService.findById(boardId).orElseThrow();
         boardService.increaseReadCount(board);
         BoardForm boardForm = boardService.boardToBoardForm(board);
@@ -91,7 +91,6 @@ public class BoardController {
             comment.setReplies(replies); // 댓글 객체에 답변 목록 설정
         }
 
-        model.addAttribute("loginMember", loginMember);
         model.addAttribute("board", boardForm);
         model.addAttribute("comments", comments);
         return "board/board";

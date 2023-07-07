@@ -8,10 +8,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter @Setter
 @NoArgsConstructor
-@Entity
-@ToString
 public class Comment extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +38,14 @@ public class Comment extends BaseTimeEntity{
         }
     }
 
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", member=" + member.getId() +
+                ", board=" + board.getId() +
+                ", content='" + content + '\'' +
+                ", likeCount=" + likeCount +
+                '}';
+    }
 }

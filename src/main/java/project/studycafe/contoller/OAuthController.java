@@ -5,14 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import project.studycafe.contoller.form.LoginForm;
 import project.studycafe.domain.Member;
+import project.studycafe.exception.UserException;
+import project.studycafe.service.member.MemberService;
 import project.studycafe.service.member.SpringDataJpaMemberService;
+import project.studycafe.service.oauth.OAuthService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,6 +35,7 @@ public class OAuthController {
                         @RequestParam(required = false, defaultValue = "/") String redirectURL,
                         HttpServletRequest request) {
 
+        log.info("oauth login Success");
         // oAuth2User.toString() 예시 :
         // Name: [2346930276], Granted Authorities: [[USER]],
         // User Attributes: [{id=2346930276, provider=kakao, name=김준우, email=bababoll@naver.com}]

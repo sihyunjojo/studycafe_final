@@ -8,9 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
 @Getter @Setter
 @NoArgsConstructor
-@Entity
 public class Reply extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,21 @@ public class Reply extends BaseTimeEntity{
     private String content;
     private Integer likeCount;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.likeCount == null) {
+            this.likeCount = 0;
+        }
+    }
 
-
-
+    @Override
+    public String toString() {
+        return "Reply{" +
+                "id=" + id +
+                ", member=" + member.getId() +
+                ", comment=" + comment.getId() +
+                ", content='" + content + '\'' +
+                ", likeCount=" + likeCount +
+                '}';
+    }
 }
