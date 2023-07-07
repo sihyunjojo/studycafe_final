@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>상품</title>'
+    <head th:insert="~{template/styleCss :: css_copy}"></head>
+    <!--<link rel="stylesheet", href="product/join.css">-->
+</head>
+<body>
+<header th:insert="~{template/header :: header_copy}"></header>
+<div class="border">
+    <h1>상품</h1>
+    <div style="float: right;">
+        <button class="btn btn-primary" th:onclick="|location.href='/cart/${productId}/add'|">장바구니에 넣기</button>
+        <button class="btn btn-primary" th:onclick="|location.href='@{/cart}'|">장바구니</button>
+    </div>
+    <hr style="margin: 2em">
+    <!--        <th:block th:if="${error == '이미 사용 중인 아이디입니다.'}">-->
+    <!--            <h2 th:text="${error}"></h2>-->
+    <!--        </th:block>-->
+    <div class="form-group">
+        <label for="name">상품</label><br>
+        <input type="text"
+               class="form-control" id="name" name="name"
+               th:value="${product.name}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="category">카테고리</label><br>
+        <input type="text"
+               class="form-control" id="category" name="category"
+               th:value="${product.category}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="quantity">수량</label><br>
+        <input type="text"
+               class="form-control" id="quantity" name="quantity"
+               th:value="${product.quantity}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="price">가격</label><br>
+        <input type="text"
+               class="form-control" id="price" name="price"
+               th:value="${product.price}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="description">설명</label><br>
+        <input type="text"
+               class="form-control" id="description" name="description"
+               th:value="${product.description}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="image">이미지</label><br>
+        <input type="text"
+               class="form-control" id="image" name="image"
+               th:value="${product.image}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="readCount">조회 수</label><br>
+        <input type="text"
+               class="form-control" id="readCount" name="readCount"
+               th:value="${product.readCount}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="likeCount">좋아요 수</label><br>
+        <input type="text"
+               class="form-control" id="likeCount" name="likeCount"
+               th:value="${product.likeCount}" th:onclick="" readonly>
+    </div>
+    <div class="form-group">
+        <label for="updatedTime">등록/수정 날짜</label><br>
+        <input type="text"
+               class="form-control" id="updatedTime" name="updatedTime"
+               th:value="${{product.updatedTime}}" readonly>
+    </div>
+    <button th:onclick="|location.href='/product/${productId}/edit'|">수정하기</button>
+    <button th:onclick="|location.href='/product/${productId}/delete'|" onclick="return confirm('정말로 삭제하겠습니까?')">삭제하기
+    </button>
+    <button th:onclick="|location.href='@{/product}'|">메인 상품</button>
+</div>
+</body>
+</html>

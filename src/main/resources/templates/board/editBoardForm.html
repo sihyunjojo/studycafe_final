@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 수정</title>'
+    <head th:insert="~{template/styleCss :: css_copy}"></head>
+    <!--<link rel="stylesheet", href="board/join.css">-->
+</head>
+<body>
+<header th:insert="~{template/header :: header_copy}"></header>
+<div class="border">
+    <form th:action th:object="${board}" method="POST">
+        <h1>게시판 수정 </h1>
+
+        <div class="form-group">
+            <label for="title">제목</label><br>
+            <input type="text" class="form-control" id="title" th:field="*{title}" required/>
+        </div>
+        <div class="form-group">
+            <label for="userName">작성자</label><br>
+            <input type="text" class="form-control" id="userName" th:field="*{userName}" readonly/>
+        </div>
+        <div class="form-group">
+            <label for="createdTime">작성일자</label><br>
+            <input type="text" class="form-control" id="createdTime" th:value="${{board.createdTime}}" readonly/>
+        </div>
+
+        <div class="form-group">
+            <label for="content">내용</label><br>
+            <input type="text" class="form-control" id="content" th:field="*{content}" required/>
+        </div>
+        <div class="form-group">
+            <label for="attachmentFile">첨부파일</label><br>
+            <input type="text" class="form-control" id="attachmentFile" th:field="*{attachmentFile}"/>
+
+        </div>
+        <button type="submit">완료</button>
+        <button th:onclick="|location.href='@{/}'|" type="button">메인 게시판</button>
+    </form>
+</div>
+</body>
+</html>
