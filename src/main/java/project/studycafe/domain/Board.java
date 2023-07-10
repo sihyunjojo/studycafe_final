@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,7 +23,6 @@ public class Board extends BaseTimeEntity{
     private String title;
     private String category; //추후 추상클래스로 만들어서 관리해야할지도
     private String content;
-    private String attachmentFile; // 추후에 객체 따로만들어야할지도
     private String popup; // 추후에 객체 따로만들어야할지도
 
     @NotNull
@@ -33,6 +31,20 @@ public class Board extends BaseTimeEntity{
     private Integer likeCount;
 
     @OneToMany(mappedBy = "board")
+//    @Column(columnDefinition = "String[]")
+    private List<AttachmentFile> attachmentFiles; // 추후에 객체 따로만들어야할지도
+
+    @OneToMany(mappedBy = "board")
     private List<Comment> Comments;
+
+    //영속상태로 변하기 직전에 시점에 시작됨.
+    @PrePersist
+    public void setting() {
+        if (this.readCount == null && this.likeCount == null) {
+            this.readCount = 0;
+            this.likeCount = 0;
+        }
+    }
+
 
 }

@@ -28,4 +28,12 @@ public class Product extends BaseTimeEntity {
     private String image; // 이미지 url
     private Integer readCount;
     private Integer likeCount;
+
+    @PrePersist
+    public void setting() {
+        if (this.readCount == null && this.likeCount == null) {
+            this.readCount = 0;
+            this.likeCount = 0;
+        }
+    }
 }

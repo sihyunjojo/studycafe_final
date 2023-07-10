@@ -3,7 +3,7 @@ package project.studycafe.contoller.form;
 import lombok.Data;
 
 @Data
-public class ChatMessage {
+public class ChatForm {
     private String sender;
     private String content;
 

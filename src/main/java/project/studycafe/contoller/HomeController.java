@@ -5,12 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import project.studycafe.contoller.form.BoardForm;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.Board;
 import project.studycafe.domain.Member;
 import project.studycafe.domain.Product;
 import project.studycafe.repository.product.dto.ProductSearchCond;
-import project.studycafe.service.board.BoardForm;
 import project.studycafe.service.board.BoardService;
 import project.studycafe.service.product.ProductService;
 

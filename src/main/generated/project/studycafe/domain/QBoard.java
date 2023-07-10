@@ -24,7 +24,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
 
-    public final StringPath attachmentFile = createString("attachmentFile");
+    public final ListPath<AttachmentFile, QAttachmentFile> attachmentFiles = this.<AttachmentFile, QAttachmentFile>createList("attachmentFiles", AttachmentFile.class, QAttachmentFile.class, PathInits.DIRECT2);
 
     public final StringPath category = createString("category");
 

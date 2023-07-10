@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.contoller.form.BoardCreateForm;
+import project.studycafe.contoller.form.BoardForm;
 import project.studycafe.domain.Board;
 import project.studycafe.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.repository.board.board.JpaBoardRepository;
@@ -30,7 +32,6 @@ public class BoardService {
     public List<Board> getHomeBoards() {
         List<Board> boardsWithoutNotice = boardRepository.findAllByCategoryNotOrderByCreatedTimeDesc("공지사항");
         List<Board> notices = boardRepository.findAllByCategoryOrderByCreatedTimeDesc("공지사항");
-
         List<Board> homeBoards = boardsWithoutNotice;
 
         if (notices.size() > 3) {
@@ -40,9 +41,6 @@ public class BoardService {
         else{
             homeBoards.addAll(0, notices);
         }
-
-
-
 
         return homeBoards;
     }
@@ -83,23 +81,27 @@ public class BoardService {
     }
 
 
-    public void addBoard(Board board) {
-        board.setLikeCount(0);
-        board.setReadCount(0);
-        boardRepository.save(board);
+    public void addBoard(BoardCreateForm form) {
+        Board board = new Board();
+        board.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
+        board.setTitle(form.getTitle());
+        board.setCategory(form.getCategory());
+        board.setContent(form.getContent());
+        board.setAttachmentFiles(form.getAttachmentFiles());
+
     }
 
     public Optional<Board> findById(long boardId) {
         return boardRepository.findById(boardId);
     }
 
-    public void updateBoard(Long boardId, BoardForm boardForm) {
+    public void updateBoard(Long boardId, BoardCreateForm boardForm) {
         Board board = boardRepository.findById(boardId).orElseThrow();
 
         board.setTitle(boardForm.getTitle());
         board.setContent(boardForm.getContent());
-        board.setAttachmentFile(boardForm.getAttachmentFile());
-//        board.setCreatedTime(LocalDateTime.now());
+        board.setCategory(boardForm.getCategory());
+        board.setAttachmentFiles(boardForm.getAttachmentFiles());
     }
 
     public void deleteBoard(long boardId) {
@@ -119,69 +121,15 @@ public class BoardService {
     }
 
     public List<BoardForm> boardsToBoardForms(List<Board> boards) {
-
-        List<BoardForm> boardForms = boards.stream()
-                .map(b -> new BoardForm(b.getId(), b.getMember().getName(), b.getTitle(), b.getCategory(), b.getContent(),
-                        b.getCreatedTime(), b.getAttachmentFile(), b.getPopup(), b.getReadCount(), b.getLikeCount()))
+        return boards.stream()
+                .map(b -> new BoardForm(b.getId(), b.getMember().getNickname(), b.getMember().getName(), b.getTitle(), b.getCategory(), b.getContent(),
+                        b.getCreatedTime(), b.getAttachmentFiles(), b.getPopup(), b.getReadCount(), b.getLikeCount()))
                 .collect(Collectors.toList());
-
-//        List<BoardForm> boardForms = new ArrayList<>();
-//
-//        for (Board board : boards) {
-//            BoardForm boardForm = new BoardForm();
-//            boardForm.setId(board.getId());
-//            boardForm.setUserName(memberRepository.findById(board.getUserId()).orElseThrow().getName());
-//
-//            boardForm.setTitle(board.getTitle());
-//            boardForm.setCategory(board.getCategory());
-//            boardForm.setContent(board.getContent());
-//            boardForm.setCreatedTime(board.getCreatedTime());
-//            boardForm.setAttachmentFile(board.getAttachmentFile());
-//            boardForm.setPopup(board.getPopup());
-//            boardForm.setReadCount(board.getReadCount());
-//            boardForm.setLikeCount(board.getLikeCount());
-//            boardForms.add(boardForm);
-//        }
-
-        return boardForms;
     }
 
     public BoardForm boardToBoardForm(Board board) {
-        BoardForm boardForm = new BoardForm(board.getId(), board.getMember().getName(), board.getTitle(), board.getCategory(), board.getContent(),
-                board.getCreatedTime(), board.getAttachmentFile(), board.getPopup(), board.getReadCount(), board.getLikeCount());
-
-//        BoardForm boardForm = new BoardForm();
-//        boardForm.setId(board.getId());
-//        boardForm.setUserName(memberRepository.findById(board.getUserId()).orElseThrow().getName());
-//
-//        boardForm.setTitle(board.getTitle());
-//        boardForm.setCategory(board.getCategory());
-//        boardForm.setContent(board.getContent());
-//        boardForm.setCreatedTime(board.getCreatedTime());
-//        boardForm.setAttachmentFile(board.getAttachmentFile());
-//        boardForm.setPopup(board.getPopup());
-//        boardForm.setReadCount(board.getReadCount());
-//        boardForm.setLikeCount(board.getLikeCount());
-
-        return boardForm;
+        return new BoardForm(board.getId(), board.getMember().getNickname(), board.getMember().getName(), board.getTitle(), board.getCategory(), board.getContent(),
+                board.getCreatedTime(), board.getAttachmentFiles(), board.getPopup(), board.getReadCount(), board.getLikeCount());
     }
 
-//    public Board boardFormToBoard(BoardForm boardForm) {
-//
-//        Board board = new Board();
-//        board.setId(boardForm.getId());
-//        board.setUserId(boardRepository.findById(boardForm.getId()).orElseThrow().getUserId()); //boardform의 id와 board의 id가 같으니까 같은 board를 가져와서, board의 getuserid
-//
-//        board.setTitle(boardForm.getTitle());
-//        board.setCategory(boardForm.getCategory());
-//        board.setContent(boardForm.getContent());
-//        board.setCreatedTime(boardForm.getCreatedTime());
-//        board.setAttachmentFile(boardForm.getAttachmentFile());
-//        board.setPopup(boardForm.getPopup());
-//        board.setReadCount(boardForm.getReadCount());
-//        board.setLikeCount(boardForm.getLikeCount());
-//        board.setPageNumber(boardForm.getPageNumber());
-//
-//        return board;
-//    }
 }

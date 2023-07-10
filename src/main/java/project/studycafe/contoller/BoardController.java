@@ -5,15 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import project.studycafe.contoller.form.BoardCreateForm;
+import project.studycafe.contoller.form.BoardForm;
 import project.studycafe.domain.*;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.repository.board.board.dto.BoardSearchCond;
-import project.studycafe.service.board.BoardForm;
 import project.studycafe.service.board.BoardService;
 import project.studycafe.service.board.CommentService;
 import project.studycafe.service.board.ReplyService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
@@ -101,22 +101,21 @@ public class BoardController {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/board/add";
         }
-        model.addAttribute("board", new Board());
+        model.addAttribute("board", new BoardCreateForm());
         model.addAttribute(LOGIN_MEMBER, loginMember);
         return "board/addBoardForm";
     }
 
     @PostMapping("/add")
-    public String add(@Login Member loginMember, Board board) {
+    public String add(@Login Member loginMember, BoardCreateForm form) {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/board/add";
         }
 
-        log.info("board ={}", board);
-        log.info("loginmbmer={}", loginMember);
+        log.info("boardForm ={}", form);
+        log.info("loginMember={}", loginMember);
 
-        log.info("board={}", board);
-        boardService.addBoard(board);
+        boardService.addBoard(form);
         return "redirect:/board"; // 일단 home으로 보내주자 나중에 board목록으로 보내주고
     }
 
@@ -130,7 +129,7 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/edit")
-    public String edit(BoardForm boardForm, @PathVariable Long boardId) {
+    public String edit(BoardCreateForm boardForm, @PathVariable Long boardId) {
 
         boardService.updateBoard(boardId, boardForm);
 

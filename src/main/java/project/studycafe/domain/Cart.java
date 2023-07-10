@@ -20,7 +20,7 @@ public class Cart extends BaseTimeEntity {
     private Member member;
 
 
-    public Member getMember() {
-        return member;
+    public String getMember() {
+        return member.getName();
     }
 }
