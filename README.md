@@ -125,40 +125,40 @@ logout 어떻게 진행되는 건지.
 ## 6/23 
 ouath아이디 비밀번호, github에 안올라가게 하기.
 
-# 7/6 (new~)
-아 했던거 다 날라갔다...
-버전관리잘못쓰다가 다 날라갔다.
-git이랑 sourcetree확실하게 공부해서 쓰자
+## 7/6 (new~)  
+아 했던거 다 날라갔다...  
+버전관리잘못쓰다가 다 날라갔다.  
+git이랑 sourcetree확실하게 공부해서 쓰자  
 
 
 ### 수정해야할 것들
-에러코드 통합 처리(발생하는 에러를 먼저 알아야함)
-파일 업로드
-OAuth2.0
-비밀번호 중복체크(ajax)
+에러코드 통합 처리(발생하는 에러를 먼저 알아야함)    
+파일 업로드    
+OAuth2.0    
+비밀번호 중복체크(ajax)    
 
-상품검색에서 최대 가격이 최소가격보다 작으면 오류 만들어주기.  (exception,bindingResult)
+상품검색에서 최대 가격이 최소가격보다 작으면 오류 만들어주기.  (exception,bindingResult)  
 
-게시판 추천 수, 상품 좋아요 버튼 만들기(ajax, api, json) (이건 추후에 orderproduct를 만들어서 하는게 맞는거 같은데)        
-장바구니에 상품 추가할(때, 상품 개수 클라이언트에서 가져와서 그만큼 추가해줘야함(html도 수정해야하고 service도 수정해야함): 이건 추후에 소비자를 위한 order을 만들어야할지도..?
+게시판 추천 수, 상품 좋아요 버튼 만들기(ajax, api, json) (이건 추후에 orderproduct를 만들어서 하는게 맞는거 같은데)          
+장바구니에 상품 추가할(때, 상품 개수 클라이언트에서 가져와서 그만큼 추가해줘야함(html도 수정해야하고 service도 수정해야함): 이건 추후에 소비자를 위한 order을 만들어야할지도..?  
 
-(사장,소비자 구분)사장님만 등록 할 수 있게 page만들기 추후에 (권한관리는 enum 활용해서 )
+(사장,소비자 구분)사장님만 등록 할 수 있게 page만들기 추후에 (권한관리는 enum 활용해서 )  
 
-(Docker)
-(jwt)
-(restAPI)
-(aws)(EC2)(RDM)
-(EDR)
-(Swagger)
-(Test code를 통한 시간 단축 (성능 향상 테스트))
-(Exception 처리 ex) 결제기능 같은 경우는 실행되는거보다 예외처리가 더 중요함.)
-
+(Docker)  
+(jwt)  
+(restAPI)  
+(aws)(EC2)(RDM)  
+(EDR)  
+(Swagger)    
+(Test code를 통한 시간 단축 (성능 향상 테스트))  
+(Exception 처리 ex) 결제기능 같은 경우는 실행되는거보다 예외처리가 더 중요함.)  
+ 
 
 #### 할까말까 고민...
 
 # 환경 
-spring boot 2.7.8    
-java 11    
-gradle
-Mysql
-(AWS)
+spring boot 2.7.8      
+java 11     
+gradle  
+Mysql  
+(AWS)  
