@@ -8,6 +8,8 @@ import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+import static project.studycafe.domain.MemberLevel.GUEST;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -57,6 +59,9 @@ public class Member extends BaseTimeEntity{
             this.cart = new Cart();
             cart.setMember(this);
         }
+        if (this.memberLevel == null) {
+            this.memberLevel = GUEST;
+        }
     }
 
     @Builder //생성을 Builder 패턴으로 하기 위해서
@@ -90,6 +95,7 @@ public class Member extends BaseTimeEntity{
                 ", provider='" + provider + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", memberLevel=" + memberLevel +
+                ", createdTime = " + getCreatedTime() +
                 '}';
     }
 }

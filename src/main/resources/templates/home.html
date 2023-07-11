@@ -78,7 +78,7 @@
                         th:class="${board.category == '공지사항'} ? 'even' : ''">
                         <td><a href="board.html" th:href="@{|/board/${board.id}|}" th:text="${board.title}">제목</a></td>
                         <td th:text="${board.memberNickname != null ? board.memberNickname : board.memberName}"> 작성자</td>
-                        <td th:text="${{board.createTime}}"> 작성일</td>
+                        <td th:text="${{board.createdTime}}"> 작성일</td>
                         <th th:text="${board.readCount}"> 1</th>
                     </tr>
                     </tbody>

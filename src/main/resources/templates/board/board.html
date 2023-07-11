@@ -26,7 +26,7 @@
             <label for="userName">작성자</label><br>
             <input type="text"
                    class="form-control" id="userName" name="userName"
-                   th:value="${board.userName}" readonly>
+                   th:value="${board.memberNickname != null ? board.memberNickname : board.memberName}" readonly>
         </div>
         <div class="form-group">
             <label for="category">카테고리</label><br>
@@ -58,11 +58,16 @@
                    class="form-control" id="content" name="content"
                    th:value="${board.content}" readonly>
         </div>
-        <div class="form-group">
-            <label for="attachmentFile">첨부파일</label><br>
-            <input type="text"
-                   class="form-control" id="attachmentFile" name="attachmentFile"
-                   th:value="${board.attachmentFile}" readonly>
+        <div class="form-group" th:if="${board.attachmentFiles.size() != 0}">
+            <label for="attachmentFiles">첨부파일</label><br>
+            <div id = "attachmentFiles">
+                <th:block th:each="attachFile : ${board.attachmentFiles}">
+                    <a th:href="|/download/${board.id}/${attachFile.attachmentFileName}|" th:text="${attachFile.attachmentFileName}"/>
+                </th:block>
+            </div>
+<!--            <input type="file" multiple="multiple"-->
+<!--                   class="form-control" id="attachmentFiles" name="attachmentFiles"-->
+<!--                   th:value="${board.attachmentFiles}" readonly>-->
         </div>
     </div>
 

@@ -7,13 +7,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.studycafe.contoller.form.BoardCreateForm;
 import project.studycafe.contoller.form.BoardForm;
+import project.studycafe.contoller.form.BoardUpdateForm;
 import project.studycafe.domain.*;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.repository.board.board.dto.BoardSearchCond;
+import project.studycafe.service.FileService;
 import project.studycafe.service.board.BoardService;
 import project.studycafe.service.board.CommentService;
 import project.studycafe.service.board.ReplyService;
 
+import java.io.IOException;
 import java.util.List;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
@@ -27,6 +30,7 @@ public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
     private final ReplyService replyService;
+    private final FileService fileService;
 
     private static final int BASIC_PER_PAGE_NUM = 10;    // 페이지당 보여줄 게시판 개수
 
@@ -41,14 +45,12 @@ public class BoardController {
 
         PageMaker pageMaker = new PageMaker(boardsWithoutNotice.size(), page, BASIC_PER_PAGE_NUM);
 
-        log.info("Boards = {}", boardList);
-
         // 클라이언트 처리
         List<BoardForm> boardForms = boardService.boardsToBoardForms(boardList);
         model.addAttribute("boards", boardForms);
         model.addAttribute("pageMaker", pageMaker);
 
-        log.info("Boards = {}", boardForms);
+//        log.info("Boards = {}", boardForms);
         return "board/boards";
     }
 
@@ -107,15 +109,20 @@ public class BoardController {
     }
 
     @PostMapping("/add")
-    public String add(@Login Member loginMember, BoardCreateForm form) {
+    public String add(@Login Member loginMember, BoardCreateForm form) throws IOException {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/board/add";
         }
 
+        Long boardId = boardService.addBoard(form);
+        log.info("board id = {}", boardId);
         log.info("boardForm ={}", form);
-        log.info("loginMember={}", loginMember);
+        log.info("board ={}", boardService.findById(boardId));
+        // 파일 저장
+        List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
 
-        boardService.addBoard(form);
+
+//        boardService.addBoard(form, storeFiles);
         return "redirect:/board"; // 일단 home으로 보내주자 나중에 board목록으로 보내주고
     }
 
@@ -129,16 +136,15 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/edit")
-    public String edit(BoardCreateForm boardForm, @PathVariable Long boardId) {
-
-        boardService.updateBoard(boardId, boardForm);
+    public String edit(BoardUpdateForm form, @PathVariable Long boardId) throws IOException {
+        boardService.updateBoard(boardId, form);
+        List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
 
         return "redirect:/board";
     }
 
     @GetMapping("/{boardId}/delete")
     public String delete(@PathVariable long boardId) {
-
         boardService.deleteBoard(boardId);
         return "redirect:/board"; // 삭제 후 목록 페이지로 리다이렉트
     }

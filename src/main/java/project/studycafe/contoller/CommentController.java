@@ -34,13 +34,13 @@ public class CommentController {
     @PostMapping()
     public String add(@Login Member loginMember, CommentForm form) { // comment 먼가 잘못됬을시 다시 돌려줘야하니까 있어야함.
         log.info("loginMember = {}", loginMember);
-        log.info("commentform = {}", form);
+        log.info("commentForm = {}", form);
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/board/" + form.getBoardId();
         }
 
         commentService.addComment(form);
-
+        log.info("success");
         return "redirect:/board/" + form.getBoardId();
     }
 

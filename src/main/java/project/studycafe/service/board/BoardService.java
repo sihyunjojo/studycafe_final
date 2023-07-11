@@ -6,10 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.studycafe.contoller.form.BoardCreateForm;
 import project.studycafe.contoller.form.BoardForm;
+import project.studycafe.contoller.form.BoardUpdateForm;
+import project.studycafe.domain.AttachmentFile;
 import project.studycafe.domain.Board;
 import project.studycafe.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.repository.board.board.JpaBoardRepository;
 import project.studycafe.repository.board.board.dto.BoardSearchCond;
+import project.studycafe.repository.board.comment.JpaCommentRepository;
+import project.studycafe.repository.board.reply.JpaReplyRepository;
+import project.studycafe.repository.file.JpaFileRepository;
 import project.studycafe.repository.member.JpaMemberRepository;
 
 import java.util.ArrayList;
@@ -27,6 +32,9 @@ public class BoardService {
     private final JpaBoardRepository boardRepository;
     private final JpaMemberRepository memberRepository;
     private final JpaQueryBoardRepository boardQueryRepository;
+    private final JpaFileRepository fileRepository;
+    private final JpaCommentRepository commentRepository;
+    private final JpaReplyRepository replyRepository;
 
 
     public List<Board> getHomeBoards() {
@@ -37,8 +45,7 @@ public class BoardService {
         if (notices.size() > 3) {
             List<Board> Top3Notices = notices.subList(0, 3);
             homeBoards.addAll(0, Top3Notices);
-        }
-        else{
+        } else {
             homeBoards.addAll(0, notices);
         }
 
@@ -52,14 +59,55 @@ public class BoardService {
         return boards.subList(startBoard, endBoard);
     }
 
-    public List<Board> getBoardsByCategoryNotOrderByCreatedTimeDesc(String category) {
-        return boardRepository.findAllByCategoryNotOrderByCreatedTimeDesc(category);
+    public Long addBoard(BoardCreateForm form) {
+        Board board = new Board();
+        board.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
+        board.setTitle(form.getTitle());
+        board.setCategory(form.getCategory());
+        board.setContent(form.getContent());
+        log.info("save board ={}", board);
+
+        boardRepository.save(board);
+
+        return board.getId();
     }
 
-    public List<Board> getBoardsByCategoryByCreatedTimeDesc(String category) {
-        return boardRepository.findAllByCategoryOrderByCreatedTimeDesc(category);
+    public void addBoard(BoardCreateForm form, List<AttachmentFile> files) {
+        Board board = new Board();
+        board.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
+        board.setTitle(form.getTitle());
+        board.setCategory(form.getCategory());
+        board.setContent(form.getContent());
+        board.setAttachmentFiles(files);
+        log.info("save board ={}", board);
+        log.info("file = {}", files);
+
+        boardRepository.save(board);
     }
 
+    public void updateBoard(Long boardId, BoardUpdateForm form) {
+        Board board = boardRepository.findById(boardId).orElseThrow();
+
+        board.setTitle(form.getTitle());
+        board.setContent(form.getContent());
+        board.setCategory(form.getCategory());
+    }
+    public void updateBoard(Long boardId, BoardUpdateForm form, List<AttachmentFile> files) {
+        Board board = boardRepository.findById(boardId).orElseThrow();
+
+        board.setTitle(form.getTitle());
+        board.setContent(form.getContent());
+        board.setCategory(form.getCategory());
+        board.setAttachmentFiles(files);
+    }
+
+    public void deleteBoard(long boardId) {
+        fileRepository.deleteByBoardId(boardId);
+        commentRepository.deleteByBoardId(boardId);
+        log.info("boardid = {}", boardId);
+        log.info("board = {}", boardRepository.findById(boardId));
+        boardRepository.deleteById(boardId);
+    }
 
     private void boardsToUpNoticeBoards(List<Board> boards) {
         List<Board> notices = new ArrayList<>();
@@ -80,32 +128,16 @@ public class BoardService {
         return boardQueryRepository.findSearchedAndSortedBoards(cond);
     }
 
+    public List<Board> getBoardsByCategoryNotOrderByCreatedTimeDesc(String category) {
+        return boardRepository.findAllByCategoryNotOrderByCreatedTimeDesc(category);
+    }
 
-    public void addBoard(BoardCreateForm form) {
-        Board board = new Board();
-        board.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
-        board.setTitle(form.getTitle());
-        board.setCategory(form.getCategory());
-        board.setContent(form.getContent());
-        board.setAttachmentFiles(form.getAttachmentFiles());
-
+    public List<Board> getBoardsByCategoryByCreatedTimeDesc(String category) {
+        return boardRepository.findAllByCategoryOrderByCreatedTimeDesc(category);
     }
 
     public Optional<Board> findById(long boardId) {
         return boardRepository.findById(boardId);
-    }
-
-    public void updateBoard(Long boardId, BoardCreateForm boardForm) {
-        Board board = boardRepository.findById(boardId).orElseThrow();
-
-        board.setTitle(boardForm.getTitle());
-        board.setContent(boardForm.getContent());
-        board.setCategory(boardForm.getCategory());
-        board.setAttachmentFiles(boardForm.getAttachmentFiles());
-    }
-
-    public void deleteBoard(long boardId) {
-        boardRepository.deleteById(boardId);
     }
 
     public void increaseReadCount(Board board) {

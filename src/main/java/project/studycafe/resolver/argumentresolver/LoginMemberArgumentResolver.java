@@ -18,8 +18,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {//@Login Member loginMember이였으니까
-        log.info("supportsParameter 실행");
-
         boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class); //@Login인지 확인
         boolean hasMemberType = Member.class.isAssignableFrom(parameter.getParameterType()); //Member class인지 확인
 
@@ -29,8 +27,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-
-        log.info("resolverArgument 실행");
+//        log.info("resolverArgument 실행");
 
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession();

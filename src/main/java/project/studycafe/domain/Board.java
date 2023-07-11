@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class Board extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "board")
 //    @Column(columnDefinition = "String[]")
-    private List<AttachmentFile> attachmentFiles; // 추후에 객체 따로만들어야할지도
+    private List<AttachmentFile> attachmentFiles = new ArrayList<>(); // 추후에 객체 따로만들어야할지도
 
     @OneToMany(mappedBy = "board")
     private List<Comment> Comments;
@@ -46,5 +47,27 @@ public class Board extends BaseTimeEntity{
         }
     }
 
+    //==연관관계 메서드==//
+    public void setMember(Member member) {
+        this.member = member;
+        member.getBoards().add(this);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "id=" + id +
+                ", member=" + member.getName() +
+                ", title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", content='" + content + '\'' +
+                ", popup='" + popup + '\'' +
+                ", readCount=" + readCount +
+                ", likeCount=" + likeCount +
+//                ", attachmentFiles=" + attachmentFiles.stream().map(a -> a.getAttachmentFileName()) +
+//                ", Comments=" + Comments +
+                '}';
+    }
 
 }

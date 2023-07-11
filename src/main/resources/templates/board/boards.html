@@ -91,7 +91,7 @@
                 <tr th:each="board : ${boards}"
                     th:class="${board.category == '공지사항'} ? 'even' : ''">
                     <th><a href="board.html" th:href="@{|/board/${board.id}|}" th:text="${board.title}">제목</a></th>
-                    <th th:text="${board.userName}"> 작성자 </th>
+                    <th th:text="${board.memberNickname != null ? board.memberNickname : board.memberName}"> 작성자 </th>
                     <th th:text="${board.category}"> 카테고리 </th>
                     <th><input type="text" class="form-control" style="border: none; outline: none;" th:value="${{board.createdTime}}" readonly></th>
                     <th th:text="${board.readCount}"> 1 </th>

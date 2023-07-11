@@ -6,8 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Data
-public class BoardCreateForm {
-    private Long memberId;
+public class BoardUpdateForm {
     private String title;
     private String category;
     private String content;

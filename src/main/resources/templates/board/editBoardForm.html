@@ -10,7 +10,7 @@
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
 <div class="border">
-    <form th:action th:object="${board}" method="POST">
+    <form th:action th:object="${board}" method="POST" enctype="multipart/form-data">
         <h1>게시판 수정 </h1>
 
         <div class="form-group">
@@ -19,7 +19,14 @@
         </div>
         <div class="form-group">
             <label for="userName">작성자</label><br>
-            <input type="text" class="form-control" id="userName" th:field="*{userName}" readonly/>
+            <input type="text" class="form-control" id="userName" th:value="${board.memberNickname != null ? board.memberNickname : board.memberName}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="category">종류</label><br>
+            <select class="form-select" id = "category" th:field="*{category}" required>
+                <option th:value="커뮤니티">커뮤니티</option>
+                <option th:value="공지사항">공지사항</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="createdTime">작성일자</label><br>
@@ -31,9 +38,9 @@
             <input type="text" class="form-control" id="content" th:field="*{content}" required/>
         </div>
         <div class="form-group">
-            <label for="attachmentFile">첨부파일</label><br>
-            <input type="text" class="form-control" id="attachmentFile" th:field="*{attachmentFile}"/>
-
+            <label for="attachmentFiles">첨부파일</label><br>
+            <input type="file" multiple="multiple"
+                   class="form-control" id="attachmentFiles" th:field="*{attachmentFiles}" placeholder="첨부파일">
         </div>
         <button type="submit">완료</button>
         <button th:onclick="|location.href='@{/}'|" type="button">메인 게시판</button>

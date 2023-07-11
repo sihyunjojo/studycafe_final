@@ -21,21 +21,6 @@ public class ProductService {
     private final JpaProductRepository productRepository;
     private final JpaQueryProductRepository productQueryRepository;
 
-    public List<Product> findProducts() {
-        return productRepository.findAllByOrderByUpdatedTimeDesc();
-    }
-
-    public List<Product> findSearchedAndSortedProducts(ProductSearchCond cond) {
-        return productQueryRepository.findSearchedAndSortedProducts(cond);
-    }
-
-    public List<Product> findProductsTop5LikeCount(ProductSearchCond cond){
-        return productQueryRepository.findTop5LikeCountProducts(cond);}
-
-    public Optional<Product> findById(long productId) {
-        return productRepository.findById(productId);
-    }
-
     public void addProduct(Product product) {
         product.setReadCount(0);
         product.setLikeCount(0);
@@ -56,6 +41,21 @@ public class ProductService {
 
     public void deleteProduct(long productId) {
         productRepository.deleteById(productId);
+    }
+
+    public List<Product> findProducts() {
+        return productRepository.findAllByOrderByUpdatedTimeDesc();
+    }
+
+    public List<Product> findSearchedAndSortedProducts(ProductSearchCond cond) {
+        return productQueryRepository.findSearchedAndSortedProducts(cond);
+    }
+
+    public List<Product> findProductsTop5LikeCount(ProductSearchCond cond){
+        return productQueryRepository.findTop5LikeCountProducts(cond);}
+
+    public Optional<Product> findById(long productId) {
+        return productRepository.findById(productId);
     }
 
     public void increaseReadCount(Product product) {
