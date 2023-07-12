@@ -141,9 +141,14 @@ board.getAttachmentFiles().add(this);
 ```
 를 사용하기 위해서는 board객체의 attachmentfiles를 new ArrayList로 정의해둬야한다. 
  정의해두지않으면 nullpointException발생  
+
+# 7/12
+
 ### 수정해야할 것들
+회원가입할때 주소란 에러 뜨는거바꾸기
+주소란 주소 완성하기
 cascade = CascadeType.REMOVE 알아보기  
-파일 업데이트가 안됨. 기존꺼 안보여주고 / 업데이트하면 쌓임.
+파일 업데이트가 안됨. 기존꺼 안보여주고 / 업데이트하면 쌓임. (실시간으로 하려면 ajax해야할거 같음.) 
 삭제 (연관관계 메서드 설정 해야함)     
 ouath 관련 해서 되는거 점검해야함.  
 에러코드 통합 처리(발생하는 에러를 먼저 알아야함)    

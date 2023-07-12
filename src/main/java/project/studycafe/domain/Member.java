@@ -11,12 +11,16 @@ import java.util.List;
 import static project.studycafe.domain.MemberLevel.GUEST;
 
 @Entity
+//@Table(uniqueConstraints = {
+//		@UniqueConstraint(name = "order_history_id_unique", columnNames = {"order_history_id"})
+//})
 @Getter @Setter
 @NoArgsConstructor
 public class Member extends BaseTimeEntity{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String userLoginId;
     private String userPassword;
     private String name;
@@ -33,6 +37,8 @@ public class Member extends BaseTimeEntity{
     private String gender;
     private String birth;
     private String provider;
+
+    @Column(unique = true)
     private String nickname;
     @Enumerated(EnumType.STRING)
     private MemberLevel memberLevel;
@@ -41,6 +47,7 @@ public class Member extends BaseTimeEntity{
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+//    @Column(columnDefinition = "Int[]")
     private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")

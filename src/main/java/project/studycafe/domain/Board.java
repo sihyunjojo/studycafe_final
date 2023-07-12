@@ -1,6 +1,7 @@
 package project.studycafe.domain;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -51,7 +53,15 @@ public class Board extends BaseTimeEntity{
     public void setMember(Member member) {
         this.member = member;
         member.getBoards().add(this);
+        log.info("this ={}", this);
+        log.info("member.getBoards() = {}", this.member.getBoards());
     }
+
+    public void removeAttachmentFile(AttachmentFile attachmentFile) {
+        this.attachmentFiles.remove(attachmentFile);
+        attachmentFile.setBoard(null);
+    }
+
 
 
     @Override

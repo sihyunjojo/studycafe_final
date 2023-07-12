@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ㅁ<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -46,7 +46,13 @@
             <input type="text"
                    class="form-control" id="name" th:field="*{name}" placeholder="Name" required>
             <div class="field-error" th:errors="*{name}"/>
-            </div>
+        </div>
+        <div class="form-group">
+            <label for="nickname">닉네임</label><br>
+            <input type="text"
+                   class="form-control" id="nickname" th:field="*{nickname}" placeholder="Nickname" required>
+            <div class="field-error" th:errors="*{nickname}"/>
+        </div>
         <!-- 성별 -->
         <div class="form-group">
             <label for="gender">성별</label><br>
@@ -64,14 +70,16 @@
         <div class="form-group">
             <label for="phone">주소</label><br>
             <input type="text"
-                   class="form-control" id="address" name="address" th:field="*{address}" placeholder="address">
+                   class="form-control" id="address" name="address" th:field="*{address}"
+                   th:errorclass="field-error" placeholder="address">
             <div class="field-error" th:errors="*{address}"/>
         </div>
         <!-- 이메일 -->
         <div class="form-group">
             <label for="email">이메일</label><br>
             <input type="text"
-                   class="form-control" name="email" id="email" th:field="*{email}" placeholder="E-mail">
+                   class="form-control" name="email" id="email" th:field="*{email}"
+                   th:errorclass="field-error" placeholder="E-mail">
             <div class="field-error" th:errors="*{email}"/>
         </div>
         <!-- 생년월일 -->

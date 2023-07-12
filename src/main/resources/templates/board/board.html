@@ -62,7 +62,7 @@
             <label for="attachmentFiles">첨부파일</label><br>
             <div id = "attachmentFiles">
                 <th:block th:each="attachFile : ${board.attachmentFiles}">
-                    <a th:href="|/download/${board.id}/${attachFile.attachmentFileName}|" th:text="${attachFile.attachmentFileName}"/>
+                    <a style="margin-right: 8px" th:href="|/download/${board.id}/${attachFile.attachmentFileName}|" th:text="${attachFile.attachmentFileName}"/>
                 </th:block>
             </div>
 <!--            <input type="file" multiple="multiple"-->

@@ -3,6 +3,7 @@ package project.studycafe.service.member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.contoller.form.MemberCreateForm;
 import project.studycafe.domain.Member;
 import project.studycafe.repository.member.JpaMemberRepository;
 import project.studycafe.contoller.form.MemberUpdateForm;
@@ -18,7 +19,11 @@ public class JpaMemberService implements MemberService {
     /**
      * 회원가입
      */
-    public String join(Member member) {
+    public String join(MemberCreateForm form) {
+        Member member = new Member();
+        member.setUserLoginId(form.getUserLoginId());
+
+
         try {
             validateDuplicatedMember(member); // 중복회원 검증
         } catch (IllegalStateException e) {

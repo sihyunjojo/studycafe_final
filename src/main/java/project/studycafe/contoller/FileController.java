@@ -36,8 +36,9 @@ public class FileController {
 
         Board board = boardService.findById(boardId).orElseThrow();
         AttachmentFile findFile = fileService.findFirstByBoardAndAttachmentFileName(board, attachmentFileName).orElseThrow();
+        String storeFileName = findFile.getUniqueFileName();
 
-        UrlResource resource = new UrlResource("file:" + fileService.getFullPath(attachmentFileName)); // 파일의 전체 경로
+        UrlResource resource = new UrlResource("file:" + fileService.getFullPath(storeFileName)); // 파일의 전체 경로
         log.info("resource = {}", resource);
         log.info("uploadFileName = {} ", attachmentFileName);
 
@@ -52,5 +53,15 @@ public class FileController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
+    }
+
+    @GetMapping("delete/{boardId}/{attachmentFileName}")
+    public void deleteFile(@PathVariable Long boardId, @PathVariable String attachmentFileName) throws MalformedURLException {
+        Board board = boardService.findById(boardId).orElseThrow();
+        AttachmentFile findFile = fileService.findFirstByBoardAndAttachmentFileName(board, attachmentFileName).orElseThrow();
+
+        //파일 삭제하는 코드
+        fileService.deleteFile(attachmentFileName);
+
     }
 }

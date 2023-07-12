@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import project.studycafe.contoller.form.MemberCreateForm;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.Member;
 import project.studycafe.contoller.form.MemberUpdateForm;
@@ -34,19 +35,23 @@ public class MemberController {
     }
 
     @PostMapping("/new")
-    public String Join(@Validated Member member, BindingResult bindingResult) {
-        String userId = memberService.join(member);
-        log.info("userId = {}", userId);
+    public String Join(@Validated MemberCreateForm form, BindingResult bindingResult) {
 
-        if (userId == null) {
-            bindingResult.reject("usedUserId","이미 사용중인 아이디입니다.");
-            return "member/addMemberForm";
-        }
+//        if (userId == null) {
+//            bindingResult.reject("usedUserId","이미 사용중인 아이디입니다.");
+//            return "member/addMemberForm";
+//        }
 
         if (bindingResult.hasErrors()) {
             log.info("회원가입 실패");
+            log.info("errors = {}", bindingResult);
             return "member/addMemberForm";
         }
+
+        String userId = memberService.join(form);
+        log.info("userId = {}", userId);
+
+
 
         return "redirect:/";
     }

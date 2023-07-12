@@ -9,6 +9,7 @@ import project.studycafe.contoller.form.BoardForm;
 import project.studycafe.contoller.form.BoardUpdateForm;
 import project.studycafe.domain.AttachmentFile;
 import project.studycafe.domain.Board;
+import project.studycafe.domain.Member;
 import project.studycafe.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.repository.board.board.JpaBoardRepository;
 import project.studycafe.repository.board.board.dto.BoardSearchCond;
@@ -61,7 +62,8 @@ public class BoardService {
 
     public Long addBoard(BoardCreateForm form) {
         Board board = new Board();
-        board.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
+        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
+        board.setMember(member);
         board.setTitle(form.getTitle());
         board.setCategory(form.getCategory());
         board.setContent(form.getContent());
