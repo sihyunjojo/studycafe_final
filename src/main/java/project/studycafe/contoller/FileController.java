@@ -56,12 +56,12 @@ public class FileController {
     }
 
     @GetMapping("delete/{boardId}/{attachmentFileName}")
-    public void deleteFile(@PathVariable Long boardId, @PathVariable String attachmentFileName) throws MalformedURLException {
+    public String deleteFile(@PathVariable Long boardId, @PathVariable String attachmentFileName) throws MalformedURLException {
         Board board = boardService.findById(boardId).orElseThrow();
         AttachmentFile findFile = fileService.findFirstByBoardAndAttachmentFileName(board, attachmentFileName).orElseThrow();
 
         //파일 삭제하는 코드
-        fileService.deleteFile(attachmentFileName);
-
+        fileService.deleteFile(findFile);
+        return "redirect:/board/" + boardId + "/edit";
     }
 }

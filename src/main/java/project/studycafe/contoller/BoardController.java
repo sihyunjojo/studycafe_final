@@ -50,6 +50,9 @@ public class BoardController {
         model.addAttribute("boards", boardForms);
         model.addAttribute("pageMaker", pageMaker);
 
+        boardList.stream()
+                .flatMap(b -> b.getAttachmentFiles().stream())
+                .forEach(a -> log.info("attach = {}", a.getBoard()));
 //        log.info("Boards = {}", boardForms);
         return "board/boards";
     }
@@ -87,11 +90,13 @@ public class BoardController {
 
         List<Comment> comments = commentService.findByBoardId(boardId);
 
-//        List<Reply> AllReplys = new ArrayList<>();
         for (Comment comment : comments) {
             List<Reply> replies = replyService.getRepliesByCommentId(comment.getId()); // 해당 댓글에 대한 답변 목록 조회
             comment.setReplies(replies); // 댓글 객체에 답변 목록 설정
         }
+
+        log.info("board = {}", board);
+        log.info("board form = {}", boardForm);
 
         model.addAttribute("board", boardForm);
         model.addAttribute("comments", comments);
@@ -137,8 +142,14 @@ public class BoardController {
 
     @PostMapping("/{boardId}/edit")
     public String edit(BoardUpdateForm form, @PathVariable Long boardId) throws IOException {
+        log.info("start edit");
+        log.info("file = {}",form.getNewAttachmentFiles());
+
+        if (form.getNewAttachmentFiles() != null) {
+            List<AttachmentFile> storeFiles = fileService.storeFiles(form.getNewAttachmentFiles(), boardId);
+        }
+
         boardService.updateBoard(boardId, form);
-        List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
 
         return "redirect:/board";
     }

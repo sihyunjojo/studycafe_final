@@ -59,25 +59,51 @@ public class Board extends BaseTimeEntity{
 
     public void removeAttachmentFile(AttachmentFile attachmentFile) {
         this.attachmentFiles.remove(attachmentFile);
-        attachmentFile.setBoard(null);
     }
-
 
 
     @Override
     public String toString() {
-        return "Board{" +
-                "id=" + id +
-                ", member=" + member.getName() +
-                ", title='" + title + '\'' +
-                ", category='" + category + '\'' +
-                ", content='" + content + '\'' +
-                ", popup='" + popup + '\'' +
-                ", readCount=" + readCount +
-                ", likeCount=" + likeCount +
-//                ", attachmentFiles=" + attachmentFiles.stream().map(a -> a.getAttachmentFileName()) +
-//                ", Comments=" + Comments +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Board{")
+                .append("id=").append(id)
+                .append(", member=").append(member.getName())
+                .append(", title='").append(title).append('\'')
+                .append(", category='").append(category).append('\'')
+                .append(", content='").append(content).append('\'')
+                .append(", popup='").append(popup).append('\'')
+                .append(", readCount=").append(readCount)
+                .append(", likeCount=").append(likeCount)
+                .append(", attachmentFiles=[");
+
+        for (AttachmentFile attachmentFile : attachmentFiles) {
+            sb.append(attachmentFile.toString()).append(", ");
+        }
+
+        // 마지막 쉼표 제거
+        if (!attachmentFiles.isEmpty()) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+
+        sb.append("]}");
+
+        return sb.toString();
     }
+
+
+//    @Override
+//    public String toString() {
+//        return "Board{" +
+//                "id=" + id +
+//                ", member=" + member.getName() +
+//                ", title='" + title + '\'' +
+//                ", category='" + category + '\'' +
+//                ", content='" + content + '\'' +
+//                ", popup='" + popup + '\'' +
+//                ", readCount=" + readCount +
+//                ", likeCount=" + likeCount +
+//                ", attachmentFiles=" + attachmentFiles.forEach(); +
+//                '}';
+//    }
 
 }

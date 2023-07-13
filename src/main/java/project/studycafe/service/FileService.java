@@ -49,6 +49,7 @@ public class FileService {
 
     // 이미지 하나 날라올때
     public AttachmentFile storeFile(MultipartFile multipartFile, Long boardId) throws IOException {
+        log.info("file store start");
         if (multipartFile.isEmpty()) {
             return null;
         }
@@ -74,14 +75,17 @@ public class FileService {
 //        return new AttachmentFile(originalFilename, storeFileName);
     }
 
-    public void deleteFile(String uniqueFileName) {
-        Optional<AttachmentFile> findFile = fileRepository.findByUniqueFileName(uniqueFileName);
-        List<Board> aLlByAttachmentFilesContaining = boardRepository.findALlByAttachmentFilesContaining(uniqueFileName);
-        for (Board board : aLlByAttachmentFilesContaining) {
-            board.removeAttachmentFile(findFile.orElseThrow());
+    public void deleteFile(AttachmentFile findFile) {
+        log.info("findFile = {}", findFile);
+        List<Board> boardContainedAttachmentFile = boardRepository.findALlByAttachmentFiles(findFile);
+        log.info("boardContainedAttachmentFile ={}", boardContainedAttachmentFile);
+        for (Board board : boardContainedAttachmentFile) {
+            //보드에서 연관된 파일 없애기
+            board.removeAttachmentFile(findFile);
         }
 
-        fileRepository.deleteByUniqueFileName(uniqueFileName);
+        //파일테이블에서 없애기
+        fileRepository.deleteByUniqueFileName(findFile.getUniqueFileName());
     }
 
     //    // 이미지 여러개 날라올때

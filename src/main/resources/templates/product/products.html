@@ -17,6 +17,7 @@
         </button>
     </div>
     <hr style="margin-bottom: 2em; margin-top: 2em;">
+
     <form th:action="@{/product/search}" th:object="${productSearch}" method="get" style="float:right">
         <input type="hidden" th:field="*{name}"/>
         <input type="hidden" th:field="*{minPrice}"/>
@@ -30,6 +31,10 @@
 
     <div>
         <form th:action="@{/product/search}" th:object="${productSearch}" method="get" class="form-inline">
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                   th:text="${err}">글로벌 에러</p>
+            </div>
             <div class="row" style="float: right; margin-right: 0px">
                 <div class="col">
                     <input type="text" th:field="*{name}" class="form-control" placeholder="상품명"/>

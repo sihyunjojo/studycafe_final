@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.Member;
@@ -25,9 +27,9 @@ public class ProductController {
     private static final int BASIC_PER_PAGE_NUM = 10;    // 페이지당 보여줄 게시판 개수
 
     @GetMapping()
-    public String products(@ModelAttribute("productSearch") ProductSearchCond productSearch, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
+    public String products(@Validated @ModelAttribute("productSearch") ProductSearchCond searchCond, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
         List<Product> products = productService.findProducts();
-        productSearch.setPerPageNum(BASIC_PER_PAGE_NUM);
+        searchCond.setPerPageNum(BASIC_PER_PAGE_NUM);
 
         List<Product> productList = productService.getProductList(page, BASIC_PER_PAGE_NUM, products);
 
@@ -39,15 +41,36 @@ public class ProductController {
 
     }
     @GetMapping("/search")
-    public String searchProducts(@ModelAttribute("productSearch") ProductSearchCond searchCond, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
+    public String searchProducts(@Validated @ModelAttribute("productSearch") ProductSearchCond searchCond, @RequestParam(required = false, defaultValue = "1") int page, BindingResult bindingResult, Model model) {
+
+        if (searchCond.getMaxPrice() != null && searchCond.getMinPrice() != null && searchCond.getMaxPrice() < searchCond.getMinPrice() ) {
+            bindingResult.reject("maxPrice is not higher minPrice", "최대 가격은 최소 가격보다 작을 수 없습니다.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            List<Product> products = productService.findProducts();
+            searchCond.setPerPageNum(BASIC_PER_PAGE_NUM);
+
+            List<Product> productList = productService.getProductList(page, BASIC_PER_PAGE_NUM, products);
+
+            PageMaker pageMaker = new PageMaker(products.size(), page, BASIC_PER_PAGE_NUM);
+
+            model.addAttribute("products", productList);
+            model.addAttribute("pageMaker", pageMaker);
+
+            log.info("errors = {}", bindingResult);
+            return "product/products";
+        }
+
         List<Product> findProducts = productService.findSearchedAndSortedProducts(searchCond);
 
         List<Product> productList = productService.getProductList(page, searchCond.getPerPageNum(), findProducts);
         PageMaker pageMaker = new PageMaker(findProducts.size(), page, searchCond.getPerPageNum());
 
+        model.addAttribute("pageMaker", pageMaker);
         model.addAttribute("products", productList);
         model.addAttribute("productSearch", searchCond);
-        model.addAttribute("pageMaker", pageMaker);
+
         return "product/products";
     }
 

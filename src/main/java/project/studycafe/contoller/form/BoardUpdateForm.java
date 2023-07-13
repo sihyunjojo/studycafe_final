@@ -10,5 +10,5 @@ public class BoardUpdateForm {
     private String title;
     private String category;
     private String content;
-    private List<MultipartFile> attachmentFiles;
+    private List<MultipartFile> newAttachmentFiles;
 }

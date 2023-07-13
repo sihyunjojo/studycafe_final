@@ -148,24 +148,23 @@ board.getAttachmentFiles().add(this);
 
 # 7/13
 주소 객체 해결완료
-
+member Validation 몇몇 해결
 
 ### 수정해야할 것들
-cascade = CascadeType.REMOVE 알아보기  
 파일 업데이트가 안됨. 기존꺼 안보여주고 / 업데이트하면 쌓임. (실시간으로 하려면 ajax해야할거 같음.) 
 삭제 (연관관계 메서드 설정 해야함)
 ouath 관련 해서 되는거 점검해야함.
+
 에러코드 통합 처리(발생하는 에러를 먼저 알아야함)    
+cascade = CascadeType.REMOVE 알아보기
 파일 업로드    
 OAuth2.0    
 비밀번호 중복체크(ajax)    
 
-상품검색에서 최대 가격이 최소가격보다 작으면 오류 만들어주기.  (exception,bindingResult)  
-
 게시판 추천 수, 상품 좋아요 버튼 만들기(ajax, api, json) (이건 추후에 orderproduct를 만들어서 하는게 맞는거 같은데)          
 장바구니에 상품 추가할(때, 상품 개수 클라이언트에서 가져와서 그만큼 추가해줘야함(html도 수정해야하고 service도 수정해야함): 이건 추후에 소비자를 위한 order을 만들어야할지도..?  
 
-(사장,소비자 구분)사장님만 등록 할 수 있게 page만들기 추후에 (권한관리는 enum 활용해서 )  
+(사장,소비자 구분)사장님만 등록 할 수 있게 page만들기 추후에  
 
 (Docker)  
 (jwt)  
