@@ -11,14 +11,12 @@ import javax.validation.constraints.NotEmpty;
 public class MemberUpdateForm {
 
     @NotEmpty
-    private String userLoginId;
-    @NotEmpty
     private String userPassword;
     @NotEmpty
     private String checkPassword;
     @NotEmpty
     private String name;
-    @NotEmpty
+    private String nickname;
     private String gender;
     @NotEmpty
     private String phone;
@@ -27,22 +25,20 @@ public class MemberUpdateForm {
     private String email;
 
     private String birth;
-    private String nickname;
 
-    @Embedded
-    private Address address;
+    private String city;
+    private String street;
+    private String zipcode;
 
     @Override
     public String toString() {
         return "MemberUpdateForm{" +
-                "userLoginId='" + userLoginId + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", checkPassword='" + checkPassword + '\'' +
                 ", name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
                 ", birth='" + birth + '\'' +
                 ", nickname='" + nickname + '\'' +
                 '}';

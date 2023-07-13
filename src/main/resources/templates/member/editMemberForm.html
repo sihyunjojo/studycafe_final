@@ -13,7 +13,7 @@
     <form th:action="edit" th:object="${loginMember}" method="POST">
         <h1>회원 수정</h1>
 
-        <input type="hidden" id="id" name="id" th:value="${memberId}">
+        <input type="hidden" id="id" name="id" th:value="${loginMember.id}">
 
         <!-- 아이디 -->
         <div class="form-group">
@@ -81,10 +81,19 @@
 
         </div>
         <div class="form-group">
-            <label for="address">주소</label><br>
-            <input type="text" class="form-control" id="address" th:field="*{address}" />
-            <div class="field-error" th:errors="*{address}"/>
-
+            <label th:for="city">도시</label>
+            <input type="text" th:field="*{city}" class="form-control" placeholder="도시를 입력하세요">
+            <div class="field-error" th:errors="*{city}"/>
+        </div>
+        <div class="form-group">
+            <label th:for="street">거리</label>
+            <input type="text" th:field="*{street}" class="form-control" placeholder="거리를 입력하세요">
+            <div class="field-error" th:errors="*{street}"/>
+        </div>
+        <div class="form-group">
+            <label th:for="zipcode">우편번호</label>
+            <input type="text" th:field="*{zipcode}" class="form-control" placeholder="우편번호를 입력하세요">
+            <div class="field-error" th:errors="*{zipcode}"/>
         </div>
         <div class="form-group">
             <label for="email">이메일</label><br>

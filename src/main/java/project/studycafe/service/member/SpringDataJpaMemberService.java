@@ -2,8 +2,11 @@ package project.studycafe.service.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jdt.internal.compiler.ast.FalseLiteral;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.contoller.form.MemberCreateForm;
+import project.studycafe.domain.Address;
 import project.studycafe.domain.Member;
 import project.studycafe.repository.member.JpaMemberRepository;
 import project.studycafe.contoller.form.MemberUpdateForm;
@@ -20,14 +23,47 @@ public class SpringDataJpaMemberService implements MemberService {
     /**
      * 회원가입
      */
-    public String join(Member member) {
+    public Object join(MemberCreateForm form) {
+        Member member = new Member();
+        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+
+        member.setUserLoginId(form.getUserLoginId());
+        member.setUserPassword(form.getUserPassword());
+        member.setName(form.getName());
+        member.setNickname(form.getNickname());
+        member.setPhone(form.getPhone());
+        member.setEmail(form.getEmail());
+        member.setBirth(form.getBirth());
+        member.setAddress(address);
+
         try {
             validateDuplicatedMember(member); // 중복회원 검증
         } catch (IllegalStateException e) {
-            return null;
+            log.info("회원 아이디가 중복되었습니다.");
+            return false;
         }
+
         memberRepository.save(member); // db에 멤버값 넣어줌
-        return member.getUserLoginId();
+        return member.getId();
+    }
+
+    @Override
+    public Optional<Member> update(long memberId, MemberUpdateForm form) {
+        Member findMember = memberRepository.findById(memberId).orElseThrow(); //값이 없으며 에러를 내라. 요고군
+        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+
+        findMember.setUserPassword(form.getUserPassword());
+        findMember.setName(form.getName());
+        findMember.setNickname(form.getNickname());
+        findMember.setGender(form.getGender());
+        findMember.setPhone(form.getPhone());
+        findMember.setEmail(form.getEmail());
+        findMember.setBirth(form.getBirth());
+        findMember.setAddress(address);
+
+        log.info("findMember ={}", findMember);
+
+        return Optional.of(findMember);
     }
 
     //public Member viewMember(Member member);
@@ -50,23 +86,6 @@ public class SpringDataJpaMemberService implements MemberService {
         return memberRepository.findByEmailAndProvider(email,provider);
     }
 
-    @Override
-    public Optional<Member> update(long memberId, MemberUpdateForm updateForm) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(); //값이 없으며 에러를 내라. 요고군
-
-        findMember.setUserPassword(updateForm.getUserPassword());
-        findMember.setName(updateForm.getName());
-        findMember.setGender(updateForm.getGender());
-        findMember.setPhone(updateForm.getPhone());
-        findMember.setBirth(updateForm.getBirth());
-        findMember.setAddress(updateForm.getAddress());
-        findMember.setEmail(updateForm.getEmail());
-
-        log.info("findMember ={}", findMember);
-
-        return Optional.of(findMember);
-    }
-
     //public int checkMemberPassword(Member member);
     //public Member getFindPasswordMember(Member member);
     //public int checkUniqueId(Member member);
@@ -81,5 +100,10 @@ public class SpringDataJpaMemberService implements MemberService {
                 });
     }
 
+    @Override
+    public Boolean validateDuplicatedMemberLoginId(String memberLoginId) {
+        log.info("userId = {}", memberLoginId);
+        return memberRepository.findFirstByUserLoginId(memberLoginId).isPresent();// member과 같은 이름이 있는지 찾앗을때
+    }
 
 }

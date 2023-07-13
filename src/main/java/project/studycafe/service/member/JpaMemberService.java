@@ -54,6 +54,11 @@ public class JpaMemberService implements MemberService {
         return null;
     }
 
+    @Override
+    public Boolean validateDuplicatedMemberLoginId(String memberLoginId) {
+        return null;
+    }
+
 
     //public int checkMemberPassword(Member member);
     //public Member getFindPasswordMember(Member member);
@@ -61,7 +66,7 @@ public class JpaMemberService implements MemberService {
 
 
     // memeber의 이름과 같은걸 찾아서
-    private void validateDuplicatedMember(Member member) {
+    public void validateDuplicatedMember(Member member) {
         log.info("userId = {}", member.getUserLoginId());
         memberRepository.findFirstByUserLoginId(member.getUserLoginId())// member과 같은 이름이 있는지 찾앗을때
                 .ifPresent(member1 -> {    // null이 아니니까(값이존재하면 ifPresent()인자 함수 실행

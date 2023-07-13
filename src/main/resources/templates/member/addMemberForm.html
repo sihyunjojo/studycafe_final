@@ -1,9 +1,9 @@
-ㅁ<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>'
+    <title>회원가입</title>
     <head th:insert="~{template/styleCss :: css_copy}"></head>
     <!--<link rel="stylesheet", href="member/join.css">-->
 </head>
@@ -15,7 +15,7 @@
 
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-               th:text="${err}">전체 오류 메시지</p>
+               th:text="${err}">글로벌 에러</p>
         </div>
 
         <!-- 아이디 -->
@@ -68,11 +68,19 @@
         </div>
         <!-- 주소 -->
         <div class="form-group">
-            <label for="phone">주소</label><br>
-            <input type="text"
-                   class="form-control" id="address" name="address" th:field="*{address}"
-                   th:errorclass="field-error" placeholder="address">
-            <div class="field-error" th:errors="*{address}"/>
+            <label th:for="city">도시</label>
+            <input type="text" th:field="*{city}" class="form-control" placeholder="도시를 입력하세요">
+            <div class="field-error" th:errors="*{city}"/>
+        </div>
+        <div class="form-group">
+            <label th:for="street">거리</label>
+            <input type="text" th:field="*{street}" class="form-control" placeholder="거리를 입력하세요">
+            <div class="field-error" th:errors="*{street}"/>
+        </div>
+        <div class="form-group">
+            <label th:for="zipcode">우편번호</label>
+            <input type="text" th:field="*{zipcode}" class="form-control" placeholder="우편번호를 입력하세요">
+            <div class="field-error" th:errors="*{zipcode}"/>
         </div>
         <!-- 이메일 -->
         <div class="form-group">

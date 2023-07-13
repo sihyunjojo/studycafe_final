@@ -24,6 +24,8 @@ public class Member extends BaseTimeEntity{
     private String userLoginId;
     private String userPassword;
     private String name;
+    @Column(unique = true)
+    private String nickname;
     private String phone;
 
     //Embedded type 은 사용자가 직접 정의한 값 타입이다.
@@ -36,10 +38,9 @@ public class Member extends BaseTimeEntity{
     private String email;
     private String gender;
     private String birth;
+
     private String provider;
 
-    @Column(unique = true)
-    private String nickname;
     @Enumerated(EnumType.STRING)
     private MemberLevel memberLevel;
 

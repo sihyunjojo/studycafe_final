@@ -30,17 +30,16 @@ public class MemberController {
 
     @GetMapping("/new")
     public String JoinForm(Model model) {
-        model.addAttribute("member", new Member());
+        model.addAttribute("member", new MemberCreateForm());
         return "member/addMemberForm";
     }
 
     @PostMapping("/new")
-    public String Join(@Validated MemberCreateForm form, BindingResult bindingResult) {
+    public String Join(@Validated @ModelAttribute("member") MemberCreateForm form, BindingResult bindingResult) {
 
-//        if (userId == null) {
-//            bindingResult.reject("usedUserId","이미 사용중인 아이디입니다.");
-//            return "member/addMemberForm";
-//        }
+        if (memberService.validateDuplicatedMemberLoginId(form.getUserLoginId())) {
+            bindingResult.reject("usedUserId", "이미 사용중인 아이디입니다.");
+        }
 
         if (bindingResult.hasErrors()) {
             log.info("회원가입 실패");
@@ -48,13 +47,43 @@ public class MemberController {
             return "member/addMemberForm";
         }
 
-        String userId = memberService.join(form);
+        Object userId = memberService.join(form);
         log.info("userId = {}", userId);
-
-
 
         return "redirect:/";
     }
+
+    @GetMapping("/edit")
+    public String EditForm(@Login Member loginMember, Model model) {
+        model.addAttribute(LOGIN_MEMBER, loginMember);
+        log.info("login member={}", loginMember);
+        return "member/editMemberForm";
+    }
+
+    //updateform의 필드들이 어자피 login
+    @PostMapping("/edit")
+    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") MemberUpdateForm updateForm, BindingResult bindingResult, Model model, HttpServletRequest request) {
+        log.info("bindingResult ={}", bindingResult);
+        log.info("updateFOrm = {}", updateForm);
+        log.info("loginmember={}", loginMember);
+
+        if (bindingResult.hasErrors()) {
+            log.info("수정 실패");
+            model.addAttribute("memberId", loginMember.getId());
+//            log.info("loginmember={}", loginMember);
+
+            return "member/editMemberForm";
+        }
+
+        Member updatedMember = memberService.update(loginMember.getId(), updateForm).orElseThrow();
+        log.info("updatedMember = {}", updatedMember);
+
+        HttpSession session = request.getSession();
+        session.setAttribute(LOGIN_MEMBER, updatedMember);
+
+        return "redirect:/member/info";
+    }
+
 
     @GetMapping("/idquiry")
     public String findIdForm() {
@@ -81,38 +110,6 @@ public class MemberController {
         model.addAttribute("member", result);
 
         return "member/findPasswordResult";
-    }
-
-    @GetMapping("/edit")
-    public String EditForm(@Login Member loginMember, Model model) {
-        model.addAttribute(LOGIN_MEMBER, loginMember);
-        model.addAttribute("memberId", loginMember.getId());
-        log.info("loginmember={}", loginMember);
-        return "member/editMemberForm";
-    }
-
-    //updateform의 필드들이 어자피 login
-    @PostMapping("/edit")
-    public String Edit(@Login Member loginMember, @Validated @ModelAttribute(LOGIN_MEMBER) MemberUpdateForm updateForm, BindingResult bindingResult, Model model, HttpServletRequest request) {
-        log.info("bindingResult ={}", bindingResult);
-        log.info("updateFOrm = {}", updateForm);
-        log.info("loginmember={}", loginMember);
-
-        if (bindingResult.hasErrors()) {
-            log.info("수정 실패");
-            model.addAttribute("memberId", loginMember.getId());
-//            log.info("loginmember={}", loginMember);
-
-            return "member/editMemberForm";
-        }
-
-        Member updatedMember = memberService.update(loginMember.getId(), updateForm).orElseThrow();
-        log.info("updatedMember = {}", updatedMember);
-
-        HttpSession session = request.getSession();
-        session.setAttribute(LOGIN_MEMBER, updatedMember);
-
-        return "redirect:/member/info";
     }
 
     // ajax로 다시만들ㅡ
