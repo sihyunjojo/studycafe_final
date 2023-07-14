@@ -118,11 +118,8 @@ public class BoardController {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/board/add";
         }
-
         Long boardId = boardService.addBoard(form);
-        log.info("board id = {}", boardId);
-        log.info("boardForm ={}", form);
-        log.info("board ={}", boardService.findById(boardId));
+
         // 파일 저장
         List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
 
@@ -142,9 +139,6 @@ public class BoardController {
 
     @PostMapping("/{boardId}/edit")
     public String edit(BoardUpdateForm form, @PathVariable Long boardId) throws IOException {
-        log.info("start edit");
-        log.info("file = {}",form.getNewAttachmentFiles());
-
         if (form.getNewAttachmentFiles() != null) {
             List<AttachmentFile> storeFiles = fileService.storeFiles(form.getNewAttachmentFiles(), boardId);
         }
@@ -156,6 +150,11 @@ public class BoardController {
 
     @GetMapping("/{boardId}/delete")
     public String delete(@PathVariable long boardId) {
+        List<AttachmentFile> attachmentFiles = boardService.findById(boardId).orElseThrow().getAttachmentFiles();
+        for (AttachmentFile attachmentFile : attachmentFiles) {
+            fileService.deleteFileFromStorage(attachmentFile);
+        }
+
         boardService.deleteBoard(boardId);
         return "redirect:/board"; // 삭제 후 목록 페이지로 리다이렉트
     }

@@ -106,7 +106,7 @@ public class BoardService {
     public void deleteBoard(long boardId) {
         fileRepository.deleteByBoardId(boardId);
         commentRepository.deleteByBoardId(boardId);
-        log.info("boardid = {}", boardId);
+        log.info("board id = {}", boardId);
         log.info("board = {}", boardRepository.findById(boardId));
         boardRepository.deleteById(boardId);
     }

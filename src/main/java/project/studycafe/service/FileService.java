@@ -71,6 +71,7 @@ public class FileService {
         //파일 저장장치에 저장
         multipartFile.transferTo(new File(getFullPath(storeFileName))); //trasferTo() 업로드된 파일을 지정된 경로로 전송(이동)하는 기능을 제공한다.
 
+
         return attachmentFile;
 //        return new AttachmentFile(originalFilename, storeFileName);
     }
@@ -86,6 +87,23 @@ public class FileService {
 
         //파일테이블에서 없애기
         fileRepository.deleteByUniqueFileName(findFile.getUniqueFileName());
+
+        //파일 저장장치에서 삭제
+        deleteFileFromStorage(findFile);
+
+    }
+
+    public void deleteFileFromStorage(AttachmentFile findFile) {
+        File storeFile = new File(getFullPath(findFile.getUniqueFileName()));
+        if (storeFile.exists()) {
+            if (storeFile.delete()) {
+                log.info("저장장치에서 파일 삭제");
+            } else {
+                // 파일 삭제 실패
+            }
+        } else {
+            // 파일이 존재하지 않음
+        }
     }
 
     //    // 이미지 여러개 날라올때
