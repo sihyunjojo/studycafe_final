@@ -27,6 +27,10 @@ public class Member extends BaseTimeEntity{
     @Column(unique = true)
     private String nickname;
     private String phone;
+    @Email
+    private String email;
+    private String gender;
+    private String birth;
 
     //Embedded type 은 사용자가 직접 정의한 값 타입이다.
     //여기서 Embedded type 을 사용하지 않으면,주소에 관한 정보를 전부 직접 정의해 줘야 되는데
@@ -34,22 +38,17 @@ public class Member extends BaseTimeEntity{
     @Embedded
     private Address address;
 
-    @Email
-    private String email;
-    private String gender;
-    private String birth;
-
     private String provider;
 
     @Enumerated(EnumType.STRING)
     private MemberLevel memberLevel;
 
     @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
 //    @Column(columnDefinition = "Int[]")
     private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
@@ -58,15 +57,11 @@ public class Member extends BaseTimeEntity{
     private List<Reply> replies = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
+//    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @PrePersist
     public void setting() {
-        if (this.cart == null) {
-            this.cart = new Cart();
-            cart.setMember(this);
-        }
         if (this.memberLevel == null) {
             this.memberLevel = GUEST;
         }

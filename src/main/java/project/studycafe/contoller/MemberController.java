@@ -7,15 +7,17 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import project.studycafe.contoller.form.MemberCreateForm;
+import project.studycafe.contoller.form.MemberForm;
+import project.studycafe.domain.AttachmentFile;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.Member;
-import project.studycafe.contoller.form.MemberUpdateForm;
+import project.studycafe.contoller.form.MemberForm;
 import project.studycafe.service.login.LoginService;
 import project.studycafe.service.member.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
@@ -30,13 +32,12 @@ public class MemberController {
 
     @GetMapping("/new")
     public String JoinForm(Model model) {
-        model.addAttribute("member", new MemberCreateForm());
+        model.addAttribute("member", new MemberForm());
         return "member/addMemberForm";
     }
 
     @PostMapping("/new")
-    public String Join(@Validated @ModelAttribute("member") MemberCreateForm form, BindingResult bindingResult) {
-
+    public String Join(@Validated @ModelAttribute("member") MemberForm form, BindingResult bindingResult, Model model) {
         if (memberService.validateDuplicatedMemberLoginId(form.getUserLoginId())) {
             bindingResult.reject("usedUserId", "이미 사용중인 아이디입니다.");
         }
@@ -44,6 +45,7 @@ public class MemberController {
         if (bindingResult.hasErrors()) {
             log.info("회원가입 실패");
             log.info("errors = {}", bindingResult);
+            model.addAttribute("member", new MemberForm());
             return "member/addMemberForm";
         }
 
@@ -55,28 +57,26 @@ public class MemberController {
 
     @GetMapping("/edit")
     public String EditForm(@Login Member loginMember, Model model) {
-        model.addAttribute(LOGIN_MEMBER, loginMember);
-        log.info("login member={}", loginMember);
+        MemberForm MemberForm = memberService.memberToMemberForm(loginMember);
+        model.addAttribute(LOGIN_MEMBER, MemberForm);
+        
         return "member/editMemberForm";
     }
 
     //updateform의 필드들이 어자피 login
     @PostMapping("/edit")
-    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") MemberUpdateForm updateForm, BindingResult bindingResult, Model model, HttpServletRequest request) {
-        log.info("bindingResult ={}", bindingResult);
-        log.info("updateFOrm = {}", updateForm);
-        log.info("loginmember={}", loginMember);
+    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") MemberForm updateForm, BindingResult bindingResult, Model model, HttpServletRequest request) {
+        log.info("updateForm = {}", updateForm);
 
         if (bindingResult.hasErrors()) {
+            log.info("bindingResult ={}", bindingResult);
             log.info("수정 실패");
-            model.addAttribute("memberId", loginMember.getId());
-//            log.info("loginmember={}", loginMember);
-
+            MemberForm MemberForm = memberService.memberToMemberForm(loginMember);
+            model.addAttribute(LOGIN_MEMBER, MemberForm);
             return "member/editMemberForm";
         }
 
         Member updatedMember = memberService.update(loginMember.getId(), updateForm).orElseThrow();
-        log.info("updatedMember = {}", updatedMember);
 
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, updatedMember);
@@ -84,6 +84,16 @@ public class MemberController {
         return "redirect:/member/info";
     }
 
+    @GetMapping("/delete")
+    public String delete(@Login Member loginMember,HttpServletRequest request) {
+        memberService.deleteMember(loginMember);
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
+    }
 
     @GetMapping("/idquiry")
     public String findIdForm() {
@@ -112,28 +122,30 @@ public class MemberController {
         return "member/findPasswordResult";
     }
 
-    // ajax로 다시만들ㅡ
-    @PostMapping("/checkPw")
-    public String CheckPw(@Login Member loginMember, MemberUpdateForm updateForm, Model model) {
-        if (updateForm.getCheckPassword().equals(updateForm.getUserPassword())) {
-            model.addAttribute("same_password", "비밀번호 일치");
-            model.addAttribute("updateMember", updateForm);
-        } else {
-            model.addAttribute("different_password", "비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
-        }
-
-        return "member/editMemberForm";
-    }
-
     @GetMapping("/info")
     public String InfoForm(@Login Member loginMember, Model model) {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/member/info/";
         }
+        log.info("member={}", loginMember);
+        MemberForm memberForm = memberService.memberToMemberForm(loginMember);
+        model.addAttribute(LOGIN_MEMBER, memberForm);
 
-        model.addAttribute(LOGIN_MEMBER, loginMember);
         return "member/memberInfo";
     }
+
+    // ajax로 다시만들ㅡ
+//    @PostMapping("/checkPw")
+//    public String CheckPw(@Login Member loginMember, MemberForm updateForm, Model model) {
+//        if (updateForm.getCheckPassword().equals(updateForm.getUserPassword())) {
+//            model.addAttribute("same_password", "비밀번호 일치");
+//            model.addAttribute("updateMember", updateForm);
+//        } else {
+//            model.addAttribute("different_password", "비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+//        }
+//
+//        return "member/editMemberForm";
+//    }
 
 
 }

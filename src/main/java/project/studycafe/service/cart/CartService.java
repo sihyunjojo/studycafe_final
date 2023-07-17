@@ -28,9 +28,19 @@ public class CartService {
     private final JpaProductRepository productRepository;
     private final JpaMemberRepository memberRepository;
 
-    public List<CartProduct>  findCartProducts(Member member) {
-        Long memberId = memberRepository.findFirstByUserLoginId(member.getUserLoginId()).orElseThrow().getId();
-        Optional<Cart> cart = cartRepository.findByMemberId(memberId);
+    public Optional<Cart> addCart(Member member) {
+        log.info("member_id ={}",member.getId());
+        log.info("member ={}", member);
+
+        Cart cart = new Cart();
+        cart.setMember(member);
+
+        cartRepository.save(cart);
+        return Optional.of(cart);
+    }
+
+    public List<CartProduct> findCartProducts(Member member) {
+        Optional<Cart> cart = cartRepository.findByMemberId(member.getId());
 
         if (cart.isEmpty()) {
             Optional<Cart> newCart = addCart(member);
@@ -41,31 +51,24 @@ public class CartService {
         return cartProducts;
     }
 
-    public Optional<Cart> addCart(Member member) {
-        log.info("member_id ={}",member.getId());
-
-        Cart cart = new Cart();
-        cart.setMember(member);
-
-        log.info("cart ={}", cart);
-        cartRepository.save(cart);
-        return Optional.of(cart);
-    }
-
     public void addCartProduct(Member member, long itemId) {
-        log.info("member.getuserlogin={}", member.getUserLoginId());
-        Cart findcart = cartRepository.findByMemberId(member.getId()).orElseThrow();
+        Optional<Cart> findCart = cartRepository.findByMemberId(member.getId());
+
+        if (findCart.isEmpty()) {
+            Optional<Cart> newCart = addCart(member);
+            findCart = newCart;
+        }
+
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
-        Optional<CartProduct> existingCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId());
+        // 카트안에 제품이 있는지
+        Optional<CartProduct> existingCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findCart.orElseThrow().getId(), findproduct.getId());
 
         if (existingCartProduct.isEmpty()) {
             CartProduct cartProduct = new CartProduct();
 
-            cartProduct.setCart(findcart);
+            cartProduct.setCart(findCart.orElseThrow());
             cartProduct.setProduct(findproduct);
-//            cartProduct.setCartId(findcart.getId());
-//            cartProduct.setProductId(itemId);
             cartProduct.setQuantity(1); // 추후에 값을 받아와서 해야함.
             cartProduct.setTotalPrice(findproduct.getPrice());
             cartProductRepository.save(cartProduct);

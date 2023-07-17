@@ -8,15 +8,19 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class MemberCreateForm {
+@AllArgsConstructor
+@NoArgsConstructor
+public class MemberForm {
 
     @NotNull
     private String userLoginId;
     @NotNull
     private String userPassword;
-    @NotNull
+
     private String name;
     private String nickname;
+    private String gender;
+
     @NotNull
     private String phone;
 
@@ -26,7 +30,6 @@ public class MemberCreateForm {
 
     @Email
     private String email;
-    private String gender;
     private String birth;
 
 }

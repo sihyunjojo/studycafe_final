@@ -33,9 +33,17 @@
         <label for="phone">휴대전화</label>
         <input type="text" id="phone" name="phone" class="form-control" value="10" th:value="${loginMember.phone}" readonly>
     </div>
-    <div>
-        <label for="address">주소</label>
-        <input type="text" id="address" name="address" class="form-control" value="10" th:value="${loginMember.address}" readonly>
+    <div class="form-group">
+        <label th:for="city">도시</label>
+        <input type="text"  class="form-control" th:value="${loginMember.city}" readonly>
+    </div>
+    <div class="form-group">
+        <label th:for="street">거리</label>
+        <input type="text"  class="form-control" th:value="${loginMember.street}" readonly>
+    </div>
+    <div class="form-group">
+        <label th:for="zipcode">우편번호</label>
+        <input type="text" class="form-control" th:value="${loginMember.zipcode}" readonly>
     </div>
     <div>
         <label for="email">이메일</label>
@@ -52,7 +60,12 @@
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
                     th:onclick="|location.href='@{/member/edit}'|"
-                    type="button">수정</button>
+                    type="button">회원 수정</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    th:onclick="|location.href='@{/member/delete}'|"
+                    type="button">회원 탈퇴</button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
