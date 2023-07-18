@@ -1,14 +1,17 @@
 package project.studycafe.service.member;
 
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.studycafe.contoller.form.MemberForm;
 import project.studycafe.domain.*;
 import project.studycafe.repository.member.JpaMemberRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +51,10 @@ public class SpringDataJpaMemberService implements MemberService {
     }
 
     @Override
-    public Optional<Member> update(long memberId, MemberForm form) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(); //값이 없으며 에러를 내라. 요고군
+    public Optional<Member> update(long memberId, MemberForm form) throws NotFoundException {
+                Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("Member not found with ID: " + memberId));
+//        Member findMember = memberRepository.findById(memberId).orElseThrow(); //값이 없으며 에러를 내라. 요고군
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
         findMember.setUserPassword(form.getUserPassword());
@@ -68,30 +73,33 @@ public class SpringDataJpaMemberService implements MemberService {
 
     @Override
     public void deleteMember(Member member) {
-        Member unknownMember = memberRepository.findFirstByUserLoginId("unknown").orElseThrow();
+        memberRepository.delete(member);
+    }
 
+    @Override
+    @Transactional
+    public void removeForeignKeyMember(Member member) {
+//        Member unknownMember = memberRepository.findFirstByUserLoginId("unknown").orElseThrow();
         List<Board> boards = member.getBoards();
         for (Board board : boards) {
+            log.info("board = {}", board);
             board.setMember(null);
         }
+
 //        unknownMember.getBoards().addAll(boards);
-
-
         List<Comment> comments = member.getComments();
         for (Comment comment : comments) {
             comment.setMember(null);
         }
 //        unknownMember.getComments().addAll(comments);
 
-
         List<Reply> replies = member.getReplies();
         for (Reply reply : replies) {
             reply.setMember(null);
         }
-        unknownMember.getReplies().addAll(replies);
+//        unknownMember.getReplies().addAll(replies);
 //        memberRepository.save(unknownMember);
 
-        memberRepository.delete(member);
     }
 
     //public Member viewMember(Member member);
@@ -132,6 +140,8 @@ public class SpringDataJpaMemberService implements MemberService {
 
     @Override
     public MemberForm memberToMemberForm(Member member) {
+        log.info("member = {}", member.getAddress());
+
         return new MemberForm(member.getUserLoginId(), member.getUserPassword(),
                 member.getName(), member.getNickname(), member.getGender(), member.getPhone(),
                 member.getAddress().getCity(), member.getAddress().getStreet(), member.getAddress().getZipcode(),

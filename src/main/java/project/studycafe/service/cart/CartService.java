@@ -40,7 +40,10 @@ public class CartService {
     }
 
     public List<CartProduct> findCartProducts(Member member) {
-        Optional<Cart> cart = cartRepository.findByMemberId(member.getId());
+        log.info("member ={}", member);
+        Optional<Cart> cart = cartRepository.findFirstByMemberId(member.getId());
+        log.info("cart = {}", cart);
+        log.info("allcart = {}", cartRepository.findAll());
 
         if (cart.isEmpty()) {
             Optional<Cart> newCart = addCart(member);
@@ -52,7 +55,7 @@ public class CartService {
     }
 
     public void addCartProduct(Member member, long itemId) {
-        Optional<Cart> findCart = cartRepository.findByMemberId(member.getId());
+        Optional<Cart> findCart = cartRepository.findFirstByMemberId(member.getId());
 
         if (findCart.isEmpty()) {
             Optional<Cart> newCart = addCart(member);
@@ -78,7 +81,7 @@ public class CartService {
     public void editUpQuantityCartProduct(Member member, long itemId) {
         Long memberId = memberRepository.findFirstByUserLoginId(member.getUserLoginId()).orElseThrow().getId();
 
-        Cart findcart = cartRepository.findByMemberId(memberId).orElseThrow();
+        Cart findcart = cartRepository.findFirstByMemberId(memberId).orElseThrow();
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
         CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId()).orElseThrow();
@@ -88,7 +91,7 @@ public class CartService {
     public void editDownQuantityCartProduct(Member member, long itemId) {
         Long memberId = memberRepository.findFirstByUserLoginId(member.getUserLoginId()).orElseThrow().getId();
 
-        Cart findcart = cartRepository.findByMemberId(memberId).orElseThrow();
+        Cart findcart = cartRepository.findFirstByMemberId(memberId).orElseThrow();
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
         CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId()).orElseThrow();
@@ -103,7 +106,7 @@ public class CartService {
     public void deleteCartProduct(Member member, long itemId) {
         Long memberId = memberRepository.findFirstByUserLoginId(member.getUserLoginId()).orElseThrow().getId();
 
-        Cart findcart = cartRepository.findByMemberId(memberId).orElseThrow();
+        Cart findcart = cartRepository.findFirstByMemberId(memberId).orElseThrow();
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
         Optional<CartProduct> findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId());

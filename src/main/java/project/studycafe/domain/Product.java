@@ -7,6 +7,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -28,6 +30,9 @@ public class Product extends BaseTimeEntity {
     private String image; // 이미지 url
     private Integer readCount;
     private Integer likeCount;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartProduct> cartProducts = new ArrayList<>();
 
     @PrePersist
     public void setting() {

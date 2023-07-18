@@ -74,7 +74,7 @@ public class BoardService {
         return board.getId();
     }
 
-    public void addBoard(BoardCreateForm form, List<AttachmentFile> files) {
+    public Long addBoard(BoardCreateForm form, List<AttachmentFile> files) {
         Board board = new Board();
         board.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
         board.setTitle(form.getTitle());
@@ -85,6 +85,8 @@ public class BoardService {
         log.info("file = {}", files);
 
         boardRepository.save(board);
+
+        return board.getId();
     }
 
     public void updateBoard(Long boardId, BoardUpdateForm form) {
@@ -94,6 +96,7 @@ public class BoardService {
         board.setContent(form.getContent());
         board.setCategory(form.getCategory());
     }
+
     public void updateBoard(Long boardId, BoardUpdateForm form, List<AttachmentFile> files) {
         Board board = boardRepository.findById(boardId).orElseThrow();
 

@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,21 +42,20 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private MemberLevel memberLevel;
 
-    @OneToMany(mappedBy = "member")
-//    @Column(columnDefinition = "Int[]")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Reply> replies = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "cart_id")
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @PrePersist

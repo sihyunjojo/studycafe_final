@@ -2,6 +2,7 @@ package project.studycafe.contoller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import project.studycafe.service.board.CommentService;
 import project.studycafe.service.board.ReplyService;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
@@ -62,6 +64,7 @@ public class BoardController {
         List<Board> findBoards = boardService.getSearchedAndSortedBoards(boardSearch);
         List<Board> notices = boardService.getBoardsByCategoryByCreatedTimeDesc("공지사항");
 
+
         log.info("search={}", boardSearch);
 
         List<Board> findBoardList = boardService.getBoardList(page, boardSearch.getPerPageNum(), findBoards);
@@ -71,7 +74,7 @@ public class BoardController {
             findBoardList.addAll(0, notices);
         }
 
-        PageMaker pageMaker = new PageMaker(findBoards.size(), page, boardSearch.getPerPageNum());
+        PageMaker pageMaker = new PageMaker(findBoards.size()- notices.size(), page, boardSearch.getPerPageNum());
 
         // 클라이언트 처리
         List<BoardForm> boardForms = boardService.boardsToBoardForms(findBoardList);
@@ -114,17 +117,26 @@ public class BoardController {
     }
 
     @PostMapping("/add")
-    public String add(@Login Member loginMember, BoardCreateForm form) throws IOException {
+    public String add(@Login Member loginMember, BoardCreateForm form) throws IOException, NoSuchAlgorithmException {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/board/add";
         }
+
         Long boardId = boardService.addBoard(form);
 
+        if (form.getAttachmentFiles() != null) {
+            List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
+        }
+
+//        List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles());
+//        Long boardId = boardService.addBoard(form, storeFiles);
+//        Long boardId = boardService.addBoard(form, storeFiles);
+
+        log.info("boardid = {}", boardId);
+        // 이름이 같은데 내부 파일이 다른 내용일 수 도 있잖음.
         // 파일 저장
-        List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
 
 
-//        boardService.addBoard(form, storeFiles);
         return "redirect:/board"; // 일단 home으로 보내주자 나중에 board목록으로 보내주고
     }
 
@@ -138,11 +150,10 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/edit")
-    public String edit(BoardUpdateForm form, @PathVariable Long boardId) throws IOException {
+    public String edit(BoardUpdateForm form, @PathVariable Long boardId) throws IOException, NoSuchAlgorithmException {
         if (form.getNewAttachmentFiles() != null) {
             List<AttachmentFile> storeFiles = fileService.storeFiles(form.getNewAttachmentFiles(), boardId);
         }
-
         boardService.updateBoard(boardId, form);
 
         return "redirect:/board";

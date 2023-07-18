@@ -142,6 +142,7 @@
 
                 <li class="row" th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
                     <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${productSearch}" method="get">
+                        <input type="hidden" name="page" th:value="${page}" />
                         <input type="hidden" th:field="*{name}"/>
                         <input type="hidden" th:field="*{minPrice}"/>
                         <input type="hidden" th:field="*{maxPrice}"/>

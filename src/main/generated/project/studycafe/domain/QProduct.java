@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -20,6 +21,8 @@ public class QProduct extends EntityPathBase<Product> {
     public static final QProduct product = new QProduct("product");
 
     public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
+
+    public final ListPath<CartProduct, QCartProduct> cartProducts = this.<CartProduct, QCartProduct>createList("cartProducts", CartProduct.class, QCartProduct.class, PathInits.DIRECT2);
 
     public final StringPath category = createString("category");
 

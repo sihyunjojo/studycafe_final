@@ -2,6 +2,7 @@ package project.studycafe.domain;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.common.reflection.XMember;
 
 import javax.persistence.*;
 
@@ -10,11 +11,12 @@ import javax.persistence.*;
 @Getter @Setter
 @NoArgsConstructor
 public class AttachmentFile extends BaseTimeEntity {
-
     @Id
     private String uniqueFileName;
+
     private String attachmentFileName;
     private long attachmentFileSize;
+
     @Enumerated(EnumType.STRING)
     private FileType attachmentFileType;
 
@@ -35,6 +37,9 @@ public class AttachmentFile extends BaseTimeEntity {
 
     //==연관관계 메서드==//
     public void setBoard(Board board) {
+        if (this.board != null) {
+            this.board.getAttachmentFiles().remove(this);
+        }
         this.board = board;
         board.getAttachmentFiles().add(this);
     }

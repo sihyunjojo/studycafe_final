@@ -1,5 +1,6 @@
 package project.studycafe.contoller;
 
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -65,7 +66,7 @@ public class MemberController {
 
     //updateform의 필드들이 어자피 login
     @PostMapping("/edit")
-    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") MemberForm updateForm, BindingResult bindingResult, Model model, HttpServletRequest request) {
+    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") MemberForm updateForm, BindingResult bindingResult, Model model, HttpServletRequest request) throws NotFoundException {
         log.info("updateForm = {}", updateForm);
 
         if (bindingResult.hasErrors()) {
@@ -86,6 +87,7 @@ public class MemberController {
 
     @GetMapping("/delete")
     public String delete(@Login Member loginMember,HttpServletRequest request) {
+//        memberService.removeForeignKeyMember(loginMember);
         memberService.deleteMember(loginMember);
 
         HttpSession session = request.getSession(false);

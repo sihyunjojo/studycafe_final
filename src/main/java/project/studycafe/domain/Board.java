@@ -33,8 +33,8 @@ public class Board extends BaseTimeEntity{
     @NotNull
     private Integer likeCount;
 
-    @OneToMany(mappedBy = "board")
-//    @Column(columnDefinition = "String[]")
+    //Cascadetype.all을 하게되면 세션에 2개의 같은 pk를 가진 attach엔티티가 발생하여서 에러가 발생한다.
+    @OneToMany(mappedBy = "board",cascade = CascadeType.REMOVE)
     private List<AttachmentFile> attachmentFiles = new ArrayList<>(); // 추후에 객체 따로만들어야할지도
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)

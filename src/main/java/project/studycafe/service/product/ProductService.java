@@ -78,6 +78,8 @@ public class ProductService {
         int startProduct = (page - 1) * perPageNum;
         int endProduct = Math.min(page * perPageNum, products.size());
 
+        log.info("= {}, = {}", page, perPageNum);
+
         return products.subList(startProduct, endProduct);
     }
 }

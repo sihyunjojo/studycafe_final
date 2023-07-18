@@ -10,16 +10,22 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@ToString
 public class Cart extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @OneToOne(mappedBy = "cart", fetch = FetchType.LAZY)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id" , nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
 
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", memberId=" + member.getId() +
+                '}';
+    }
 }
+
