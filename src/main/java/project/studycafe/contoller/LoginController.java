@@ -51,15 +51,16 @@ public class LoginController {
 //            throw new RuntimeException("잘못된 사용자");
 //        }
 
-        if (loginMember.getUserLoginId().equals("ex")) {
-            throw new RuntimeException("잘못된 사용자");
-        }
-        if (loginMember.getUserLoginId().equals("bad")) {
-            throw new IllegalArgumentException("잘못된 입력 값");
-        }
-        if (loginMember.getUserLoginId().equals("user-ex")) {
-            throw new UserException("사용자 오류");
-        }
+
+//        if (loginMember.getUserLoginId().equals("ex")) {
+//            throw new RuntimeException("잘못된 사용자");
+//        }
+//        if (loginMember.getUserLoginId().equals("bad")) {
+//            throw new IllegalArgumentException("잘못된 입력 값");
+//        }
+//        if (loginMember.getUserLoginId().equals("user-ex")) {
+//            throw new UserException("사용자 오류");
+//        }
 
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, loginMember);

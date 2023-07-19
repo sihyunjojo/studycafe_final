@@ -31,7 +31,7 @@ public class Product extends BaseTimeEntity {
     private Integer readCount;
     private Integer likeCount;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<CartProduct> cartProducts = new ArrayList<>();
 
     @PrePersist

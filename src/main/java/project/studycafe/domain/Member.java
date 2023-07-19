@@ -35,7 +35,7 @@ public class Member extends BaseTimeEntity{
     //여기서 Embedded type 을 사용하지 않으면,주소에 관한 정보를 전부 직접 정의해 줘야 되는데
     //그러면 객체지향적이지 않고 응집력을 떨어뜨리는 원인이 된다.
     @Embedded
-    private Address address;
+    private Address address = new Address();
 
     private String provider;
 
@@ -62,6 +62,9 @@ public class Member extends BaseTimeEntity{
     public void setting() {
         if (this.memberLevel == null) {
             this.memberLevel = GUEST;
+        }
+        if (this.address == null) {
+            this.address = new Address();
         }
     }
 

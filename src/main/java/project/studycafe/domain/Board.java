@@ -38,7 +38,7 @@ public class Board extends BaseTimeEntity{
     private List<AttachmentFile> attachmentFiles = new ArrayList<>(); // 추후에 객체 따로만들어야할지도
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<Comment> Comments;
+    private List<Comment> Comments = new ArrayList<>();
 
     //영속상태로 변하기 직전에 시점에 시작됨.
     @PrePersist

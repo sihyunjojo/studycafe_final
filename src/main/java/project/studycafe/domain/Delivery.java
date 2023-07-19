@@ -16,7 +16,7 @@ public class Delivery extends BaseTimeEntity{
     private Order order;
 
     @Embedded
-    private Address address;
+    private Address address = new Address();
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus state;

@@ -95,6 +95,7 @@ public class BoardService {
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
         board.setCategory(form.getCategory());
+        log.info("board = {}", boardRepository.findById(boardId));
     }
 
     public void updateBoard(Long boardId, BoardUpdateForm form, List<AttachmentFile> files) {
@@ -106,9 +107,9 @@ public class BoardService {
         board.setAttachmentFiles(files);
     }
 
-    public void deleteBoard(long boardId) {
-        fileRepository.deleteByBoardId(boardId);
-        commentRepository.deleteByBoardId(boardId);
+    public void deleteBoard(Long boardId) {
+//        fileRepository.deleteByBoardId(boardId);
+//        commentRepository.deleteByBoardId(boardId);
         log.info("board id = {}", boardId);
         log.info("board = {}", boardRepository.findById(boardId));
         boardRepository.deleteById(boardId);

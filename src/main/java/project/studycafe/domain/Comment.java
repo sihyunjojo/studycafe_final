@@ -3,6 +3,7 @@ package project.studycafe.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,11 +14,13 @@ public class Comment extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // cascade 넣었다가.... 이거 삭제되니 관련된 mmeber 다 삭제.. -> board 다 삭제..
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // cascade 넣었다가.... 이거 삭제되니 관련된 board 다 삭제..
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
@@ -25,7 +28,7 @@ public class Comment extends BaseTimeEntity{
     private Integer likeCount;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    private List<Reply> replies;
+    private List<Reply> replies = new ArrayList<>();
 
 
     @PrePersist

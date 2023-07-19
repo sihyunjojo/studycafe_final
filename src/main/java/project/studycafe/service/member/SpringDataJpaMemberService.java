@@ -77,7 +77,6 @@ public class SpringDataJpaMemberService implements MemberService {
     }
 
     @Override
-    @Transactional
     public void removeForeignKeyMember(Member member) {
 //        Member unknownMember = memberRepository.findFirstByUserLoginId("unknown").orElseThrow();
         List<Board> boards = member.getBoards();
@@ -141,6 +140,8 @@ public class SpringDataJpaMemberService implements MemberService {
     @Override
     public MemberForm memberToMemberForm(Member member) {
         log.info("member = {}", member.getAddress());
+
+        member.setAddress(new Address());
 
         return new MemberForm(member.getUserLoginId(), member.getUserPassword(),
                 member.getName(), member.getNickname(), member.getGender(), member.getPhone(),
