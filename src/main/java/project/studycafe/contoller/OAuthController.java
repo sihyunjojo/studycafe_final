@@ -49,9 +49,9 @@ public class OAuthController {
             return "redirect:/";
         }
 
-        log.info("loginmember ={}", loginMember.get());
+        log.info("loginmember ={}", loginMember.orElseThrow());
         HttpSession session = request.getSession();
-        session.setAttribute(LOGIN_MEMBER, loginMember.get());
+        session.setAttribute(LOGIN_MEMBER, loginMember.orElseThrow());
 
         return "redirect:" + redirectURL;
     }

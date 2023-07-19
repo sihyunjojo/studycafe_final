@@ -63,19 +63,21 @@
             <label for="name">이름</label><br>
             <input type="text" class="form-control" id="name" th:field="*{name}" required/>
             <div class="field-error" th:errors="*{name}"/>
-
+        </div>
+        <div class="form-group">
+            <label for="nickname">닉네임</label><br>
+            <input type="text" class="form-control" id="nickname" th:field="*{nickname}" required/>
+            <div class="field-error" th:errors="*{nickname}"/>
         </div>
         <div class="form-group">
             <label for="gender">성별</label><br>
             <input type="text" class="form-control" id="gender" th:field="*{gender}"/>
             <div class="field-error" th:errors="*{gender}"/>
-
         </div>
         <div class="form-group">
             <label for="phone">휴대전화 ('-' 없이 번호만 입력해주세요)</label><br>
             <input type="text" class="form-control" id="phone" th:field="*{phone}" required/>
             <div class="field-error" th:errors="*{phone}"/>
-
         </div>
         <div class="form-group">
             <label th:for="city">도시</label>

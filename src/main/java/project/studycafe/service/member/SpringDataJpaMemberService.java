@@ -3,15 +3,14 @@ package project.studycafe.service.member;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.contoller.form.CommonMemberForm;
 import project.studycafe.contoller.form.MemberForm;
+import project.studycafe.contoller.form.OauthMemberForm;
 import project.studycafe.domain.*;
 import project.studycafe.repository.member.JpaMemberRepository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class SpringDataJpaMemberService implements MemberService {
     /**
      * 회원가입
      */
-    public Object join(MemberForm form) {
+    public Object join(CommonMemberForm form) {
         Member member = new Member();
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
@@ -46,30 +45,82 @@ public class SpringDataJpaMemberService implements MemberService {
             return false;
         }
 
+        log.info("member ={}", member);
         memberRepository.save(member); // db에 멤버값 넣어줌
         return member.getId();
     }
 
     @Override
     public Optional<Member> update(long memberId, MemberForm form) throws NotFoundException {
-                Member findMember = memberRepository.findById(memberId)
+        Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException("Member not found with ID: " + memberId));
-//        Member findMember = memberRepository.findById(memberId).orElseThrow(); //값이 없으며 에러를 내라. 요고군
-        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
-        findMember.setUserPassword(form.getUserPassword());
-        findMember.setName(form.getName());
-        findMember.setNickname(form.getNickname());
-        findMember.setGender(form.getGender());
-        findMember.setPhone(form.getPhone());
-        findMember.setEmail(form.getEmail());
-        findMember.setBirth(form.getBirth());
-        findMember.setAddress(address);
+        if (form instanceof CommonMemberForm) {
+            CommonMemberForm commonForm = (CommonMemberForm) form;
+            Address address = new Address(commonForm.getCity(), commonForm.getStreet(), commonForm.getZipcode());
 
-        log.info("findMember ={}", findMember);
+            findMember.setUserPassword(commonForm.getUserPassword());
+            findMember.setName(commonForm.getName());
+            findMember.setNickname(commonForm.getNickname());
+            findMember.setGender(commonForm.getGender());
+            findMember.setPhone(commonForm.getPhone());
+            findMember.setEmail(commonForm.getEmail());
+            findMember.setBirth(commonForm.getBirth());
+            findMember.setAddress(address);
+        } else if (form instanceof OauthMemberForm) {
+            OauthMemberForm oauthForm = (OauthMemberForm) form;
+            Address address = new Address(oauthForm.getCity(), oauthForm.getStreet(), oauthForm.getZipcode());
+
+            findMember.setName(oauthForm.getName());
+            findMember.setNickname(oauthForm.getNickname());
+            findMember.setGender(oauthForm.getGender());
+            findMember.setPhone(oauthForm.getPhone());
+            findMember.setEmail(oauthForm.getEmail());
+            findMember.setBirth(oauthForm.getBirth());
+            findMember.setAddress(address);
+        }
+
+        log.info("findMember = {}", findMember);
 
         return Optional.of(findMember);
     }
+
+
+//    @Override
+//    public Optional<Member> update(long memberId, MemberForm form) throws NotFoundException {
+//                Member findMember = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new NotFoundException("Member not found with ID: " + memberId));
+////        Member findMember = memberRepository.findById(memberId).orElseThrow(); //값이 없으며 에러를 내라. 요고군
+//
+//        if (form.getClass() == CommonMemberForm.class) {
+//            CommonMemberForm form = (CommonMemberForm) form;
+//            Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+//
+//            findMember.setUserPassword(form.getUserPassword());
+//            findMember.setName(form.getName());
+//            findMember.setNickname(form.getNickname());
+//            findMember.setGender(form.getGender());
+//            findMember.setPhone(form.getPhone());
+//            findMember.setEmail(form.getEmail());
+//            findMember.setBirth(form.getBirth());
+//            findMember.setAddress(address);
+//        } else if (form.getClass() == OauthMemberForm.class) {
+//            OauthMemberForm form = (OauthMemberForm) form;
+//            Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+//
+//            findMember.setName(form.getName());
+//            findMember.setNickname(form.getNickname());
+//            findMember.setGender(form.getGender());
+//            findMember.setPhone(form.getPhone());
+//            findMember.setEmail(form.getEmail());
+//            findMember.setBirth(form.getBirth());
+//            findMember.setAddress(address);
+//        }
+//
+//        log.info("findMember ={}", findMember);
+//
+//        return Optional.of(findMember);
+//    }
 
     @Override
     public void deleteMember(Member member) {
@@ -138,14 +189,22 @@ public class SpringDataJpaMemberService implements MemberService {
     }
 
     @Override
-    public MemberForm memberToMemberForm(Member member) {
+    public CommonMemberForm memberToMemberForm(Member member) {
         log.info("member = {}", member.getAddress());
 
-        member.setAddress(new Address());
-
-        return new MemberForm(member.getUserLoginId(), member.getUserPassword(),
+        return new CommonMemberForm(member.getUserLoginId(), member.getUserPassword(),
                 member.getName(), member.getNickname(), member.getGender(), member.getPhone(),
                 member.getAddress().getCity(), member.getAddress().getStreet(), member.getAddress().getZipcode(),
                 member.getEmail(), member.getBirth());
+    }
+
+    @Override
+    public OauthMemberForm memberToOauthMemberForm(Member member) {
+        log.info("member address = {}", member.getAddress());
+
+        return new OauthMemberForm(member.getEmail(), member.getProvider(),
+                member.getName(), member.getNickname(), member.getGender(), member.getPhone(),
+                member.getAddress().getCity(), member.getAddress().getStreet(), member.getAddress().getZipcode(),
+                member.getBirth());
     }
 }

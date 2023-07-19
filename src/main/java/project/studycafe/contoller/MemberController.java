@@ -8,17 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import project.studycafe.contoller.form.MemberForm;
-import project.studycafe.domain.AttachmentFile;
+import project.studycafe.contoller.form.CommonMemberForm;
+import project.studycafe.contoller.form.OauthMemberForm;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.Member;
-import project.studycafe.contoller.form.MemberForm;
 import project.studycafe.service.login.LoginService;
 import project.studycafe.service.member.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Optional;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
@@ -33,12 +31,12 @@ public class MemberController {
 
     @GetMapping("/new")
     public String JoinForm(Model model) {
-        model.addAttribute("member", new MemberForm());
+        model.addAttribute("member", new CommonMemberForm());
         return "member/addMemberForm";
     }
 
     @PostMapping("/new")
-    public String Join(@Validated @ModelAttribute("member") MemberForm form, BindingResult bindingResult, Model model) {
+    public String Join(@Validated @ModelAttribute("member") CommonMemberForm form, BindingResult bindingResult, Model model) {
         if (memberService.validateDuplicatedMemberLoginId(form.getUserLoginId())) {
             bindingResult.reject("usedUserId", "이미 사용중인 아이디입니다.");
         }
@@ -46,7 +44,7 @@ public class MemberController {
         if (bindingResult.hasErrors()) {
             log.info("회원가입 실패");
             log.info("errors = {}", bindingResult);
-            model.addAttribute("member", new MemberForm());
+            model.addAttribute("member", new CommonMemberForm());
             return "member/addMemberForm";
         }
 
@@ -58,32 +56,61 @@ public class MemberController {
 
     @GetMapping("/edit")
     public String EditForm(@Login Member loginMember, Model model) {
-        MemberForm MemberForm = memberService.memberToMemberForm(loginMember);
-        model.addAttribute(LOGIN_MEMBER, MemberForm);
-        
+        if (loginMember.getProvider() != null) {
+            log.info("provider = {}", loginMember.getProvider());
+            OauthMemberForm oauthMemberForm = memberService.memberToOauthMemberForm(loginMember);
+            model.addAttribute(LOGIN_MEMBER, oauthMemberForm);
+            return "member/oauthEditMemberForm";
+        }
+
+        CommonMemberForm commonMemberForm = memberService.memberToMemberForm(loginMember);
+        model.addAttribute(LOGIN_MEMBER, commonMemberForm);
+
         return "member/editMemberForm";
     }
 
     //updateform의 필드들이 어자피 login
     @PostMapping("/edit")
-    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") MemberForm updateForm, BindingResult bindingResult, Model model, HttpServletRequest request) throws NotFoundException {
-        log.info("updateForm = {}", updateForm);
+    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") CommonMemberForm form, BindingResult bindingResult, Model model, HttpServletRequest request) throws NotFoundException {
+        log.info("updateForm = {}", form);
 
         if (bindingResult.hasErrors()) {
             log.info("bindingResult ={}", bindingResult);
             log.info("수정 실패");
-            MemberForm MemberForm = memberService.memberToMemberForm(loginMember);
-            model.addAttribute(LOGIN_MEMBER, MemberForm);
+            CommonMemberForm CommonMemberForm = memberService.memberToMemberForm(loginMember);
+            model.addAttribute(LOGIN_MEMBER, CommonMemberForm);
             return "member/editMemberForm";
         }
 
-        Member updatedMember = memberService.update(loginMember.getId(), updateForm).orElseThrow();
+        Member updatedMember = memberService.update(loginMember.getId(), form).orElseThrow();
 
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, updatedMember);
 
         return "redirect:/member/info";
     }
+
+    //updateform의 필드들이 어자피 login
+    @PostMapping("/edit/oauth")
+    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("member") OauthMemberForm form, BindingResult bindingResult, Model model, HttpServletRequest request) throws NotFoundException {
+        log.info("updateForm = {}", form);
+
+        if (bindingResult.hasErrors()) {
+            log.info("bindingResult ={}", bindingResult);
+            log.info("수정 실패");
+            OauthMemberForm OauthMemberForm = memberService.memberToOauthMemberForm(loginMember);
+            model.addAttribute(LOGIN_MEMBER, OauthMemberForm);
+            return "member/editMemberForm";
+        }
+
+        Member updatedMember = memberService.update(loginMember.getId(), form).orElseThrow();
+
+        HttpSession session = request.getSession();
+        session.setAttribute(LOGIN_MEMBER, updatedMember);
+
+        return "redirect:/member/info";
+    }
+
 
     @GetMapping("/delete")
     public String delete(@Login Member loginMember,HttpServletRequest request) {
@@ -129,9 +156,17 @@ public class MemberController {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/member/info/";
         }
+
+        if (loginMember.getProvider() != null) {
+            log.info("provider = {}", loginMember.getProvider());
+            OauthMemberForm oauthMemberForm = memberService.memberToOauthMemberForm(loginMember);
+            model.addAttribute(LOGIN_MEMBER, oauthMemberForm);
+            return "member/oauthMemberInfo";
+        }
+
         log.info("member={}", loginMember);
-        MemberForm memberForm = memberService.memberToMemberForm(loginMember);
-        model.addAttribute(LOGIN_MEMBER, memberForm);
+        CommonMemberForm commonMemberForm = memberService.memberToMemberForm(loginMember);
+        model.addAttribute(LOGIN_MEMBER, commonMemberForm);
 
         return "member/memberInfo";
     }

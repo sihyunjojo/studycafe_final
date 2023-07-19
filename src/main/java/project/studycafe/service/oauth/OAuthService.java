@@ -11,9 +11,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.domain.Address;
 import project.studycafe.repository.member.JpaMemberRepository;
 import project.studycafe.domain.Member;
-import project.studycafe.repository.member.dto.MemberProfile;
+import project.studycafe.contoller.form.MemberProfile;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -56,6 +57,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, memberProfile, registrationId);
 
+        //OAuth2 인증을 통해 가져온 사용자 정보를 기반으로 Spring Security에서 사용할 수 있는 DefaultOAuth2User 객체를 생성하는 역할을 합니다. 이 객체는 인증 및 권한 부여를 위해 사용될 수 있습니다.
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("USER")),
                 customAttribute,
@@ -78,10 +80,11 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 .map(m -> update(m, memberProfile.getName(),memberProfile.getEmail()))// OAuth 서비스 사이트에서 유저 정보 변경이 있을 수 있기 때문에 우리 DB에도 update
                 .orElse(memberProfile.toMember());
 
+        log.info("member ={}", member);
         return memberRepository.save(member);
     }
 
-    private Member update(Member member,String name, String email) {
+    private Member update(Member member, String name, String email) {
         member.setName(name);
         member.setEmail(email);
         return member;

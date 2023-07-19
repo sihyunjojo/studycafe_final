@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/oauth/Login")// oauth 전용 loginForm을 말하는 거 같음. // 이 코드를 작성하니까 기존 @{/login}을 사용했을때 ouath이상한 화면으로 넘어가던게 그냥 됬음.
                 .defaultSuccessUrl("/oauth/success", true) //OAuth2 성공시 redirect
                 .userInfoEndpoint() //OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정 담당
-                .userService(oAuthService); //OAuth2 로그인 성공 시, 작업을 진행할 MemberService
+                .userService(oAuthService); //OAuth2 로그인 성공 시, 작업을 진행할 oAuthService
 
     }
 }

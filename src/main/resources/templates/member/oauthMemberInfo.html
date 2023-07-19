@@ -14,12 +14,8 @@
 <!--    메시지 국제화 코드 포함시켜보자 나중에 th:text="#{label.member.userId}"-->
     <div> 추후 메시지 국제화 코드도 포함시켜보자. </div>
     <div>
-        <label for="userLoginId">아이디</label>
-        <input type="text" id="userLoginId" name="userLoginId" class="form-control" th:value="${loginMember.userLoginId}" readonly>
-    </div>
-    <div>
-        <label for="userPassword">비밀번호</label>
-        <input type="password" id="userPassword" name="userPassword" class="form-control" value="10000" th:value="${loginMember.userPassword}" readonly>
+        <label for="email">제공자</label>
+        <input type="text" id="email" name="email" class="form-control" value="10" th:value="${loginMember.provider}" readonly>
     </div>
     <div>
         <label for="name">이름</label>
@@ -37,6 +33,10 @@
         <label for="phone">휴대전화</label>
         <input type="text" id="phone" name="phone" class="form-control" value="10" th:value="${loginMember.phone}" readonly>
     </div>
+    <div>
+        <label for="email">이메일</label>
+        <input type="text" id="email" name="email" class="form-control" value="10" th:value="${loginMember.email}" readonly>
+    </div>
     <div class="form-group">
         <label th:for="city">도시</label>
         <input type="text"  class="form-control" th:value="${loginMember.city}" readonly>
@@ -50,13 +50,10 @@
         <input type="text" class="form-control" th:value="${loginMember.zipcode}" readonly>
     </div>
     <div>
-        <label for="email">이메일</label>
-        <input type="text" id="email" name="email" class="form-control" value="10" th:value="${loginMember.email}" readonly>
-    </div>
-    <div>
         <label for="birth">생년월일</label>
         <input type="text" id="birth" name="birth" class="form-control" value="10" th:value="${loginMember.birth}" readonly>
     </div>
+
 
     <hr class="my-4">
 

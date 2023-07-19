@@ -2,12 +2,14 @@ package project.studycafe.service.oauth;
 
 
 
-import project.studycafe.repository.member.dto.MemberProfile;
+import lombok.extern.slf4j.Slf4j;
+import project.studycafe.contoller.form.MemberProfile;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 public enum OAuthAttributes {
     GOOGLE("google", (attributes) -> {
         MemberProfile memberProfile = new MemberProfile();
@@ -18,7 +20,7 @@ public enum OAuthAttributes {
 
     NAVER("naver", (attributes) -> {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        System.out.println(response);
+        log.info("response = {}", response);
         MemberProfile memberProfile = new MemberProfile();
         memberProfile.setName((String) response.get("name"));
         memberProfile.setEmail(((String) response.get("email")));

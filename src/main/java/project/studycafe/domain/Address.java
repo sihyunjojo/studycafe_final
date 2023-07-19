@@ -1,14 +1,12 @@
 package project.studycafe.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class Address {
 
@@ -16,8 +14,10 @@ public class Address {
     private String street;
     private String zipcode;
 
-    public Address(){
-
+    // 이렇게 안하니까 null값이 계속 들어가더라.
+    public Address(String city, String street, String zipcode) {
+        this.city = city != null ? city : "";
+        this.street = street != null ? street : "";
+        this.zipcode = zipcode != null ? zipcode : "";
     }
-
 }
