@@ -8,6 +8,10 @@ import java.util.stream.DoubleStream;
 
 public interface JpaMemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findFirstByUserLoginId(String UserLoginId);
-    Optional<Member> findByEmailAndProvider(String email, String provider);
+    Optional<Member> findByNickname(String nickname);
     Optional<Member> findFirstByNameAndPhone(String name, String phone);
+
+    Optional<Member> findByEmailAndProvider(String email, String provider);
+
+
 }

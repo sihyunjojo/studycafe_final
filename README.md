@@ -168,7 +168,13 @@ board에서 첨부파일도 해결.
 삭제시 연관객체들 관리
 Oauth 완벽 완료
 
+# 7/20
+error 표시해주는 코드 완료.
+한국어 안나오는거 해결완료.
+
 ### 수정해야할 것들
+@Validated @ModelAttribute("member") CommonMemberForm form 이거에 대해서 좀 알아야함
+
 에러코드 통합 처리(발생하는 에러를 먼저 알아야함)    
 비밀번호 중복체크(ajax)    
 
