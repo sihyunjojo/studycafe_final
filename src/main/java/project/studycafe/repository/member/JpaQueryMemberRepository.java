@@ -14,7 +14,6 @@ import static project.studycafe.domain.QMember.member;
 @Slf4j
 public class JpaQueryMemberRepository{
     private final JPAQueryFactory query;
-
     public JpaQueryMemberRepository(EntityManager em) {
         this.query = new JPAQueryFactory(em);
     }

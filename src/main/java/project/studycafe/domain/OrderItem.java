@@ -1,12 +1,15 @@
 package project.studycafe.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class OrderItem extends BaseTimeEntity{
 
     @Id
@@ -21,6 +24,40 @@ public class OrderItem extends BaseTimeEntity{
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private int orderPrice;
-    private int count;
+    private int count = 1;
+    private int allPrice = product.getPrice();
+
+
+    public OrderItem(Product product, int count) {
+        this.product = product;
+        this.count = count;
+        this.allPrice = count * product.getPrice();
+
+        product.removeStock(count);
+    }
+
+    //==생성 메서드==//
+    public static OrderItem createOrderItem(Product product, int allPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setProduct(product);
+        orderItem.setAllPrice(allPrice);
+        orderItem.setCount(count);
+
+        product.removeStock(count);
+        return orderItem;
+    }
+
+
+    // 값을 받아오고 실행.
+    @PrePersist
+    void setting() {
+        if (this.count != 1) {
+            this.allPrice = count * product.getPrice();
+        }
+    }
+    //==비즈니스 로직==//
+    public void cancel() {
+        getProduct().addStock(count);
+    }
+
 }

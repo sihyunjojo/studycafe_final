@@ -57,5 +57,4 @@ public class OAuthController {
         return "redirect:" + redirectURL;
     }
 
-
 }

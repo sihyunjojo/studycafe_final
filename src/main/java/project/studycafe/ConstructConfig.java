@@ -3,6 +3,7 @@ package project.studycafe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import project.studycafe.repository.OrderQueryRepository;
 import project.studycafe.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.repository.member.JpaMemberRepository;
 import project.studycafe.repository.member.JpaQueryMemberRepository;
@@ -46,4 +47,10 @@ public class ConstructConfig {
     public JpaQueryProductRepository jpaQueryProductRepository(){
         return new JpaQueryProductRepository(em);
     }
+
+    @Bean
+    public OrderQueryRepository orderQueryRepository(){
+        return new OrderQueryRepository(em);
+    }
+
 }

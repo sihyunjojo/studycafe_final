@@ -3,6 +3,7 @@ package project.studycafe.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import project.studycafe.exception.NotEnoughStockException;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -40,5 +41,18 @@ public class Product extends BaseTimeEntity {
             this.readCount = 0;
             this.likeCount = 0;
         }
+    }
+
+    //==비지니스 로직==//
+    public void addStock(int quantity) {
+        this.quantity += quantity;
+    }
+
+    public void removeStock(int quantity) {
+        int restStock = this.quantity - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("need more stock");
+        }
+        this.quantity = restStock;
     }
 }

@@ -156,7 +156,7 @@ public class BoardController {
         }
         boardService.updateBoard(boardId, form);
 
-        return "redirect:/board";
+        return "redirect:/board/" + boardId;
     }
 
     @GetMapping("/{boardId}/delete")

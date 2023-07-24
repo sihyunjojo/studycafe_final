@@ -1,10 +1,12 @@
 package project.studycafe.repository.board.board.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode
+@AllArgsConstructor
 public class BoardSearchCond {
     private String title;
     private String userName;
@@ -12,12 +14,4 @@ public class BoardSearchCond {
     private String sort;
     private Integer perPageNum;
 
-
-    public BoardSearchCond(String title, String userName, String category, String sort, Integer perPageNum) {
-        this.title = title;
-        this.userName = userName;
-        this.category = category;
-        this.sort = sort;
-        this.perPageNum = perPageNum;
-    }
 }

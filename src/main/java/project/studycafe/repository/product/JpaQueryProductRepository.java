@@ -48,6 +48,7 @@ public class JpaQueryProductRepository {
                 .fetch();
     }
 
+    // 조회수순, 좋아요순
     private OrderSpecifier<?> sortedProductBySort(String sort) {
         if (StringUtils.hasText(sort)) {
             if ("readCount".equalsIgnoreCase(sort)) {

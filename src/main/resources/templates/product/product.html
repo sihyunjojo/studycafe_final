@@ -73,9 +73,15 @@
                class="form-control" id="updatedTime" name="updatedTime"
                th:value="${{product.updatedTime}}" readonly>
     </div>
+    <form>
+        <label for = "add_number">구매 수량</label>
+        <input type="hidden" th:field="${loginmember}"/>
+        <input type="text" id="add_number" name = "add_number" th:value="${1}" required>
+        <button th:onclick="|location.href='/order/${productId}/buy'|">구매하기</button>
+    </form>
+    <hr>
     <button th:onclick="|location.href='/product/${productId}/edit'|">수정하기</button>
-    <button th:onclick="|location.href='/product/${productId}/delete'|" onclick="return confirm('정말로 삭제하겠습니까?')">삭제하기
-    </button>
+    <button th:onclick="|location.href='/product/${productId}/delete'|" onclick="return confirm('정말로 삭제하겠습니까?')">삭제하기</button>
     <button th:onclick="|location.href='@{/product}'|">메인 상품</button>
 </div>
 </body>
