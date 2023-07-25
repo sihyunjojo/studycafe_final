@@ -1,8 +1,10 @@
 package project.studycafe.repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import project.studycafe.domain.Order;
 import project.studycafe.domain.OrderStatus;
@@ -15,6 +17,7 @@ import java.util.List;
 import static project.studycafe.domain.QOrder.order;
 
 
+@Slf4j
 public class OrderQueryRepository {
     private final JPAQueryFactory query;
 
@@ -28,12 +31,35 @@ public class OrderQueryRepository {
                 .where(
                         likeMemberName(cond.getMemberName()),
                         likeProductName(cond.getProductName()),
-                        eqProductCategory(cond.getCategory()),
+                        eqProductCategory(cond.getProductCategory()),
                         eqOrderStatus(cond.getOrderStatus()),
                         leMaxCreatedTime(cond.getMaxCreatedTime()),
                         geMinCreatedTime(cond.getMinCreatedTime())
                 )
+                .orderBy(
+                        sortedBoardBySort(cond.getSort(), cond.getSortDirection())
+                )
                 .fetch();
+    }
+
+    private OrderSpecifier<?> sortedBoardBySort(String sort, String sortDirection) {
+        log.info("sort ={}, direction={}", sort, sortDirection);
+        if (StringUtils.hasText(sort)) {
+            if ("orderId".equalsIgnoreCase(sort)) {
+                if ("down".equalsIgnoreCase(sortDirection)) {
+                    return order.id.desc();
+                } else {
+                    return order.id.asc();
+                }
+            } else if ("orderStatus".equalsIgnoreCase(sort)) {
+                if ("down".equalsIgnoreCase(sortDirection)) {
+                    return order.status.desc();
+                } else {
+                    return order.status.asc();
+                }
+            }
+        }
+        return order.id.desc();
     }
 
     private BooleanExpression likeMemberName(String productName) {

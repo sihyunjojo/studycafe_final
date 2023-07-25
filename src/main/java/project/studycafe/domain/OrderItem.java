@@ -25,8 +25,16 @@ public class OrderItem extends BaseTimeEntity{
     private Order order;
 
     private int count = 1;
-    private int allPrice = product.getPrice();
+    private int allPrice;
 
+
+    // 값을 받아오고 실행.
+    @PrePersist
+    void setting() {
+        if (this.count != 1) {
+            this.allPrice = count * product.getPrice();
+        }
+    }
 
     public OrderItem(Product product, int count) {
         this.product = product;
@@ -47,14 +55,6 @@ public class OrderItem extends BaseTimeEntity{
         return orderItem;
     }
 
-
-    // 값을 받아오고 실행.
-    @PrePersist
-    void setting() {
-        if (this.count != 1) {
-            this.allPrice = count * product.getPrice();
-        }
-    }
     //==비즈니스 로직==//
     public void cancel() {
         getProduct().addStock(count);

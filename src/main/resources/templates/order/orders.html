@@ -5,6 +5,44 @@
   <meta charset="UTF-8">
   <title>주문내역</title>
   <head th:insert="~{template/styleCss :: css_copy}"></head>
+  <script>
+    function toggleArrow() {
+      const form = document.querySelector('sortedOrderStatus');
+      const arrowIcon = document.getElementById('arrowIcon');
+      const arrowDirection = document.getElementById('arrowDirection').value;
+
+      // Toggle arrow direction
+      if (arrowDirection === 'down') {
+        arrowIcon.innerHTML = '&#9652;'; // (▲)
+        document.getElementById('arrowDirection').value = 'up';
+      } else {
+        arrowIcon.innerHTML = '&#9660;'; // (▼)
+        document.getElementById('arrowDirection').value = 'down';
+      }
+
+      // Submit the form
+      document.querySelector('form').submit();
+    }
+
+    function toggleArrow1(sort) {
+      const form = document.querySelector(sort);
+      const arrowIcon = form.getElementById('arrowIcon');
+      const arrowDirection = form.getElementById('arrowDirection').value;
+
+      // Toggle arrow direction
+      if (arrowDirection === 'down') {
+        arrowIcon.innerHTML = '&#9652;'; // (▲)
+        form.getElementById('arrowDirection').value = 'up';
+      } else {
+        arrowIcon.innerHTML = '&#9660;'; // (▼)
+        form.getElementById('arrowDirection').value = 'down';
+      }
+
+      // Submit the form
+      form.submit();
+    }
+
+  </script>
 </head>
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
@@ -13,6 +51,106 @@
   <h3> 주문 내역 </h3>
   <hr>
 
+  <section>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="row">
+          <form class="sortOrderId" th:action="@{/order/search}" th:object="${orderSearch}" method="get">
+              <input type="hidden" th:name="memberName" th:field="*{memberName}"/>
+              <input type="hidden" th:name="productName" th:field="*{productName}"/>
+              <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
+              <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>
+              <input type="hidden" th:name="maxCreatedTime" th:field="*{maxCreatedTime}"/>
+              <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+              <input type="text" th:name="sort" value="orderId"/>
+              <!-- Use a hidden input field to store the current arrow direction -->
+              <input type="text" id="arrowDirection" th:name="sortDirection" th:value="${orderSearch.sortDirection}"/>
+              <button type="button" onclick="toggleArrow1('sortOrderId')" style="border: none; outline: none; background-color: white; font-weight: bold;">
+                  주문 번호<span id="arrowIcon">&#9660;</span>
+              </button>
+          </form>
+        </th>
+        <th scope="row">주문자</th>
+        <th scope="row">대표상품 이름</th>
+        <th scope="row">대표상품 주문 수량</th>
+        <th scope="row">대표상품 주문 총가격</th>
+        <th scope="row">
+          <form class="sortOrderStatus" th:action="@{/order/search}" th:object="${orderSearch}" method="get">
+            <input type="hidden" th:name="memberName" th:field="*{memberName}"/>
+            <input type="hidden" th:name="productName" th:field="*{productName}"/>
+            <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
+            <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>
+            <input type="hidden" th:name="maxCreatedTime" th:field="*{maxCreatedTime}"/>
+            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+            <input type="text" th:name="sort" value="orderStatus"/>
+            <!-- Use a hidden input field to store the current arrow direction -->
+            <input type="text" id="arrowDirection" th:name="sortDirection" th:value="${orderSearch.sortDirection}"/>
+
+            <button type="button" onclick="toggleArrow1('sortOrderStatus')" style="border: none; outline: none; background-color: white; font-weight: bold;">
+              주문 상태<span id="arrowIcon">&#9660;</span>
+            </button>
+          </form>
+        </th>
+        <th scope="row">주문 일시</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${orders}">
+        <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.id}">주문번호</a></th>
+        <th th:text="${order.member.nickname != null ? order.member.nickname : order.member.name}"> 작성자 </th>
+        <th th:text="${order.orderItems[0].product.name}"></th>
+        <th th:text="${order.orderItems[0].count}"></th>
+        <th th:text="${order.orderItems[0].allPrice}"></th>
+        <th th:text="${order.status}"></th>
+        <th th:text="${order.updatedTime}"></th>
+      </tr>
+      </tbody>
+    </table>
+
+<!--    <div class="PageMaker">-->
+<!--      <ul>-->
+<!--        <li class="row" th:if="${pageMaker.startPage > 1}">-->
+<!--          <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">-->
+<!--            <input type="hidden" name="page" th:value="${pageMaker.startPage -1}" />-->
+<!--            <input type="hidden" th:name="userName" th:field="*{userName}"/>-->
+<!--            <input type="hidden" th:name="title" th:field="*{title}"/>-->
+<!--            <input type="hidden" th:name="category" th:field="*{category}"/>-->
+<!--            <input type="hidden" th:name="sort" th:field="*{sort}"/>-->
+<!--            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>-->
+<!--            <button type="submit">&lt;</button>-->
+<!--          </form>-->
+<!--        </li>-->
+
+<!--        <li class="row" th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">-->
+<!--          <form th:action="@{${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">-->
+<!--            <input type="hidden" name="page" th:value="${page}" />-->
+<!--            <input type="hidden" th:name="userName" th:field="*{userName}"/>-->
+<!--            <input type="hidden" th:name="title" th:field="*{title}"/>-->
+<!--            <input type="hidden" th:name="category" th:field="*{category}"/>-->
+<!--            <input type="hidden" th:name="sort" th:field="*{sort}"/>-->
+<!--            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>-->
+<!--            <button type="submit">[[${page}]]</button>-->
+<!--          </form>-->
+<!--        </li>-->
+
+<!--        <li class="row" th:if="${pageMaker.endPage < pageMaker.totalPages}">-->
+<!--          <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">-->
+<!--            <input type="hidden" name="page" th:value="${pageMaker.endPage + 1}" />-->
+<!--            <input type="hidden" th:name="userName" th:field="*{userName}"/>-->
+<!--            <input type="hidden" th:name="title" th:field="*{title}"/>-->
+<!--            <input type="hidden" th:name="category" th:field="*{category}"/>-->
+<!--            <input type="hidden" th:name="sort" th:field="*{sort}"/>-->
+<!--            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>-->
+<!--            <button type="submit">&gt;</button>-->
+<!--          </form>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+
+    <div style="float: right;"> <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-secondary mb-2">메인 화면</button> </div>
+  </section>
 </div>
 </body>
 </html>

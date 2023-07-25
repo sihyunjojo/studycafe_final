@@ -19,10 +19,10 @@ public class PageMaker {
     private int displayPageNum;
 
 
-    public PageMaker(int totalBoardCount, int currentPage, int perPageNum) {
+    public PageMaker(int totalBoardCount, int currentPage, Integer perPageNum) {
         this.totalBoardCount = totalBoardCount;
         this.currentPage = currentPage;
-        this.perPageNum = perPageNum;
+        this.perPageNum = (perPageNum != null) ? perPageNum : 10;
         this.displayPageNum = 10;
         calcData();
     }

@@ -10,8 +10,6 @@ import project.studycafe.repository.*;
 import project.studycafe.repository.member.JpaMemberRepository;
 import project.studycafe.repository.product.JpaProductRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,7 +27,7 @@ public class OrderService {
     private final DeliveryRepository deliveryRepository;
     private final OrderItemRepository orderItemRepository;
 
-    public void addOrderNow(OrderNowForm form) {
+    public long addOrderNow(OrderNowForm form) {
 //        Order order = new Order();
         OrderItem orderItems = new OrderItem(productRepository.findById(form.getProductId()).orElseThrow(), form.getProductCount());
 
@@ -37,7 +35,7 @@ public class OrderService {
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         Delivery delivery = new Delivery(member, address);
 
-        if (deliveryRepository.existsDistinctByAddressAAndMember(address, member)) {
+        if (deliveryRepository.existsDistinctByAddressAndMember(address, member)) {
             deliveryRepository.save(delivery);
         }
 
@@ -45,6 +43,8 @@ public class OrderService {
 
         orderItemRepository.save(orderItems);
         orderRepository.save(order);
+
+        return order.getId();
     }
 
     public void updateOrderNow(Long orderId, OrderNowForm form) {
@@ -56,7 +56,7 @@ public class OrderService {
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         Delivery updateDelivery = new Delivery(member, updateAddress);
 
-        if (deliveryRepository.existsDistinctByAddressAAndMember(updateAddress, member)) {
+        if (deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
             deliveryRepository.save(updateDelivery);
         }
 
@@ -73,7 +73,10 @@ public class OrderService {
         return orderRepository.findAllByOrderByUpdatedTimeDesc();
     }
 
-    public List<Order> getOrderList(int page, int perPageNum, List<Order> orders) {
+    public List<Order> getOrderList(int page, Integer perPageNum, List<Order> orders) {
+        if (perPageNum == null) {
+            perPageNum = 10;
+        }
         int startOrder= (page - 1) * perPageNum;
         int endOder = Math.min(page * perPageNum, orders.size());
 
@@ -84,15 +87,15 @@ public class OrderService {
 
 
     public OrderNowForm orderToOrderNowForm(Order order) {
-        return new OrderNowForm(order.getMember().getId(), order.getOrderItems().get(0).getProduct().getId(),
-                order.getOrderItems().get(0).getCount(), order.getOrderItems().get(0).getAllPrice(),
+        return new OrderNowForm(order.getId(), order.getMember().getId(), order.getOrderItems().get(0).getProduct().getId(),
+                order.getOrderItems().get(0).getCount(),
                 order.getDelivery().getAddress().getCity(), order.getDelivery().getAddress().getStreet(), order.getDelivery().getAddress().getZipcode());
     }
 
     public List<OrderNowForm> ordersToOrderNowForms(List<Order> orderList) {
         return orderList.stream()
-                .map(o -> new OrderNowForm(o.getMember().getId(), o.getOrderItems().get(0).getProduct().getId(),
-                        o.getOrderItems().get(0).getCount(), o.getOrderItems().get(0).getAllPrice(),
+                .map(o -> new OrderNowForm(o.getId(), o.getMember().getId(), o.getOrderItems().get(0).getProduct().getId(),
+                        o.getOrderItems().get(0).getCount(),
                         o.getDelivery().getAddress().getCity(), o.getDelivery().getAddress().getStreet(), o.getDelivery().getAddress().getZipcode()))
                 .collect(Collectors.toList());
     }

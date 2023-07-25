@@ -8,5 +8,5 @@ import project.studycafe.domain.Member;
 import java.util.Optional;
 
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
-    Boolean existsDistinctByAddressAAndMember(Address address, Member member);
+    Boolean existsDistinctByAddressAndMember(Address address, Member member);
 }

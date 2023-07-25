@@ -10,9 +10,81 @@
 <header th:insert="~{template/header :: header_copy}"></header>
 
 <div class="container">
-  <h3> 주문 </h3>
+  <h3 th:text="|${order.id}번 주문|"> 주문 </h3>
   <hr>
 
+  <div>
+    <div class="form-group">
+      <label for="title">주문자</label><br>
+      <input type="text"
+             class="form-control" id="title" name="title"
+             th:value="${order.member.nickname != null ? order.member.nickname : order.member.name}" readonly>
+    </div>
+
+    <div th:each="orderitem :${order.orderItems}">
+      <div class="form-group">
+        <label for="item_name">상품 이름</label><br>
+        <input type="text"
+               class="form-control" id="item_name" name="item_name"
+               th:value="${orderitem.product.name}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="item_count">상품 수량</label><br>
+        <input type="text"
+               class="form-control" id="item_count" name="item_count"
+               th:value="${orderitem.count}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="item_allPrice">상품 가격</label><br>
+        <input type="text"
+               class="form-control" id="item_allPrice" name="item_allPrice"
+               th:value="${{orderitem.allPrice}}" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="delivery_city">배달 도시</label><br>
+      <input type="text"
+             class="form-control" id="delivery_city" name="delivery_city"
+             th:value="${order.delivery.address.city}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="delivery_street">배달 거리</label><br>
+      <input type="text"
+             class="form-control" id="delivery_street" name="delivery_street"
+             th:value="${order.delivery.address.street}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="delivery_zipcode">배달 우편번호</label><br>
+      <input type="text"
+             class="form-control" id="delivery_zipcode" name="delivery_zipcode"
+             th:value="${order.delivery.address.zipcode}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="order_status">주문 상태</label><br>
+      <input type="text"
+             class="form-control" id="order_status" name="order_status"
+             th:value="${order.status}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="delivery_status">배달 상태</label><br>
+      <input type="text"
+             class="form-control" id="delivery_status" name="delivery_status"
+             th:value="${order.delivery.status}" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="createdTime">주문 생성 일시</label><br>
+      <input type="text"
+             class="form-control" id="createdTime" name="createdTime"
+             th:value="${order.createdTime}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="updatedTime">주문 수정 일시</label><br>
+      <input type="text"
+             class="form-control" id="updatedTime" name="updatedTime"
+             th:value="${order.updatedTime}" readonly>
+    </div>
+  <hr>
 </div>
 </body>
 </html>

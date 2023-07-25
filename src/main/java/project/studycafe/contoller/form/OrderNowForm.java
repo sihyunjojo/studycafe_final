@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderNowForm {
 
+    private long id;
     private long memberId;
     private long productId;
     private int productCount;
-    private int productAllPrice;
 
     //delivery - address
     private String city;
