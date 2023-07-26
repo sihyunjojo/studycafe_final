@@ -1,14 +1,16 @@
 package project.studycafe.domain;
 
 public enum OrderStatus {
-    ORDER,
-    CANCEL {
+    WAIT {
 
     },
-    WAIT {
+    DELIVERY{
 
     },
     COMPLETE{
 
-    }
+    },
+    CANCEL {
+
+    },
 }

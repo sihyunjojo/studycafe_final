@@ -59,7 +59,6 @@ public class Member extends BaseTimeEntity{
     private List<Delivery> deliveries = new ArrayList<>();
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @PrePersist

@@ -15,7 +15,7 @@
 
 <!--        조회수 정렬-->
         <form th:action="@{/board/search}" th:object="${boardSearch}" method="get" style="float:right">
-            <input type="hidden" th:name="userName" th:field="*{userName}"/>
+            <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
             <input type="hidden" th:name="title" th:field="*{title}"/>
             <input type="hidden" th:name="category" th:field="*{category}"/>
             <input type="hidden" th:name="perPageNum" th:value="*{perPageNum}"/>
@@ -33,7 +33,7 @@
                         <input class="form-control" type="text" id = "title" th:field="*{title}" placeholder="제목"/>
                     </div>
                     <div class="col">
-                        <input class="form-control" type="text" id="userName" th:field="*{userName}" placeholder="글작성자"/>
+                        <input class="form-control" type="text" id="userNickname" th:field="*{userNickname}" placeholder="글작성자"/>
                     </div>
                     <div class="col">
                         <select class="form-select" id = "category" th:field="*{category}">
@@ -77,7 +77,7 @@
                     <th scope="row">
 <!--                        조회수 정렬-->
                         <form th:action="@{/board/search}" th:object="${boardSearch}" method="get">
-                            <input type="hidden" th:name="userName" th:field="*{userName}"/>
+                            <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
                             <input type="hidden" th:name="title" th:field="*{title}"/>
                             <input type="hidden" th:name="category" th:field="*{category}"/>
                             <input type="hidden" th:name="perPageNum" th:value="*{perPageNum}"/>
@@ -104,7 +104,7 @@
                     <li class="row" th:if="${pageMaker.startPage > 1}">
                         <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">
                             <input type="hidden" name="page" th:value="${pageMaker.startPage -1}" />
-                            <input type="hidden" th:name="userName" th:field="*{userName}"/>
+                            <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
                             <input type="hidden" th:name="title" th:field="*{title}"/>
                             <input type="hidden" th:name="category" th:field="*{category}"/>
                             <input type="hidden" th:name="sort" th:field="*{sort}"/>
@@ -116,7 +116,7 @@
                     <li class="row" th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
                         <form th:action="@{${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">
                             <input type="hidden" name="page" th:value="${page}" />
-                            <input type="hidden" th:name="userName" th:field="*{userName}"/>
+                            <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
                             <input type="hidden" th:name="title" th:field="*{title}"/>
                             <input type="hidden" th:name="category" th:field="*{category}"/>
                             <input type="hidden" th:name="sort" th:field="*{sort}"/>
@@ -128,7 +128,7 @@
                     <li class="row" th:if="${pageMaker.endPage < pageMaker.totalPages}">
                         <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">
                             <input type="hidden" name="page" th:value="${pageMaker.endPage + 1}" />
-                            <input type="hidden" th:name="userName" th:field="*{userName}"/>
+                            <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
                             <input type="hidden" th:name="title" th:field="*{title}"/>
                             <input type="hidden" th:name="category" th:field="*{category}"/>
                             <input type="hidden" th:name="sort" th:field="*{sort}"/>

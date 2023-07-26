@@ -9,4 +9,7 @@ import java.util.Optional;
 
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     Boolean existsDistinctByAddressAndMember(Address address, Member member);
+    Boolean existsDistinctByAddress(Address address);
+    Boolean existsDistinctByMember(Member member);
+
 }

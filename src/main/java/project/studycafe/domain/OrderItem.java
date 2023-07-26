@@ -60,4 +60,14 @@ public class OrderItem extends BaseTimeEntity{
         getProduct().addStock(count);
     }
 
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", product=" + product.getId() +
+                ", count=" + count +
+                ", allPrice=" + allPrice +
+                '}';
+    }
 }

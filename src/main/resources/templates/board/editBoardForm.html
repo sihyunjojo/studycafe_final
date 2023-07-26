@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>게시판 수정</title>'
     <head th:insert="~{template/styleCss :: css_copy}"></head>
-    <!--<link rel="stylesheet", href="board/join.css">-->
 </head>
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
@@ -50,7 +49,7 @@
                     <a class="btn btn-outline-secondary" style="margin: 1em"
                        th:href="|/delete/${board.id}/${attachFile.attachmentFileName}|" th:text="X" />
                 </th:block>
-<!--                ajax로 해야할꺼 같은데(실시간으로 하려면)-->
+<!--               추후 ajax로 해야할꺼 같은데(실시간으로 하려면) 실시간으로 안하니 위에꺼 다 초기화되서 다시 해야함.-->
             </div>
         </div>
         <button type="submit">완료</button>

@@ -3,15 +3,15 @@ package project.studycafe.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static project.studycafe.domain.OrderStatus.WAIT;
 
+@Slf4j
 @Entity
 @Getter @Setter
 @Table(name = "orders")
@@ -28,22 +28,26 @@ public class Order extends BaseTimeEntity{
     @JoinColumn(name = "member_id") // member 를 어떤 이름으로 order 테이블의 컬럼명으로 저장하는지
     private Member member;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     //1:1 관계에서 외래키는 주테이블에 존재하는 것으로 하자. 그게 제일 편하다.
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "delivery_Id") // delivery 를 어떤 이름으로 order 테이블의 컬럼명으로 저장하는지
     private Delivery delivery;
 
+    // 추후 결재 할시 결재 정보
+
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-
 
     @PrePersist
     void setting() {
         if (this.status == null) {
             this.status = WAIT;
+        }
+        if (this.delivery == null) {
+            this.delivery = new Delivery(member, new Address());
         }
     }
 
@@ -53,19 +57,23 @@ public class Order extends BaseTimeEntity{
         member.getOrders().add(this);
     }
 
-    public void setOrderItem(OrderItem orderItem) {
-        this.orderItems = null;
-        addOrderItem(orderItem);
-    }
 
-    public void setOrderItem(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-        for (OrderItem orderItem : orderItems) {
-            orderItem.setOrder(this);
-        }
-    }
+//    public void setOrderItem(OrderItem orderItem) {
+//        log.info("orderItem = {}", orderItem);
+//        this.orderItems = new ArrayList<>();
+//        addOrderItem(orderItem);
+//    }
+
+//    public void setOrderItem(List<OrderItem> orderItems) {
+//        this.orderItems = orderItems;
+//        for (OrderItem orderItem : orderItems) {
+//            orderItem.setOrder(this);
+//        }
+//    }
 
     public void addOrderItem(OrderItem orderItem) {
+        log.info("this orderitems = {}", this.orderItems);
+        log.info("orderItem = {}", orderItem);
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
@@ -84,6 +92,17 @@ public class Order extends BaseTimeEntity{
         }
         return order;
     }
+
+    public static Order createOrder(Member member, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setDelivery(new Delivery(member,new Address()));
+        order.setMember(member);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
+    }
+
 
     //==비즈니스 로직==//
     /**

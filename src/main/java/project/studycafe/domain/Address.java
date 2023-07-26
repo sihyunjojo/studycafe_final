@@ -8,11 +8,12 @@ import javax.persistence.Embeddable;
 @Getter
 @NoArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class Address {
 
-    private String city;
-    private String street;
-    private String zipcode;
+    private String city = "";
+    private String street = "";
+    private String zipcode = "";
 
     // 이렇게 안하니까 null값이 계속 들어가더라.
     public Address(String city, String street, String zipcode) {

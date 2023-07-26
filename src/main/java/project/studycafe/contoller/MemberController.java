@@ -113,7 +113,7 @@ public class MemberController {
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, updatedMember);
 
-        return "redirect:/member/info";
+        return "redirect:/";
     }
 
 

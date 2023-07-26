@@ -49,10 +49,14 @@ public class OAuthController {
             return "redirect:/";
         }
 
-        log.info("login Oauth member ={}", loginMember.orElseThrow());
-        log.info("redirect = {}", redirectURL);
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, loginMember.orElseThrow());
+
+        if (loginMember.orElseThrow().getNickname() == null) {
+            return "redirect:/member/edit";
+        }
+
+        log.info("redirect = {}", redirectURL);
 
         return "redirect:" + redirectURL;
     }

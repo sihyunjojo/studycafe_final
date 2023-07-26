@@ -30,6 +30,7 @@ public class Delivery extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
+
     public Delivery(Member member,Address address) {
         this.member = member;
         this.address = address;

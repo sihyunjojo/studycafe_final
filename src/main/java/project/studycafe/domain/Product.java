@@ -3,6 +3,7 @@ package project.studycafe.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import project.studycafe.exception.NotEnoughStockException;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -32,11 +34,15 @@ public class Product extends BaseTimeEntity {
     private Integer readCount;
     private Integer likeCount;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<CartProduct> cartProducts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @PrePersist
     public void setting() {
+
         if (this.readCount == null && this.likeCount == null) {
             this.readCount = 0;
             this.likeCount = 0;
@@ -49,6 +55,7 @@ public class Product extends BaseTimeEntity {
     }
 
     public void removeStock(int quantity) {
+        log.info("this = {},quantity = {}", this.quantity, quantity);
         int restStock = this.quantity - quantity;
         if (restStock < 0) {
             throw new NotEnoughStockException("need more stock");

@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import static project.studycafe.SessionConst.LOGIN_MEMBER;
-
 @Slf4j
 @Controller
 @RequestMapping("/order")
@@ -62,20 +60,45 @@ public class OrderController {
         return "order/orders";
     }
 
-
     @GetMapping("/{orderId}")
     public String order(@PathVariable long orderId, Model model) {
         Order order = orderService.findById(orderId).orElseThrow();
-        OrderNowForm orderNowForm = orderService.orderToOrderNowForm(order);
-        orderNowForm.setId(orderId);
-        log.info("orderID = {}", orderNowForm.getId());
+//        OrderNowForm orderNowForm = orderService.orderToOrderNowForm(order);
+//        orderNowForm.setId(orderId);
+//        log.info("orderID = {}", orderNowForm.getId());
 
         model.addAttribute("order", order);
         return "order/order";
     }
 
+    //product.html에서 구매하면 member,product 로 order 만들어서 추가정보 입력하게해주게 보내줌.
+    @PostMapping("/add/{productId}/now")
+    public String addOrderNow(@Login Member loginMember, @PathVariable Long productId ,OrderNowForm form){
+        log.info("add loginMember = {}", loginMember);
+        if (loginMember == null) {
+            return "redirect:/login?redirectURL=/product/" + productId;
+        }
+        long orderId = orderService.addOrderNow(form);
+        return "redirect:/order/edit/" + orderId + "/now";
+    }
+
+    //받은 order로 추가정보 입력하는 form 보내줌.
+    @GetMapping("/edit/{orderId}/now")
+    public String editOrderNowForm(@PathVariable long orderId, Model model) {
+        Order order = orderService.findById(orderId).orElseThrow();;
+        model.addAttribute("order", order);
+        return "order/editOrderNowForm";
+    }
+
+    @PostMapping("/edit/{orderId}/now")
+    public String editOrderNow(@PathVariable long orderId, OrderNowForm form) {
+        log.info("form = {}", form);
+        orderService.updateOrderNow(orderId, form);
+        return "redirect:/order/" + orderId;
+    }
+
     @PostMapping("/add/{productId}")
-    public String addOrderNow(@Login Member loginMember, @PathVariable Long productId ,OrderNowForm form) throws IOException, NoSuchAlgorithmException {
+    public String addOrder(@Login Member loginMember, @PathVariable Long productId ,OrderNowForm form) throws IOException, NoSuchAlgorithmException {
         log.info("add loginMember = {}", loginMember);
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/product/" + productId;
@@ -105,4 +128,9 @@ public class OrderController {
         return "redirect:/order";
     }
 
+    @PostMapping("/{orderId}/delete")
+    public String deletePost(@PathVariable long orderId) {
+        orderService.deleteOrder(orderId);
+        return "redirect:/order";
+    }
 }

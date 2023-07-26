@@ -1,5 +1,7 @@
 package project.studycafe.domain;
 
 public enum DeliveryStatus {
-    READY,COMP
+    READY,
+    DELIVERING,
+    COMP
 }

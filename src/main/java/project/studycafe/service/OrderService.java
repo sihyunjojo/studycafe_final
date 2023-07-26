@@ -13,6 +13,7 @@ import project.studycafe.repository.product.JpaProductRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -28,18 +29,18 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
 
     public long addOrderNow(OrderNowForm form) {
-//        Order order = new Order();
+        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         OrderItem orderItems = new OrderItem(productRepository.findById(form.getProductId()).orElseThrow(), form.getProductCount());
 
-        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
-        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
-        Delivery delivery = new Delivery(member, address);
+//        배송지 파트
+//        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+//        Delivery delivery = new Delivery(member, address);
+//
+//        if (deliveryRepository.existsDistinctByAddressAndMember(address, member)) {
+//            deliveryRepository.save(delivery);
+//        }
 
-        if (deliveryRepository.existsDistinctByAddressAndMember(address, member)) {
-            deliveryRepository.save(delivery);
-        }
-
-        Order order = Order.createOrder(member, delivery, orderItems);
+        Order order = Order.createOrder(member, new Delivery(member, new Address()), orderItems);
 
         orderItemRepository.save(orderItems);
         orderRepository.save(order);
@@ -50,18 +51,23 @@ public class OrderService {
     public void updateOrderNow(Long orderId, OrderNowForm form) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         //속도 향상하려면 그대로면, 안 만들게 해주면 될듯.
-        OrderItem orderItem = new OrderItem(productRepository.findById(form.getProductId()).orElseThrow(), form.getProductCount());
+        OrderItem findOrderItem = orderRepository.findById(orderId).orElseThrow().getOrderItems().get(0);
+        findOrderItem.setCount(form.getProductCount());
+        findOrderItem.setAllPrice(form.getProductAllPrice());
 
+//        OrderItem orderItem = new OrderItem(productRepository.findById(form.getProductId()).orElseThrow(), form.getProductCount());
+
+        //추후 기존 딜러버리를 넣어주는 것도 만들어줫으면 좋겠음.
         Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         Delivery updateDelivery = new Delivery(member, updateAddress);
 
-        if (deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
+        if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
+            log.info("add Delivery");
             deliveryRepository.save(updateDelivery);
         }
 
         order.setMember(member);
-        order.setOrderItem(orderItem);
         order.setDelivery(updateDelivery);
     }
 
@@ -89,14 +95,16 @@ public class OrderService {
     public OrderNowForm orderToOrderNowForm(Order order) {
         return new OrderNowForm(order.getId(), order.getMember().getId(), order.getOrderItems().get(0).getProduct().getId(),
                 order.getOrderItems().get(0).getCount(),
-                order.getDelivery().getAddress().getCity(), order.getDelivery().getAddress().getStreet(), order.getDelivery().getAddress().getZipcode());
+                order.getDelivery().getAddress().getCity(), order.getDelivery().getAddress().getStreet(), order.getDelivery().getAddress().getZipcode(),
+                order.getTotalPrice());
     }
 
     public List<OrderNowForm> ordersToOrderNowForms(List<Order> orderList) {
         return orderList.stream()
                 .map(o -> new OrderNowForm(o.getId(), o.getMember().getId(), o.getOrderItems().get(0).getProduct().getId(),
                         o.getOrderItems().get(0).getCount(),
-                        o.getDelivery().getAddress().getCity(), o.getDelivery().getAddress().getStreet(), o.getDelivery().getAddress().getZipcode()))
+                        o.getDelivery().getAddress().getCity(), o.getDelivery().getAddress().getStreet(), o.getDelivery().getAddress().getZipcode(),
+                        o.getTotalPrice()))
                 .collect(Collectors.toList());
     }
 

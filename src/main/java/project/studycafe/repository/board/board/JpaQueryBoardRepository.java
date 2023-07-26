@@ -27,7 +27,7 @@ public class JpaQueryBoardRepository {
                 .from(board)
                 .where(
                         likeBoardTitle(cond.getTitle()),
-//                        likeBoardCreatedUserName(cond.getUserName()),
+                        eqCreatedMemberNickName(cond.getUserNickname()),
                         eqBoardCategory(cond.getCategory())
                 )
                 .orderBy(
@@ -62,11 +62,18 @@ public class JpaQueryBoardRepository {
 //        return null;
 //    }
 
+    private Predicate eqCreatedMemberNickName(String userNickname) {
+        if (StringUtils.hasText(userNickname)) {
+            return board.member.nickname.eq(userNickname);
+        }
+        return null;
+    }
+
     private Predicate eqBoardCategory(String category) {
         if (StringUtils.hasText(category)) {
             return board.category.eq(category);
         }
-        return board.category.eq("커뮤니티");
+        return board.category.ne("공지사항");
     }
 
 

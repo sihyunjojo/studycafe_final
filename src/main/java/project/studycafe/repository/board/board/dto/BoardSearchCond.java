@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class BoardSearchCond {
     private String title;
-    private String userName;
+    private String userNickname;
     private String category;
     private String sort;
     private Integer perPageNum;
