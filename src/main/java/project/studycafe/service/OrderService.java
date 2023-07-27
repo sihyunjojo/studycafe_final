@@ -142,13 +142,18 @@ public class OrderService {
     public void updateOrderItems(List<OrderItemForm> updateOrderItems, Long orderId) {
         List<OrderItem> newOrderItems = new ArrayList<>();
         int newOrderTotalPrice = 0;
-
         Order order = orderRepository.findById(orderId).orElseThrow();
+
+        order.setOrderItems(new ArrayList<>());
 
         for (OrderItemForm updateOrderItemform : updateOrderItems) {
             if (!updateOrderItemform.isEmpty()) {
                 Product product = productRepository.findById(updateOrderItemform.getId()).orElseThrow();
                 OrderItem newOrderItem = createOrderItem(product, updateOrderItemform.getCount());
+//                if (newOrderItem.getCount() == 0) {
+//                    orderItemRepository.delete(newOrderItem);
+//                    newOrderItems.remove(newOrderItem);
+//                }
                 newOrderItem.setOrder(order); //order.setOrderItems()도해줌
                 newOrderTotalPrice += newOrderItem.getAllPrice();
 
