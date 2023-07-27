@@ -36,6 +36,8 @@ public class AttachmentFile extends BaseTimeEntity {
     }
 
     //==연관관계 메서드==//
+    // 이게 도대체 뭔 코드임???
+    // 삭제했다가 그냥 다시 넣어주는 코드인데?
     public void setBoard(Board board) {
         if (this.board != null) {
             this.board.getAttachmentFiles().remove(this);

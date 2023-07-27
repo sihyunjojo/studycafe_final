@@ -3,6 +3,7 @@ package project.studycafe.contoller.form;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Primary;
 
 @Data
 @AllArgsConstructor
@@ -12,6 +13,7 @@ public class OrderNowForm {
     private long id;
     private long memberId;
     private long productId;
+
     private int productCount;
     private int productAllPrice;
     private int orderTotalPrice;

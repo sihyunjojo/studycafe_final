@@ -143,6 +143,7 @@ public class BoardController {
     @GetMapping("/{boardId}/edit")
     public String editForm(@PathVariable Long boardId, Model model) {
         Board board = boardService.findById(boardId).orElseThrow();
+        // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.
         BoardForm boardForm = boardService.boardToBoardForm(board);
 
         model.addAttribute("board", boardForm);

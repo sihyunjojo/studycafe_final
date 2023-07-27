@@ -18,8 +18,11 @@
             <input type="text" class="form-control" id="name" th:field="*{name}" required/>
         </div>
         <div class="form-group">
-            <label for="category">카테고리</label><br>
-            <input type="text" class="form-control" id="category" th:field="*{category}" required/>
+            <label for="category">종류</label><br>
+            <select class="form-select" id = "category" th:field="*{category}" required>
+                <option th:value="음료">음료</option>
+                <option th:value="과자">과자</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="quantity">수량</label><br>

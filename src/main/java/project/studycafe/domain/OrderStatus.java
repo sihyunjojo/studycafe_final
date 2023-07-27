@@ -4,7 +4,7 @@ public enum OrderStatus {
     WAIT {
 
     },
-    DELIVERY{
+    DELIVERING{
 
     },
     COMPLETE{

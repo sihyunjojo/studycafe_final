@@ -97,30 +97,22 @@ public class SpringDataJpaMemberService implements MemberService {
 
     @Override
     public void removeForeignKeyMember(Member member) {
-//        Member unknownMember = memberRepository.findFirstByUserLoginId("unknown").orElseThrow();
         List<Board> boards = member.getBoards();
         for (Board board : boards) {
             log.info("board = {}", board);
             board.setMember(null);
         }
 
-//        unknownMember.getBoards().addAll(boards);
         List<Comment> comments = member.getComments();
         for (Comment comment : comments) {
             comment.setMember(null);
         }
-//        unknownMember.getComments().addAll(comments);
 
         List<Reply> replies = member.getReplies();
         for (Reply reply : replies) {
             reply.setMember(null);
         }
-//        unknownMember.getReplies().addAll(replies);
-//        memberRepository.save(unknownMember);
-
     }
-
-    //public Member viewMember(Member member);
 
     @Override
     public Optional<Member> findById(Member member) {
@@ -212,7 +204,7 @@ public class SpringDataJpaMemberService implements MemberService {
     }
 
     @Override
-    public boolean validateDuplicatedMemberNickname(OauthMemberForm form,long memberId) {
+    public boolean validateDuplicatedMemberNickname(OauthMemberForm form, long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
 
         if (optionalMember.isPresent()) {

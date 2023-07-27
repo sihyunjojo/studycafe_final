@@ -31,9 +31,10 @@ public class Delivery extends BaseTimeEntity{
     private DeliveryStatus status;
 
 
-    public Delivery(Member member,Address address) {
+    public Delivery(Member member, Address address, DeliveryStatus deliveryStatus) {
         this.member = member;
         this.address = address;
+        this.status = deliveryStatus;
     }
 
     @PrePersist
@@ -41,5 +42,17 @@ public class Delivery extends BaseTimeEntity{
         if (this.status == null) {
             this.status = READY;
         }
+    }
+
+
+    @Override
+    public String toString() {
+        return "Delivery{" +
+                "id=" + id +
+                ", member=" + member.getId() +
+                ", order=" + order.getId() +
+                ", address=" + address.toString() +
+                ", status=" + status +
+                '}';
     }
 }
