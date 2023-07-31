@@ -11,9 +11,13 @@ import project.studycafe.domain.OrderStatus;
 
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static project.studycafe.domain.OrderStatus.*;
+import static project.studycafe.domain.OrderStatus.DELIVERING;
 import static project.studycafe.domain.QOrder.order;
 
 
@@ -29,7 +33,7 @@ public class OrderQueryRepository {
         return query.select(order)
                 .from(order)
                 .where(
-                        likeMemberName(cond.getMemberName()),
+                        likeMemberNickname(cond.getMemberNickname()),
                         likeProductName(cond.getProductName()),
                         eqProductCategory(cond.getProductCategory()),
                         eqOrderStatus(cond.getOrderStatus()),
@@ -37,7 +41,8 @@ public class OrderQueryRepository {
                         geMinCreatedTime(cond.getMinCreatedTime())
                 )
                 .orderBy(
-                        sortedBoardBySort(cond.getSort(), cond.getSortDirection())
+                        sortedBoardBySort(cond.getSort(), cond.getSortDirection()),
+                        sortedBoardBySort(cond.getSort())
                 )
                 .fetch();
     }
@@ -62,9 +67,22 @@ public class OrderQueryRepository {
         return order.id.desc();
     }
 
-    private BooleanExpression likeMemberName(String productName) {
-        if (StringUtils.hasText(productName)) {
-            return order.member.name.like("%" + productName + "%");
+    private OrderSpecifier<?> sortedBoardBySort(String sort) {
+        log.info("sort ={}", sort);
+        if (StringUtils.hasText(sort)) {
+            if ("orderId".equalsIgnoreCase(sort)) {
+                return order.id.desc();
+            } else if ("orderStatus".equalsIgnoreCase(sort)) {
+                return order.status.desc();
+            }
+        }
+        return order.id.desc();
+    }
+
+
+    private BooleanExpression likeMemberNickname(String memberNickname) {
+        if (StringUtils.hasText(memberNickname)) {
+            return order.member.nickname.like("%" + memberNickname + "%");
         }
         return null;
     }
@@ -84,33 +102,40 @@ public class OrderQueryRepository {
     }
 
 
-    private Predicate eqOrderStatus(String orderStatus) {
-        if (StringUtils.hasText(orderStatus)) {
-            if ("WAIT".equalsIgnoreCase(orderStatus)) {
-                return order.status.eq(OrderStatus.WAIT);
-            } else if ("CANCEL".equalsIgnoreCase(orderStatus)) {
-                return order.status.eq(OrderStatus.CANCEL);
-            } else if ("COMPLETE".equalsIgnoreCase(orderStatus)) {
-                return order.status.eq(OrderStatus.COMPLETE);
-            }
+    private Predicate eqOrderStatus(OrderStatus orderStatus) {
+        if (orderStatus == WAIT) {
+            return order.status.eq(WAIT);
+        } else if (orderStatus == DELIVERING) {
+            return order.status.eq(DELIVERING);
+        } else if (orderStatus == CANCEL) {
+            return order.status.eq(CANCEL);
+        } else if (orderStatus == COMPLETE) {
+            return order.status.eq(COMPLETE);
         }
         return null;
     }
 
 
-    private BooleanExpression leMaxCreatedTime(LocalDateTime maxCreatedTime) {
-        if (maxCreatedTime != null) {
-            return order.createdTime.loe(maxCreatedTime);
+    private BooleanExpression leMaxCreatedTime(String maxCreatedTime) {
+        log.info(" max tiem = {}", maxCreatedTime);
+        if (maxCreatedTime != null && !maxCreatedTime.isEmpty()) {
+            // Parse maxCreatedTime string into LocalDateTime
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+            LocalDateTime maxDateTime = LocalDate.parse(maxCreatedTime, formatter).atStartOfDay();
+            // Perform the comparison using `loe` (less than or equal) method
+            return order.createdTime.loe(maxDateTime);
         }
         return null;
     }
 
-    private BooleanExpression geMinCreatedTime(LocalDateTime minCreatedTime) {
-        if (minCreatedTime != null) {
-            return order.createdTime.goe(minCreatedTime);
+
+    private BooleanExpression geMinCreatedTime(String minCreatedTime) {
+        log.info(" min time = {}", minCreatedTime);
+        if (minCreatedTime != null && !minCreatedTime.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+            LocalDateTime minDateTime = LocalDate.parse(minCreatedTime, formatter).atStartOfDay();
+            return order.createdTime.goe(minDateTime);
         }
         return null;
     }
-
-
 }

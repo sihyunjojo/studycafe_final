@@ -31,7 +31,7 @@ public class Order extends BaseTimeEntity{
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private Integer totalPrice;
+    private Integer totalPrice = 0;
 
     //1:1 관계에서 외래키는 주테이블에 존재하는 것으로 하자. 그게 제일 편하다.
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -51,8 +51,7 @@ public class Order extends BaseTimeEntity{
         if (this.delivery == null) {
             this.delivery = new Delivery(member, new Address(), DeliveryStatus.READY);
         }
-        if (this.totalPrice == null) {
-            totalPrice = 0;
+        if (this.totalPrice == 0) {
             for (OrderItem orderItem : orderItems) {
                 this.totalPrice += orderItem.getAllPrice();
             }
@@ -66,15 +65,9 @@ public class Order extends BaseTimeEntity{
     }
 
     public void addOrderItem(OrderItem orderItem) {
-        log.info("this orderitems = {}", this.orderItems);
         log.info("orderItem = {}", orderItem);
         orderItems.add(orderItem);
         orderItem.setOrder(this);
-    }
-
-    public void removeOrderItems(OrderItem orderItem) {
-        orderItem.setOrder(null); // Set the order item's order reference to null
-        this.orderItems.remove(orderItem);
     }
 
     public void setDelivery(Delivery delivery) {
@@ -82,18 +75,10 @@ public class Order extends BaseTimeEntity{
         delivery.setOrder(this);
     }
 
-//    public void setOrderItem(OrderItem orderItem) {
-//        log.info("orderItem = {}", orderItem);
-//        this.orderItems = new ArrayList<>();
-//        addOrderItem(orderItem);
-//    }
-
-//    public void setOrderItems(List<OrderItem> orderItems) {
-////        this.orderItems = orderItems;
-//        for (OrderItem orderItem : orderItems) {
-//            orderItem.setOrder(this);
-//        }
-//    }
+    public void removeOrderItems(OrderItem orderItem) {
+        orderItem.setOrder(null); // Set the order item's order reference to null
+        this.orderItems.remove(orderItem);
+    }
 
     public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
         Order order = new Order();
@@ -111,6 +96,15 @@ public class Order extends BaseTimeEntity{
         order.setMember(member);
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
+        }
+        return order;
+    }
+    public static Order createOrder(Member member, List<OrderItem> orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+            order.totalPrice += orderItem.getAllPrice();
         }
         return order;
     }
@@ -155,4 +149,19 @@ public class Order extends BaseTimeEntity{
         sb.append('}');
         return sb.toString();
     }
+
+
+    //    public void setOrderItem(OrderItem orderItem) {
+//        log.info("orderItem = {}", orderItem);
+//        this.orderItems = new ArrayList<>();
+//        addOrderItem(orderItem);
+//    }
+
+//    public void setOrderItems(List<OrderItem> orderItems) {
+////        this.orderItems = orderItems;
+//        for (OrderItem orderItem : orderItems) {
+//            orderItem.setOrder(this);
+//        }
+//    }
+
 }

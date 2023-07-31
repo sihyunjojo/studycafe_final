@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.contoller.form.CartProductForm;
 import project.studycafe.domain.Cart;
 import project.studycafe.domain.CartProduct;
 import project.studycafe.domain.Member;
@@ -72,7 +73,7 @@ public class CartService {
 
             cartProduct.setCart(findCart.orElseThrow());
             cartProduct.setProduct(findproduct);
-            cartProduct.setQuantity(1); // 추후에 값을 받아와서 해야함.
+            cartProduct.setCount(1); // 추후에 값을 받아와서 해야함.
             cartProduct.setTotalPrice(findproduct.getPrice());
             cartProductRepository.save(cartProduct);
         }
@@ -85,7 +86,7 @@ public class CartService {
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
         CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId()).orElseThrow();
-        findCartProduct.setQuantity(findCartProduct.getQuantity() + 1);
+        findCartProduct.setCount(findCartProduct.getCount() + 1);
     }
 
     public void editDownQuantityCartProduct(Member member, long itemId) {
@@ -95,8 +96,8 @@ public class CartService {
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
         CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId()).orElseThrow();
-        if (findCartProduct.getQuantity() > 0) {
-            findCartProduct.setQuantity(findCartProduct.getQuantity() - 1);
+        if (findCartProduct.getCount() > 0) {
+            findCartProduct.setCount(findCartProduct.getCount() - 1);
         }
 
     }
@@ -124,13 +125,16 @@ public class CartService {
             log.info("findproduct ={}", findProduct);
 //            cartProductForm.setCheck(false);
             cartProductForm.setProductId(findProduct.getId());
-            cartProductForm.setImage(findProduct.getImage());
-            cartProductForm.setName(findProduct.getName());
-            cartProductForm.setNeededQuantity(cartProduct.getQuantity());
+            cartProductForm.setCount(cartProduct.getCount());
             cartProductForm.setTotalPrice(cartProduct.getTotalPrice());
             cartProductForms.add(cartProductForm);
         }
 
         return cartProductForms;
+    }
+
+    public Cart findByMemberId(Long memberId) {
+        return cartRepository.findFirstByMemberId(memberId).orElseThrow();
+
     }
 }

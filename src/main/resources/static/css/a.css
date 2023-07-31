@@ -8,6 +8,14 @@ a {
     text-decoration: none;
 }
 
+input.text {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    padding: 5px;
+    margin: auto;
+
+}
 table {
     width: 100%;
     margin-bottom: 1rem;

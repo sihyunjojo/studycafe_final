@@ -5,34 +5,6 @@
     <meta charset="UTF-8">
     <title>주문 수정</title>
     <head th:insert="~{template/styleCss :: css_copy}"></head>
-
-    <script th:inline="javascript">
-        // Function to update the allPrice based on the count
-        function updateAllPrice(event) {
-            // Get the target input element
-            let countInput = event.target;
-
-            // Get the corresponding allPrice input element
-            let allPriceInput = countInput.closest('.form-group').next('.form-group').find('.all-price-input');
-
-            // Get the product price for this orderItem
-            let productPrice = parseFloat(allPriceInput.data('product-price'));
-
-            // Calculate the new allPrice based on the count
-            let count = parseInt(countInput.value);
-            let newAllPrice = count * productPrice;
-
-            // Update the allPrice input value
-            allPriceInput.val(newAllPrice.toFixed(2));
-        }
-
-        // Add onchange event listeners to all count input fields
-        let countInputs = document.getElementsByClassName('count-input');
-        for (let i = 0; i < countInputs.length; i++) {
-            countInputs[i].addEventListener('change', updateAllPrice);
-        }
-    </script>
-
 </head>
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
@@ -64,7 +36,7 @@
                     <label for="itemCount">상품 수량</label><br>
                     <input type="number"
                            class="form-control count-input" id="itemCount" th:name="|orderItems[__${#strings.toString(orderItemStat.index)}__].count|"
-                           th:value="${orderItem.count}">
+                           th:value="${orderItem.count}" readonly>
 <!--                           class="form-control" id="itemCount" name="orderItems[__${orderItemStat.index}__].count"-->
                 </div>
 <!--                바로바로 업데이트 되나?-->
@@ -74,6 +46,7 @@
                            class="form-control all-price-input" id="itemAllPrice" th:name="|orderItems[__${#strings.toString(orderItemStat.index)}__].allPrice|"
                            th:value="${{orderItem.count * orderItem.product.price}}" readonly>
                 </div>
+                <hr>
             </div>
 <!--            상품 추가 option도 만들어줘야함. -->
             <div class="form-group">

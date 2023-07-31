@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import project.studycafe.contoller.form.CartForm;
+import project.studycafe.domain.Cart;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.CartProduct;
 import project.studycafe.domain.Member;
-import project.studycafe.service.cart.CartProductForm;
+import project.studycafe.contoller.form.CartProductForm;
 import project.studycafe.service.cart.CartService;
 
 import java.util.List;
@@ -24,18 +26,21 @@ public class CartController {
     // 장바구니 보여주기
     @GetMapping
     public String cart(@Login Member loginmember, Model model) {
-        List<CartProduct> cartProducts = cartService.findCartProducts(loginmember);
-        List<CartProductForm> cartProductForms = cartService.cartProductToCartProductForm(cartProducts);
-        model.addAttribute("cartProducts", cartProductForms);
+        Cart cart = cartService.findByMemberId(loginmember.getId());
+        log.info("cart ={}", cart);
+//        List<CartProduct> cartProducts = cartService.findCartProducts(loginmember);
+//        List<CartProductForm> cartProductForms = cartService.cartProductToCartProductForm(cartProducts);
+//        CartForm cartForm = new CartForm(loginmember.getId(), cartProductForms);
+        model.addAttribute("cart", cart);
 
         return "cart/cart";
     }
 
     // 장바구니에 상품 추가
-    @GetMapping("/{itemId}/add")
-    public String addCartProduct(@Login Member loginmember, @PathVariable long itemId) {
-        cartService.addCartProduct(loginmember, itemId);
-        return "redirect:/product/" + itemId;
+    @GetMapping("/{productId}/add")
+    public String addCartProduct(@Login Member loginmember, @PathVariable long productId) {
+        cartService.addCartProduct(loginmember, productId);
+        return "redirect:/product/" + productId;
     }
 
     @GetMapping("/{itemId}/edit/up")
@@ -54,7 +59,7 @@ public class CartController {
         // 좋아요 같이 해야할거같은데
     }
 
-    @GetMapping("/{itemId}/delete")
+    @PostMapping("/{itemId}/delete")
     public String delete(@Login Member loginmember,@PathVariable long itemId) {
         cartService.deleteCartProduct(loginmember, itemId);
         return "redirect:/cart";

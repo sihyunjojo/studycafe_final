@@ -27,21 +27,12 @@ public class OrderItem extends BaseTimeEntity{
     private int count = 1;
     private int allPrice;
 
-
     // 값을 받아오고 실행.
     @PrePersist
     void setting() {
         if (this.count != 1) {
             this.allPrice = count * product.getPrice();
         }
-    }
-
-    public OrderItem(Product product, int count) {
-        this.product = product;
-        this.count = count;
-        this.allPrice = count * product.getPrice();
-
-        product.removeStock(count);
     }
 
     // 이게 도대체 뭔 코드임???
