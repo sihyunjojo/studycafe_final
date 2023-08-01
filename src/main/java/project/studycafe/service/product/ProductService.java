@@ -65,12 +65,18 @@ public class ProductService {
     public void upLikeCountProduct(Long productId) {
         Product findProduct = productRepository.findById(productId).orElseThrow();
         findProduct.setLikeCount(findProduct.getLikeCount() + 1);
+        if (findProduct.getReadCount() > 0) {
+            findProduct.setReadCount(findProduct.getReadCount() - 1);
+        }
     }
 
     public void downLikeCountProduct(Long productId) {
         Product findProduct = productRepository.findById(productId).orElseThrow();
         if (findProduct.getLikeCount() > 0) {
             findProduct.setLikeCount(findProduct.getLikeCount() - 1);
+        }
+        if (findProduct.getReadCount() > 0) {
+            findProduct.setReadCount(findProduct.getReadCount() - 1);
         }
     }
 

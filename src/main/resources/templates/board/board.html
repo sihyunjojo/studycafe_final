@@ -46,11 +46,20 @@
                    class="form-control" id="readCount" name="readCount"
                    th:value="${board.readCount}" readonly>
         </div>
-        <div class="form-group">
-            <label for="likeCount">좋아요 수</label><br>
+        <label for="likeCount">좋아요 수</label><br>
+        <div class="form-group" style="display: flex;">
+            <button style="flex:1; margin-right: 1em"
+                    th:onclick="|location.href='/board/${board.id}/likeCountUp'|"
+                    type="button"> up
+            </button>
             <input type="text"
-                   class="form-control" id="likeCount" name="likeCount"
+                   class="form-control" style="flex:6"
+                   id="likeCount" name="likeCount"
                    th:value="${board.likeCount}" readonly>
+            <button style="flex:1; margin-left: 1em"
+                    th:onclick="|location.href='/board/${board.id}/likeCountDown'|"
+                    type="button"> down
+            </button>
         </div>
         <div class="form-group">
             <label for="content">내용</label><br>

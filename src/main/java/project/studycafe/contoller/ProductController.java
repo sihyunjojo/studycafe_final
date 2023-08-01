@@ -129,16 +129,16 @@ public class ProductController {
     }
 
 
-    @GetMapping("/{productId}/edit/likeCountUp")
+    @GetMapping("/{productId}/likeCountUp")
     public String upLikeCountEdit(@PathVariable Long productId) {
         productService.upLikeCountProduct(productId);
-        return "redirect:/product";
+        return "redirect:/product/"+ productId;
     }
 
-    @GetMapping("/{productId}/edit/likeCountDown")
+    @GetMapping("/{productId}/likeCountDown")
     public String downLikeCountEdit(@PathVariable Long productId) {
         productService.downLikeCountProduct(productId);
-        return "redirect:/product";
+        return "redirect:/product/"+ productId;
     }
 
     @GetMapping("/{productId}/delete")
@@ -147,6 +147,7 @@ public class ProductController {
         return "redirect:/product"; // 삭제 후 목록 페이지로 리다이렉트
     }
 }
+
 
 //    @GetMapping()
 //    public String products(@ModelAttribute("productSearch") ProductSearchCond productSearch, Model model) {

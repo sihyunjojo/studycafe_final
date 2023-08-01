@@ -141,9 +141,6 @@ public class BoardController {
             List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
         }
 
-//        List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles());
-//        Long boardId = boardService.addBoard(form, storeFiles);
-//        Long boardId = boardService.addBoard(form, storeFiles);
 
         log.info("boardid = {}", boardId);
         // 이름이 같은데 내부 파일이 다른 내용일 수 도 있잖음.
@@ -185,11 +182,18 @@ public class BoardController {
     }
 
 
-    //    @PostMapping("/{boardId}/edit/likeCount")
-//    public String editLikeCount(BoardForm boardForm, @PathVariable Long boardId) {
-//        // 이걸하려면 멤버마다 그 보드에 대한 like를 유지하고 있는지에 대한 db 컬럼이 필요하다.
-//        return "redirect:/board";
-//    }
+    @GetMapping("/{boardId}/likeCountUp")
+    public String upLikeCountEdit(@PathVariable Long boardId) {
+        boardService.upLikeCountBoard(boardId);
+        return "redirect:/board/"+ boardId;
+    }
+
+    @GetMapping("/{boardId}/likeCountDown")
+    public String downLikeCountEdit(@PathVariable Long boardId) {
+        boardService.downLikeCountBoard(boardId);
+        return "redirect:/board/"+ boardId;
+    }
+    
 
 
 

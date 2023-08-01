@@ -10,6 +10,7 @@ import project.studycafe.contoller.form.BoardUpdateForm;
 import project.studycafe.domain.AttachmentFile;
 import project.studycafe.domain.Board;
 import project.studycafe.domain.Member;
+import project.studycafe.domain.Product;
 import project.studycafe.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.repository.board.board.JpaBoardRepository;
 import project.studycafe.repository.board.board.dto.BoardSearchCond;
@@ -169,4 +170,23 @@ public class BoardService {
                 board.getCreatedTime(), board.getAttachmentFiles(), board.getPopup(), board.getReadCount(), board.getLikeCount());
     }
 
+
+    public void upLikeCountBoard(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId).orElseThrow();
+        findBoard.setLikeCount(findBoard.getLikeCount() + 1);
+        if (findBoard.getReadCount() > 0) {
+            findBoard.setReadCount(findBoard.getReadCount() - 1);
+        }
+    }
+
+    public void downLikeCountBoard(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId).orElseThrow();
+        if (findBoard.getLikeCount() > 0) {
+            findBoard.setLikeCount(findBoard.getLikeCount() - 1);
+        }
+        if (findBoard.getReadCount() > 0) {
+            findBoard.setReadCount(findBoard.getReadCount() - 1);
+        }
+
+    }
 }
