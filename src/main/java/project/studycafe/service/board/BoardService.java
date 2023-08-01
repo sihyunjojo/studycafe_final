@@ -95,7 +95,6 @@ public class BoardService {
         board.setTitle(form.getTitle());
         board.setContent(form.getContent());
         board.setCategory(form.getCategory());
-        log.info("board = {}", boardRepository.findById(boardId));
     }
 
     public void updateBoard(Long boardId, BoardUpdateForm form, List<AttachmentFile> files) {

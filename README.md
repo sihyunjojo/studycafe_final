@@ -186,8 +186,8 @@ enum으로 쓰는게 코드 안정성이 높아지고, 기존 enum의 값이 바
 결제 코드 만들기
 
 비밀번호 중복체크(ajax)
+상품 좋아요 목록, board 좋아요.
 
-member 삭제시 db에있는 첨부파일은 삭제되는데 저장장치의 첨부파일은 삭제 안됨.(연관관계 끊으면서 디비에서만 사라짐)
 (master)사장님만 등록 할 수 있게 page만들기 추후에  
 
 @Validated @ModelAttribute("member") CommonMemberForm form 이거에 대해서 좀 알아야함

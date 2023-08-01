@@ -165,7 +165,7 @@ public class BoardController {
 
     @PostMapping("/{boardId}/edit")
     public String edit(BoardUpdateForm form, @PathVariable Long boardId) throws IOException, NoSuchAlgorithmException {
-        if (form.getNewAttachmentFiles() != null) {
+        if (!form.getNewAttachmentFiles().isEmpty()) {
             List<AttachmentFile> storeFiles = fileService.storeFiles(form.getNewAttachmentFiles(), boardId);
         }
         boardService.updateBoard(boardId, form);

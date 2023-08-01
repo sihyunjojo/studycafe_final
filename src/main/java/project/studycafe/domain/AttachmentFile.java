@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 public class AttachmentFile extends BaseTimeEntity {
     @Id
     private String uniqueFileName;
@@ -39,9 +40,6 @@ public class AttachmentFile extends BaseTimeEntity {
     // 이게 도대체 뭔 코드임???
     // 삭제했다가 그냥 다시 넣어주는 코드인데?
     public void setBoard(Board board) {
-        if (this.board != null) {
-            this.board.getAttachmentFiles().remove(this);
-        }
         this.board = board;
         board.getAttachmentFiles().add(this);
     }

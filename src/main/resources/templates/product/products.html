@@ -101,7 +101,7 @@
                         <input type="hidden" th:field="*{maxPrice}"/>
                         <input type="hidden" th:field="*{minLikeCount}"/>
                         <input type="hidden" th:field="*{perPageNum}">
-                        <input type="text" id="sortByReadCount" th:name="sort" th:field="*{sort}"/>
+                        <input type="hidden" id="sortByReadCount" th:name="sort" th:field="*{sort}"/>
                         <button type="submit" th:onclick="toggleSorting('ReadCount')">조회수&#9660;</button>
                     </form>
                 </th>
@@ -113,7 +113,7 @@
                         <input type="hidden" th:field="*{category}"/>
                         <input type="hidden" th:field="*{minLikeCount}"/>
                         <input type="hidden" th:field="*{perPageNum}">
-                        <input type="text" id="sortByLikeCount" th:name="sort" th:field="*{sort}"/>
+                        <input type="hidden" id="sortByLikeCount" th:name="sort" th:field="*{sort}"/>
                         <button type="submit" th:onclick="toggleSorting('LikeCount')">좋아요&#9660;</button>
                     </form>
                 </th>
