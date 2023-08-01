@@ -20,9 +20,8 @@ public class OrderSearchCond {
     private Integer perPageNum;
 
     private String sort;
-    private String sortDirection;
 
-    public OrderSearchCond(String memberNickname, String productName, String productCategory, String minCreatedTime, String maxCreatedTime, OrderStatus orderStatus, Integer perPageNum, String sort, String sortDirection) {
+    public OrderSearchCond(String memberNickname, String productName, String productCategory, String minCreatedTime, String maxCreatedTime, OrderStatus orderStatus, Integer perPageNum, String sort) {
         this.memberNickname = memberNickname;
         this.productName = productName;
         this.productCategory = productCategory;
@@ -34,6 +33,5 @@ public class OrderSearchCond {
             this.perPageNum = 10;
         }
         this.sort = sort;
-        this.sortDirection = sortDirection;
     }
 }

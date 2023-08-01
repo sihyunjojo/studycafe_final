@@ -5,7 +5,23 @@
     <meta charset="UTF-8">
     <title>메인 상품</title>
     <head th:insert="~{template/styleCss :: css_copy}"></head>
-    <!--<link rel="stylesheet", href="member/join.css">-->
+    <script>
+        function toggleSorting(sort) {
+            let formString = "sortProduct" + sort
+            let inputIdString = "sortBy" + sort
+            let form = document.getElementById(formString);
+            let inputBySort = document.getElementById(inputIdString);
+
+            let currentValue = inputBySort.value;
+
+            if (currentValue == "product" + sort + "Up") {
+                inputBySort.value = "product" + sort + "Up"
+            } else {
+                inputBySort.value = "product" + sort + "Down"
+            }
+            form.submit();
+        }
+    </script>
 </head>
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
@@ -78,26 +94,27 @@
                 <th scope="row">카테고리</th>
                 <th scope="row">가격</th>
                 <th scope="row">
-                    <form th:action="@{/product/search}" th:object="${productSearch}" method="get">
+                    <form class="sortProductReadCount" th:action="@{/product/search}" th:object="${productSearch}" method="get">
                         <input type="hidden" th:field="*{name}"/>
+                        <input type="hidden" th:field="*{category}"/>
                         <input type="hidden" th:field="*{minPrice}"/>
                         <input type="hidden" th:field="*{maxPrice}"/>
-                        <input type="hidden" th:field="*{category}"/>
                         <input type="hidden" th:field="*{minLikeCount}"/>
                         <input type="hidden" th:field="*{perPageNum}">
-                        <input type="hidden" th:name="sort" th:value="readCount"/>
-                        <button type="submit">조회수&#9660;</button>
+                        <input type="text" id="sortByReadCount" th:name="sort" th:field="*{sort}"/>
+                        <button type="submit" th:onclick="toggleSorting('ReadCount')">조회수&#9660;</button>
                     </form>
                 </th>
                 <th scope="row">
-                    <form th:action="@{/product/search}" th:object="${productSearch}" method="get">
+                    <form class="sortProductLikeCount" th:action="@{/product/search}" th:object="${productSearch}" method="get">
                         <input type="hidden" th:field="*{name}"/>
                         <input type="hidden" th:field="*{minPrice}"/>
                         <input type="hidden" th:field="*{maxPrice}"/>
                         <input type="hidden" th:field="*{category}"/>
                         <input type="hidden" th:field="*{minLikeCount}"/>
                         <input type="hidden" th:field="*{perPageNum}">
-                        <button type="submit">좋아요&#9660;</button>
+                        <input type="text" id="sortByLikeCount" th:name="sort" th:field="*{sort}"/>
+                        <button type="submit" th:onclick="toggleSorting('LikeCount')">좋아요&#9660;</button>
                     </form>
                 </th>
             </tr>

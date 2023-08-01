@@ -54,14 +54,24 @@ public class OrderController {
 
     @GetMapping("/search")
     public String searchOrders(@ModelAttribute("orderSearch") OrderSearchCond orderSearch, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
-        log.info("ordersearch = {}", orderSearch);
+        log.info("orderSearch = {}", orderSearch);
         List<Order> findOrders = orderService.findSearchedAndSortedOrder(orderSearch);
 
         List<Order> findOrderList = orderService.getOrderList(page, orderSearch.getPerPageNum(), findOrders);
 
         PageMaker pageMaker = new PageMaker(findOrders.size(), page, orderSearch.getPerPageNum());
 
-        log.info("searchtype = {}", orderSearch.getMinCreatedTime());
+        if (orderSearch.getSort() != null) {
+            if (orderSearch.getSort().equals("orderIdUp")) {
+                orderSearch.setSort("orderIdDown");
+            } else if (orderSearch.getSort().equals("orderIdDown")) {
+                orderSearch.setSort("orderIdUp");
+            } else if (orderSearch.getSort().equals("orderStatusDown")) {
+                orderSearch.setSort("orderStatusUp");
+            } else if (orderSearch.getSort().equals("orderStatusUp")) {
+                orderSearch.setSort("orderStatusDown");
+            }
+        }
 
         if (orderSearch.getMinCreatedTime() != null) {
             log.info("searchtype = {}", orderSearch.getMinCreatedTime().getClass());
@@ -70,6 +80,7 @@ public class OrderController {
 //        List<OrderNowForm> orderNowForms = orderService.ordersToOrderNowForms(findOrderList);
         model.addAttribute("pageMaker", pageMaker);
         model.addAttribute("orders", findOrderList);
+        log.info("orderSearch = {}", orderSearch);
         model.addAttribute("orderSearch", orderSearch);
 
         return "order/orders";

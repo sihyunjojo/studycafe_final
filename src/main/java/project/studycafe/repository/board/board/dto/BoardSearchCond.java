@@ -13,5 +13,4 @@ public class BoardSearchCond {
     private String category;
     private String sort;
     private Integer perPageNum;
-
 }

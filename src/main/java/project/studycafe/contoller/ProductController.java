@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import project.studycafe.contoller.form.OrderNowForm;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.Member;
 import project.studycafe.domain.PageMaker;
@@ -42,15 +41,16 @@ public class ProductController {
 
     }
     @GetMapping("/search")
-    public String searchProducts(@Validated @ModelAttribute("productSearch") ProductSearchCond searchCond, @RequestParam(required = false, defaultValue = "1") int page, BindingResult bindingResult, Model model) {
+    public String searchProducts(@Validated @ModelAttribute("productSearch") ProductSearchCond productSearch, @RequestParam(required = false, defaultValue = "1") int page, BindingResult bindingResult, Model model) {
 
-        if (searchCond.getMaxPrice() != null && searchCond.getMinPrice() != null && searchCond.getMaxPrice() < searchCond.getMinPrice() ) {
+        log.info("productSearch = {}", productSearch);
+        if (productSearch.getMaxPrice() != null && productSearch.getMinPrice() != null && productSearch.getMaxPrice() < productSearch.getMinPrice() ) {
             bindingResult.reject("maxPrice is not higher minPrice", "최대 가격은 최소 가격보다 작을 수 없습니다.");
         }
 
         if (bindingResult.hasErrors()) {
             List<Product> products = productService.findProducts();
-            searchCond.setPerPageNum(BASIC_PER_PAGE_NUM);
+            productSearch.setPerPageNum(BASIC_PER_PAGE_NUM);
 
             List<Product> productList = productService.getProductList(page, BASIC_PER_PAGE_NUM, products);
 
@@ -63,14 +63,25 @@ public class ProductController {
             return "product/products";
         }
 
-        List<Product> findProducts = productService.findSearchedAndSortedProducts(searchCond);
+        List<Product> findProducts = productService.findSearchedAndSortedProducts(productSearch);
 
-        List<Product> productList = productService.getProductList(page, searchCond.getPerPageNum(), findProducts);
-        PageMaker pageMaker = new PageMaker(findProducts.size(), page, searchCond.getPerPageNum());
-
+        List<Product> productList = productService.getProductList(page, productSearch.getPerPageNum(), findProducts);
+        PageMaker pageMaker = new PageMaker(findProducts.size(), page, productSearch.getPerPageNum());
+        if (productSearch.getSort() != null) {
+            if (productSearch.getSort().equals("productReadCountUp")) {
+                productSearch.setSort("productReadCountDown");
+            } else if (productSearch.getSort().equals("productReadCountDown")) {
+                productSearch.setSort("productReadCountUp");
+            } else if (productSearch.getSort().equals("productLikeCountUp")) {
+                productSearch.setSort("productLikeCountDown");
+            } else if (productSearch.getSort().equals("productLikeCountDown")) {
+                productSearch.setSort("productLikeCountUp");
+            }
+        }
+        log.info("productSearch = {}", productSearch);
         model.addAttribute("pageMaker", pageMaker);
         model.addAttribute("products", productList);
-        model.addAttribute("productSearch", searchCond);
+        model.addAttribute("productSearch", productSearch);
 
         return "product/products";
     }

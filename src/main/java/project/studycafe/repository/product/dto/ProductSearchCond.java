@@ -2,8 +2,10 @@ package project.studycafe.repository.product.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 @AllArgsConstructor
 public class ProductSearchCond {
     private String name;
@@ -13,5 +15,4 @@ public class ProductSearchCond {
     private Integer minLikeCount;
     private String sort;
     private Integer perPageNum;
-
 }

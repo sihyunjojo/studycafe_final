@@ -76,6 +76,19 @@ public class BoardController {
 
         PageMaker pageMaker = new PageMaker(findBoards.size()- notices.size(), page, boardSearch.getPerPageNum());
 
+
+        if (boardSearch.getSort() != null) {
+            if (boardSearch.getSort().equals("boardReadCountUp")) {
+                boardSearch.setSort("boardReadCountDown");
+            } else if (boardSearch.getSort().equals("boardReadCountDown")) {
+                boardSearch.setSort("boardReadCountUp");
+            } else if (boardSearch.getSort().equals("boardLikeCountUp")) {
+                boardSearch.setSort("boardLikeCountDown");
+            } else if (boardSearch.getSort().equals("boardLikeCountDown")) {
+                boardSearch.setSort("boardLikeCountUp");
+            }
+        }
+
         // 클라이언트 처리
         List<BoardForm> boardForms = boardService.boardsToBoardForms(findBoardList);
         model.addAttribute("pageMaker", pageMaker);

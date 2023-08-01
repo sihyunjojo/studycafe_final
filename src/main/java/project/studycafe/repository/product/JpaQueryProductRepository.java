@@ -11,6 +11,7 @@ import project.studycafe.repository.product.dto.ProductSearchCond;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static project.studycafe.domain.QBoard.board;
 import static project.studycafe.domain.QProduct.product;
 
 public class JpaQueryProductRepository {
@@ -48,16 +49,19 @@ public class JpaQueryProductRepository {
                 .fetch();
     }
 
-    // 조회수순, 좋아요순
     private OrderSpecifier<?> sortedProductBySort(String sort) {
         if (StringUtils.hasText(sort)) {
-            if ("readCount".equalsIgnoreCase(sort)) {
+            if ("productReadCountUp".equalsIgnoreCase(sort)) {
+                return product.readCount.asc();
+            } else if ("productReadCountDown".equalsIgnoreCase(sort)) {
                 return product.readCount.desc();
-            } else if ("likeCount".equalsIgnoreCase(sort)) {
+            } else if ("productLikeCountUp".equalsIgnoreCase(sort)) {
+                return product.likeCount.asc();
+            } else if ("productLikeCountDown".equalsIgnoreCase(sort)) {
                 return product.likeCount.desc();
             }
         }
-        return product.likeCount.desc();
+        return product.createdTime.desc();
     }
 
     private BooleanExpression likeProductName(String productName) {

@@ -30,49 +30,33 @@ public class OrderQueryRepository {
     }
 
     public List<Order> findSearchedAndSortedOrder(OrderSearchCond cond) {
-        return query.select(order)
-                .from(order)
-                .where(
+        return query.
+                select(order).
+                from(order).
+                where(
                         likeMemberNickname(cond.getMemberNickname()),
                         likeProductName(cond.getProductName()),
                         eqProductCategory(cond.getProductCategory()),
                         eqOrderStatus(cond.getOrderStatus()),
                         leMaxCreatedTime(cond.getMaxCreatedTime()),
                         geMinCreatedTime(cond.getMinCreatedTime())
-                )
-                .orderBy(
-                        sortedBoardBySort(cond.getSort(), cond.getSortDirection()),
+                ).
+                orderBy(
                         sortedBoardBySort(cond.getSort())
-                )
-                .fetch();
-    }
-
-    private OrderSpecifier<?> sortedBoardBySort(String sort, String sortDirection) {
-        log.info("sort ={}, direction={}", sort, sortDirection);
-        if (StringUtils.hasText(sort)) {
-            if ("orderId".equalsIgnoreCase(sort)) {
-                if ("down".equalsIgnoreCase(sortDirection)) {
-                    return order.id.desc();
-                } else {
-                    return order.id.asc();
-                }
-            } else if ("orderStatus".equalsIgnoreCase(sort)) {
-                if ("down".equalsIgnoreCase(sortDirection)) {
-                    return order.status.desc();
-                } else {
-                    return order.status.asc();
-                }
-            }
-        }
-        return order.id.desc();
+                ).
+                fetch();
     }
 
     private OrderSpecifier<?> sortedBoardBySort(String sort) {
         log.info("sort ={}", sort);
         if (StringUtils.hasText(sort)) {
-            if ("orderId".equalsIgnoreCase(sort)) {
+            if ("orderIdUp".equalsIgnoreCase(sort)) {
+                return order.id.asc();
+            } else if ("orderIdDown".equalsIgnoreCase(sort)) {
                 return order.id.desc();
-            } else if ("orderStatus".equalsIgnoreCase(sort)) {
+            } else if ("orderStatusUp".equalsIgnoreCase(sort)) {
+                return order.status.asc();
+            } else if ("orderStatusDown".equalsIgnoreCase(sort)) {
                 return order.status.desc();
             }
         }
@@ -94,7 +78,7 @@ public class OrderQueryRepository {
         return null;
     }
 
-    private Predicate eqProductCategory(String category) {
+    private BooleanExpression eqProductCategory(String category) {
         if (StringUtils.hasText(category)) {
             return order.orderItems.any().product.category.eq(category);
         }
@@ -102,7 +86,7 @@ public class OrderQueryRepository {
     }
 
 
-    private Predicate eqOrderStatus(OrderStatus orderStatus) {
+    private BooleanExpression eqOrderStatus(OrderStatus orderStatus) {
         if (orderStatus == WAIT) {
             return order.status.eq(WAIT);
         } else if (orderStatus == DELIVERING) {
@@ -139,3 +123,4 @@ public class OrderQueryRepository {
         return null;
     }
 }
+

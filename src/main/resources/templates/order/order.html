@@ -20,7 +20,7 @@
                    class="form-control" id="memberNickname"
                    th:value="${order.member.nickname != null ? order.member.nickname : order.member.name}" readonly>
         </div>
-
+        <br>
         <div th:each="orderItem :${order.orderItems}">
             <div class="form-group">
                 <label for="itemName">상품 이름</label><br>
@@ -40,14 +40,15 @@
                        class="form-control" id="allPrice" name="allPrice"
                        th:value="${{orderItem.allPrice}}" readonly>
             </div>
+            <br>
         </div>
-
         <div class="form-group">
             <label for="totalPrice">주문 총가격</label><br>
             <input type="text"
                    class="form-control" id="totalPrice" name="totalPrice"
                    th:value="${{order.totalPrice}}" readonly>
         </div>
+        <hr>
         <div class="form-group">
             <label for="delivery_city">배달 도시</label><br>
             <input type="text"
@@ -66,6 +67,7 @@
                    class="form-control" id="delivery_zipcode" name="delivery_zipcode"
                    th:value="${order.delivery.address.zipcode}" readonly>
         </div>
+        <hr>
         <div class="form-group">
             <label for="order_status">주문 상태</label><br>
             <input type="text"

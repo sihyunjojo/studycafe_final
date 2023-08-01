@@ -5,6 +5,24 @@
     <meta charset="UTF-8">
     <title>메인 게시판</title>
     <head th:insert="~{template/styleCss :: css_copy}"></head>
+
+    <script>
+        function toggleSorting(sort) {
+            let formString = "sortBoard" + sort
+            let inputIdString = "sortBy" + sort
+            let form = document.getElementById(formString);
+            let inputBySort = document.getElementById(inputIdString);
+
+            let currentValue = inputBySort.value;
+
+            if (currentValue == "board" + sort + "Up") {
+                inputBySort.value = "board" + sort + "Up"
+            } else {
+                inputBySort.value = "board" + sort + "Down"
+            }
+            form.submit();
+        }
+    </script>
 </head>
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
@@ -48,8 +66,8 @@
                 <div class="col">
                     <select class="form-select" id="sort" th:field="*{sort}">
                         <option th:value>최신순</option>
-                        <option th:value="readCount">조회수순</option>
-                        <option th:value="likeCount">좋아요순</option>
+                        <option th:value="boardReadCountDown">조회수순</option>
+                        <option th:value="boardLikeCountDown">좋아요순</option>
                     </select>
                 </div>
                 <div class="col">
@@ -82,14 +100,26 @@
                 <th scope="row">작성시간</th>
                 <th scope="row">
                     <!--                        조회수 정렬-->
-                    <form th:action="@{/board/search}" th:object="${boardSearch}" method="get">
+                    <form class = "sortBoardReadCount" th:action="@{/board/search}" th:object="${boardSearch}" method="get">
                         <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
                         <input type="hidden" th:name="title" th:field="*{title}"/>
                         <input type="hidden" th:name="category" th:field="*{category}"/>
                         <input type="hidden" th:name="perPageNum" th:value="*{perPageNum}"/>
-                        <input type="hidden" th:name="sort" th:value="readCount"/>
-                        <button type="submit"
+                        <input type="hidden" id = "sortByReadCount" th:name="sort" th:field="*{sort}"/>
+                        <button type="submit" th:onclick="toggleSorting('ReadCount')"
                                 style=" border: none; outline: none; background-color: white; font-weight: bold;">조회수&#9660;
+                        </button>
+                    </form>
+                </th>
+                <th scope="row">
+                    <form class = "sortBoardLikeCount" th:action="@{/board/search}" th:object="${boardSearch}" method="get">
+                        <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
+                        <input type="hidden" th:name="title" th:field="*{title}"/>
+                        <input type="hidden" th:name="category" th:field="*{category}"/>
+                        <input type="hidden" th:name="perPageNum" th:value="*{perPageNum}"/>
+                        <input type="hidden" id = "sortByLikeCount" th:name="sort" th:field="*{sort}"/>
+                        <button type="submit" th:onclick="toggleSorting('LikeCount')"
+                                style=" border: none; outline: none; background-color: white; font-weight: bold;">좋아요&#9660;
                         </button>
                     </form>
                 </th>

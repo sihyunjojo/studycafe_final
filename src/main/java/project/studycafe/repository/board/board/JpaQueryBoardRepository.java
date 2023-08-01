@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static project.studycafe.domain.QBoard.board;
+import static project.studycafe.domain.QOrder.order;
 
 public class JpaQueryBoardRepository {
     private final JPAQueryFactory query;
@@ -39,9 +40,13 @@ public class JpaQueryBoardRepository {
 
     public OrderSpecifier<?> sortedBoardBySort(String sort) {
         if (StringUtils.hasText(sort)) {
-            if ("readCount".equalsIgnoreCase(sort)) {
+            if ("boardReadCountUp".equalsIgnoreCase(sort)) {
+                return board.readCount.asc();
+            } else if ("boardReadCountDown".equalsIgnoreCase(sort)) {
                 return board.readCount.desc();
-            } else if ("likeCount".equalsIgnoreCase(sort)) {
+            } else if ("boardLikeCountUp".equalsIgnoreCase(sort)) {
+                return board.likeCount.asc();
+            } else if ("boardLikeCountDown".equalsIgnoreCase(sort)) {
                 return board.likeCount.desc();
             }
         }
