@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -17,6 +18,7 @@ public class OauthMemberForm implements MemberForm{
     private String provider;
 
     private String name;
+    @NotEmpty(message = "회원 닉네임은 필수 입니다")
     private String nickname;
     private String gender;
 

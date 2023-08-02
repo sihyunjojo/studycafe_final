@@ -3,9 +3,11 @@ package project.studycafe.handler.exceptionHandler.advice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.studycafe.exception.BadRequestException;
+import project.studycafe.exception.NotFindOrderItemException;
 import project.studycafe.exception.UserException;
 import project.studycafe.handler.exceptionHandler.ErrorResult;
 
@@ -14,10 +16,18 @@ import project.studycafe.handler.exceptionHandler.ErrorResult;
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
-    @ExceptionHandler(RuntimeException.class) // 2개이상 가능
+    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400 클라이언트측 에러를 발생시켜줘라
+    @ExceptionHandler(RuntimeException.class) // 런타임에러가 발생시 발생한다. 2개이상 가능
     public ModelAndView badRequestHandler(BadRequestException e) {
         log.error("[badRequestHandler] ex", e);
+        return new ModelAndView("error/400");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400 클라이언트측 에러를 발생시켜줘라
+    @ExceptionHandler(NotFindOrderItemException.class) // 런타임에러가 발생시 발생한다. 2개이상 가능
+    public ModelAndView notFindOrderItemExceptionHandler(NotFindOrderItemException e, Model model) {
+        log.error("[badRequestHandler] ex", e);
+        model.addAttribute("errorMessage", e.getMessage());
         return new ModelAndView("error/400");
     }
 

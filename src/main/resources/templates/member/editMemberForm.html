@@ -24,43 +24,13 @@
             <div class="field-error" th:errors="*{userLoginId}"/>
         </div>
         <!-- 비밀번호 -->
-
-        <th:block th:if="${same_password}">
-            <div class="form-group">
-                <label for="userPassword">비밀번호</label><br>
-                <input type="password"
-                       class="form-control" id="userPassword" name="userPassword" th:value="${updateMember.userPassword}" placeholder="PASSWORD" required>
-                <div class="field-error" th:errors="*{userPassword}"/>
-
-            </div>
-
-            <div class="form-group">
-                <label for="checkPassword">비밀번호 재입력 </label><br>
-                <input type="password"
-                       class="form-control" id="checkPassword" name="checkPassword" th:value="${updateMember.checkPassword}" placeholder="Confirm Password" readonly>
-                <button type="submit" th:formaction="|@{/member/checkPw}|" disabled>비밀번호 확인</button>
-            </div>
-        </th:block>
-
-        <th:block th:unless="${same_password}">
-            <div class="form-group">
-                <label for="userPassword">비밀번호</label><br>
-                <input type="password"
-                       class="form-control" id="userPassword" name="userPassword" placeholder="PASSWORD" required>
-                <div class="field-error" th:errors="*{userPassword}"/>
-            </div>
-
-            <div class="form-group">
-                <label for="checkPassword">비밀번호 재입력 </label><br>
-                <input type="password"
-                        class="form-control" id="checkPassword" name="checkPassword"
-                        placeholder="Confirm Password" required>
-                <button type="submit" th:formaction="|@{/member/checkPw}|">비밀번호 확인</button>
-                <th:block th:if="${different_password}">
-                    <div th:text="${different_password}"></div>
-                </th:block>
-            </div>
-        </th:block>
+        <div class="form-group">
+            <label for="userPassword">비밀번호</label><br>
+            <input type="password"
+                   class="form-control" id="userPassword" name="userPassword" th:value="${updateMember.userPassword}"
+                   placeholder="PASSWORD" required>
+            <div class="field-error" th:errors="*{userPassword}"/>
+        </div>
 
         <!-- 이름 -->
         <div class="form-group">
@@ -85,17 +55,17 @@
         </div>
         <div class="form-group">
             <label th:for="city">도시</label>
-            <input type="text" class="form-control" id ="city" th:field="*{city}" >
+            <input type="text" class="form-control" id="city" th:field="*{city}">
             <div class="field-error" th:errors="*{city}"/>
         </div>
         <div class="form-group">
             <label th:for="street">거리</label>
-            <input type="text" class="form-control" th:field="*{street}" >
+            <input type="text" class="form-control" th:field="*{street}">
             <div class="field-error" th:errors="*{street}"/>
         </div>
         <div class="form-group">
             <label th:for="zipcode">우편번호</label>
-            <input type="text" class="form-control" th:field="*{zipcode}" >
+            <input type="text" class="form-control" th:field="*{zipcode}">
             <div class="field-error" th:errors="*{zipcode}"/>
         </div>
         <div class="form-group">

@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.studycafe.contoller.form.CommonMemberForm;
+import project.studycafe.contoller.form.MemberForm;
 import project.studycafe.contoller.form.OauthMemberForm;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.domain.Member;
@@ -175,9 +176,9 @@ public class MemberController {
         return "member/memberInfo";
     }
 
-    // ajax로 다시만들ㅡ
+//
 //    @PostMapping("/checkPw")
-//    public String CheckPw(@Login Member loginMember, MemberForm updateForm, Model model) {
+//    public String CheckPw(@Login Member loginMember, CommonMemberForm updateForm, Model model) {
 //        if (updateForm.getCheckPassword().equals(updateForm.getUserPassword())) {
 //            model.addAttribute("same_password", "비밀번호 일치");
 //            model.addAttribute("updateMember", updateForm);

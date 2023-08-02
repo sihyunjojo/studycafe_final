@@ -11,10 +11,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.domain.Address;
+import project.studycafe.domain.OAuthAttributes;
 import project.studycafe.repository.member.JpaMemberRepository;
 import project.studycafe.domain.Member;
-import project.studycafe.contoller.form.MemberProfile;
+import project.studycafe.domain.MemberProfile;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -45,13 +45,13 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         Map<String, Object> attributes = oAuth2User.getAttributes(); // OAuth 서비스의 유저 정보들
 
         log.info("oAuth2User ={}", oAuth2User);
-        log.info("attributes ={}", attributes);
-        log.info("userNameAttributeName ={}", userNameAttributeName);
         log.info("registrationId ={}", registrationId);
+        log.info("userNameAttributeName ={}", userNameAttributeName);
+        log.info("attributes ={}", attributes);
+
 
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, attributes); // registrationId에 따라 유저 정보를 통해 공통된 UserProfile 객체로 만들어 줌
         log.info("memberProfile ={}", memberProfile);
-
         memberProfile.setProvider(registrationId);
         Member member = saveOrUpdate(memberProfile);
 

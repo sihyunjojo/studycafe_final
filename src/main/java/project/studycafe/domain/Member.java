@@ -78,7 +78,6 @@ public class Member extends BaseTimeEntity{
         this.email = email;
         this.provider = provider;
         this.nickname = nickname;
-        this.address = new Address("","","");
     }
 
     //==연관관계 메서드==//

@@ -52,11 +52,16 @@ public class OrderService {
 
         List<CartProductForm> cartProductForms = form.getCartProductList();
         for (CartProductForm cartProductForm : cartProductForms) {
-            OrderItem orderItem = createOrderItem(productRepository.findById(cartProductForm.getProductId()).orElseThrow(), cartProductForm.getCount());
-            orderItems.add(orderItem);
-            orderItemRepository.save(orderItem);
+            if (cartProductForm.isPurchasedCheck()) {
+                OrderItem orderItem = createOrderItem(productRepository.findById(cartProductForm.getProductId()).orElseThrow(), cartProductForm.getCount());
+                orderItems.add(orderItem);
+                orderItemRepository.save(orderItem);
+            }
         }
 
+        if (orderItems.size() == 0) {
+            throw new NotFindOrderItemException("장바구니에 구매할 상품을 체크 후 구매하기 버튼을 눌러주세요");
+        }
         Order order = createOrder(member,orderItems);
         orderRepository.save(order);
         return order.getId();

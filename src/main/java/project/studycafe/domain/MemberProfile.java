@@ -1,4 +1,4 @@
-package project.studycafe.contoller.form;
+package project.studycafe.domain;
 
 import lombok.Getter;
 import lombok.Setter;
