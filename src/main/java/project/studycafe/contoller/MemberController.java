@@ -47,7 +47,6 @@ public class MemberController {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
-//            model.addAttribute("member", new CommonMemberForm());
             return "member/addMemberForm";
         }
 
@@ -81,8 +80,6 @@ public class MemberController {
 
         if (bindingResult.hasErrors()) {
             log.info("bindingResult ={}", bindingResult);
-//            CommonMemberForm CommonMemberForm = memberService.memberToMemberForm(loginMember);
-//            model.addAttribute(LOGIN_MEMBER, CommonMemberForm);
             return "member/editMemberForm";
         }
 
@@ -104,8 +101,6 @@ public class MemberController {
         if (bindingResult.hasErrors()) {
             log.info("수정 실패");
             log.info("binding result = {}", bindingResult);
-//            OauthMemberForm OauthMemberForm = memberService.memberToOauthMemberForm(loginMember);
-//            model.addAttribute(LOGIN_MEMBER, OauthMemberForm);
             return "member/editOauthMemberForm";
         }
 
@@ -129,26 +124,25 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/idquiry")
+    @GetMapping("/find/id")
     public String findIdForm() {
         return "/member/findIdForm";
     }
 
-    @PostMapping("/idquiry")
+    @PostMapping("/find/id")
     public String findUserId(Member member, Model model) {
         Optional<Member> result = memberService.findMemberByNameAndPhone(member);
         model.addAttribute("member", result);
 
         return "member/findIdResult";
-        // 예외처리할때, 일치하는 회원 없으면 없다고 보여주기
     }
 
-    @GetMapping("/pwquiry")
+    @GetMapping("/find/pw")
     public String findPasswordForm() {
         return "/member/findPasswordForm";
     }
 
-    @PostMapping("/pwquiry")
+    @PostMapping("/find/pw")
     public String findPassword(Member member, Model model) {
         Optional<Member> result = memberService.findByUserId(member);
         model.addAttribute("member", result);
@@ -175,19 +169,4 @@ public class MemberController {
 
         return "member/memberInfo";
     }
-
-//
-//    @PostMapping("/checkPw")
-//    public String CheckPw(@Login Member loginMember, CommonMemberForm updateForm, Model model) {
-//        if (updateForm.getCheckPassword().equals(updateForm.getUserPassword())) {
-//            model.addAttribute("same_password", "비밀번호 일치");
-//            model.addAttribute("updateMember", updateForm);
-//        } else {
-//            model.addAttribute("different_password", "비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
-//        }
-//
-//        return "member/editMemberForm";
-//    }
-
-
 }

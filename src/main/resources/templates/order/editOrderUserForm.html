@@ -12,7 +12,7 @@
 <div class="container">
     <h3 th:text="|${order.member.nickname}님 주문|"> 주문 </h3>
     <hr>
-    <form th:action="@{|/order/edit/${order.id}/cart|}" method="post">
+    <form th:action="@{|/order/edit/${order.id}/user|}" method="post">
         <input type="hidden" name="id" th:value="${order.id}">
         <input type="hidden" name="memberId" th:value="${order.member.id}">
 
@@ -38,26 +38,24 @@
                     <input type="number"
                            class="form-control count-input" id="itemCount" th:name="|orderItems[__${#strings.toString(orderItemStat.index)}__].count|"
                            th:value="${orderItem.count}" readonly>
-                    <!--                           class="form-control" id="itemCount" name="orderItems[__${orderItemStat.index}__].count"-->
                 </div>
                 <!--                바로바로 업데이트 되나?-->
                 <div class="form-group">
                     <label for="itemAllPrice">상품 총가격</label><br>
                     <input type="text"
                            class="form-control all-price-input" id="itemAllPrice" th:name="|orderItems[__${#strings.toString(orderItemStat.index)}__].allPrice|"
-                           th:value="${orderItem.allPrice}" readonly>
-<!--                           th:value="${{orderItem.count * orderItem.product.price}}" readonly>-->
+                           th:value="${{orderItem.count * orderItem.product.price}}" readonly>
                 </div>
                 <hr>
             </div>
             <!--                이거 바로바로 바뀌게 해주는게 좋을거 같은데,-->
-
             <div class="form-group">
                 <label for="OrderTotalPrice">주문 총가격</label><br>
                 <input type="text"
                        class="form-control" id="OrderTotalPrice" name="OrderTotalPrice"
                        th:value="${order.totalPrice}" readonly>
             </div>
+            <hr>
             <div class="form-group">
                 <label for="delivery_city">배달 도시</label><br>
                 <input type="text"

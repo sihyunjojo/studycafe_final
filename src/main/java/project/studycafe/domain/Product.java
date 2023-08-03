@@ -42,7 +42,6 @@ public class Product extends BaseTimeEntity {
 
     @PrePersist
     public void setting() {
-
         if (this.readCount == null && this.likeCount == null) {
             this.readCount = 0;
             this.likeCount = 0;
@@ -61,5 +60,12 @@ public class Product extends BaseTimeEntity {
             throw new NotEnoughStockException("need more stock");
         }
         this.quantity = restStock;
+    }
+
+    public Product(Long id, String name, int price, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
     }
 }

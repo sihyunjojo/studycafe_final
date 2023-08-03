@@ -147,26 +147,3 @@ public class ProductController {
         return "redirect:/product"; // 삭제 후 목록 페이지로 리다이렉트
     }
 }
-
-
-//    @GetMapping()
-//    public String products(@ModelAttribute("productSearch") ProductSearchCond productSearch, Model model) {
-//        List<Product> products = productService.findProducts();
-//        model.addAttribute("products", products);
-//        return "product/products";
-//
-//    }
-//    @GetMapping("/search")
-//    public String products(@ModelAttribute("productSearch") ProductSearchCond productSearch, @RequestParam(name = "sort") String sort, Model model) {
-//        List<Product> products;
-//
-//        if (sort.isEmpty()) {
-//            products = productService.findSearchedProducts(productSearch);
-//        } else {
-//            products = productService.findSearchedAndSortedProducts(productSearch, sort);
-//        }
-//
-//        model.addAttribute("products", products);
-//        model.addAttribute("productSearch", productSearch);
-//        return "product/products";
-//    }

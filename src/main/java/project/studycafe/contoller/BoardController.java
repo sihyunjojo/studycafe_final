@@ -55,7 +55,6 @@ public class BoardController {
         boardList.stream()
                 .flatMap(b -> b.getAttachmentFiles().stream())
                 .forEach(a -> log.info("attach = {}", a.getBoard()));
-//        log.info("Boards = {}", boardForms);
         return "board/boards";
     }
 
@@ -141,13 +140,9 @@ public class BoardController {
             List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
         }
 
-
         log.info("boardid = {}", boardId);
-        // 이름이 같은데 내부 파일이 다른 내용일 수 도 있잖음.
-        // 파일 저장
 
-
-        return "redirect:/board"; // 일단 home으로 보내주자 나중에 board목록으로 보내주고
+        return "redirect:/board";
     }
 
     @GetMapping("/{boardId}/edit")
@@ -178,7 +173,7 @@ public class BoardController {
         }
 
         boardService.deleteBoard(boardId);
-        return "redirect:/board"; // 삭제 후 목록 페이지로 리다이렉트
+        return "redirect:/board";
     }
 
 
@@ -193,26 +188,4 @@ public class BoardController {
         boardService.downLikeCountBoard(boardId);
         return "redirect:/board/"+ boardId;
     }
-    
-
-
-
-    //    //@GetMapping()
-//    public String boards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, Model model) {
-//        List<Board> boards = boardService.findBoards();
-//        List<BoardForm> boardForms = boardService.boardsToBoardForms(boards);
-//        model.addAttribute("boards", boardForms);
-//        return "board/boards";
-//    }
-//
-//    //    @GetMapping("/search")
-//    public String searchBoards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, @RequestParam(required = false) String sort, Model model) {
-//        List<Board> boards = boardService.findSearchedAndSortedBoards(boardSearch);
-//
-//        List<BoardForm> boardForms = boardService.boardsToBoardForms(boards);
-//        model.addAttribute("boards", boardForms);
-//        model.addAttribute("boardSearch", boardSearch);
-//
-//        return "board/boards";
-//    }
 }

@@ -14,7 +14,6 @@ public class OrderItemForm {
     private long id;
     private int count;
 
-    @NumberFormat(pattern = "###,###")
     private int allPrice;
 
     public boolean isEmpty() {

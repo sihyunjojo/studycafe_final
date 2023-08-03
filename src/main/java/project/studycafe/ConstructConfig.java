@@ -22,7 +22,6 @@ public class ConstructConfig {
     private final EntityManager em;
     private final JpaMemberRepository jpaMemberRepository;
 
-
     @Bean
     public MemberService memberService(){
         return new SpringDataJpaMemberService(jpaMemberRepository);

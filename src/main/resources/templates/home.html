@@ -27,11 +27,11 @@
                                 <input type="text" id="userLoginId" name="userLoginId" placeholder="아이디" required/><br>
                                 <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" required/><br>
 
-                                <button th:onclick="|location.href='@{/member/idquiry}'|"
+                                <button th:onclick="|location.href='@{/member/find/id}'|"
                                         type="button" class="btn-light mb-2">아이디 찾기
                                 </button>
                                 <span class="bar" aria-hidden="true">|</span>
-                                <button th:onclick="|location.href='@{/member/pwquiry}'|"
+                                <button th:onclick="|location.href='@{/member/find/pw}'|"
                                         type="button" class="btn-light mb-2">비밀번호 찾기
                                 </button><br>
 

@@ -55,12 +55,6 @@ public class ReplyController {
         return "redirect:/board/" + reply.getComment().getBoard().getId();
     }
 
-//    @PostMapping("/{boardId}/edit/likeCount")
-//    public String editLikeCount(BoardForm boardForm, @PathVariable Long boardId) {
-//        // 이걸하려면 멤버마다 그 보드에 대한 like를 유지하고 있는지에 대한 db 컬럼이 필요하다.
-//        return "redirect:/board";
-//    }
-
     // 댓글 삭제
     @GetMapping("/{replyId}/delete")
     public String delete(@PathVariable long replyId) {

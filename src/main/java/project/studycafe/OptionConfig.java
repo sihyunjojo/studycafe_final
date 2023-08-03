@@ -34,24 +34,19 @@ public class OptionConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns
-                        ("/", "/login", "/logout","/oauth/**","/download/**",
-                                "/board", "/board/{boardId}", "board/add",
-                                "/product", "/product/{productId}","product/add",
-                                "/comment/**", "/reply/**",
-                                "/popup/**","/css/**", "/*.ico", "/error", "/img/**", "/template/template/**",
-                                "/member/**")
-                .addPathPatterns("/member/info");
-
+                .excludePathPatterns(
+                        "/", "/login", "/logout", "/oauth/**", "/download/**",
+                        "/board", "/board/{boardId}", "board/add",
+                        "/product", "/product/{productId}", "product/add",
+                        "/comment/**", "/reply/**",
+                        "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**",
+                        "/member/new", "/member/find/**"
+                );
         registry.addInterceptor(new SessionInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
-//                                "/", "/login", "/logout", "/oauth/**",
-//                                "/board", "/board/{boardId}", "board/add",
-//                                "/product", "/product/{productId}", "product/add",
-//                                "/member/**",
                                 "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**"
                         );
     }

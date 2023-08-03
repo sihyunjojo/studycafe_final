@@ -42,6 +42,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(IllegalArgumentException.class) // 2개이상 가능
     public ErrorResult illegalExHandler(IllegalArgumentException e) {
         log.error("[exceptionHandler] ex", e);
+        // code,message
         return new ErrorResult("BAD", e.getMessage());
     }
 
@@ -49,6 +50,7 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ErrorResult> userExHandler(UserException e) {
         log.error("[exceptionHandler] ex", e);
         ErrorResult errorResult = new ErrorResult("USER-EX", e.getMessage());
+        //	public ResponseEntity(@Nullable T body, HttpStatus status)
         return new ResponseEntity(errorResult, HttpStatus.BAD_REQUEST);
     }
 

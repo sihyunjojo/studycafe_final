@@ -17,6 +17,7 @@ public class OauthMemberForm implements MemberForm{
     private String email;
     private String provider;
 
+    @NotEmpty(message = "회원 이름은 필수 입니다")
     private String name;
     @NotEmpty(message = "회원 닉네임은 필수 입니다")
     private String nickname;

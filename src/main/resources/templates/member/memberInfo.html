@@ -20,23 +20,23 @@
     </div>
     <div>
         <label for="userPassword">비밀번호</label>
-        <input type="password" id="userPassword" name="userPassword" class="form-control" value="10000" th:value="${loginMember.userPassword}" readonly>
+        <input type="password" id="userPassword" name="userPassword" class="form-control" th:value="${loginMember.userPassword}" readonly>
     </div>
     <div>
         <label for="name">이름</label>
-        <input type="text" id="name" name="name" class="form-control" value="10" th:value="${loginMember.name}" readonly>
+        <input type="text" id="name" name="name" class="form-control" th:value="${loginMember.name}" readonly>
     </div>
     <div>
         <label for="email">닉네임</label>
-        <input type="text" id="email" name="email" class="form-control" value="10" th:value="${loginMember.nickname}" readonly>
+        <input type="text" id="email" name="email" class="form-control" th:value="${loginMember.nickname}" readonly>
     </div>
     <div>
         <label for="gender">성별</label>
-        <input type="text" id="gender" name="gender" class="form-control" value="10" th:value="${loginMember.gender}" readonly>
+        <input type="text" id="gender" name="gender" class="form-control" th:value="${loginMember.gender}" readonly>
     </div>
     <div>
         <label for="phone">휴대전화</label>
-        <input type="text" id="phone" name="phone" class="form-control" value="10" th:value="${loginMember.phone}" readonly>
+        <input type="text" id="phone" name="phone" class="form-control" th:value="${loginMember.phone}" readonly>
     </div>
     <div class="form-group">
         <label th:for="city">도시</label>
@@ -52,11 +52,11 @@
     </div>
     <div>
         <label for="email">이메일</label>
-        <input type="text" id="email" name="email" class="form-control" value="10" th:value="${loginMember.email}" readonly>
+        <input type="text" id="email" name="email" class="form-control" th:value="${loginMember.email}" readonly>
     </div>
     <div>
         <label for="birth">생년월일</label>
-        <input type="text" id="birth" name="birth" class="form-control" value="10" th:value="${loginMember.birth}" readonly>
+        <input type="date" id="birth" name="birth" class="form-control" th:value="${loginMember.birth}" readonly>
     </div>
 
     <hr class="my-4">

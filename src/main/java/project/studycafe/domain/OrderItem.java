@@ -35,16 +35,6 @@ public class OrderItem extends BaseTimeEntity{
         }
     }
 
-    // 이게 도대체 뭔 코드임???
-    // 삭제했다가 그냥 다시 넣어주는 코드인데?
-    public void setOrder(Order order) {
-        if (this.order != null) {
-            this.order.getOrderItems().remove(this);
-        }
-        this.order = order;
-        order.getOrderItems().add(this);
-    }
-
     //==생성 메서드==//
     public static OrderItem createOrderItem(Product product, int count) {
         OrderItem orderItem = new OrderItem();

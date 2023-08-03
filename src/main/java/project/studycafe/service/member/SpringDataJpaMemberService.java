@@ -25,7 +25,7 @@ public class SpringDataJpaMemberService implements MemberService {
     /**
      * 회원가입
      */
-    public Object join(CommonMemberForm form) {
+    public Long join(CommonMemberForm form) {
         Member member = new Member();
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
@@ -43,7 +43,7 @@ public class SpringDataJpaMemberService implements MemberService {
             validateDuplicatedMember(member); // 중복회원 검증
         } catch (IllegalStateException e) {
             log.info("회원 아이디가 중복되었습니다.");
-            return false;
+            // 어자피 bindingResult 를 통해서 클라이언트에게 알려줌.
         }
 
         log.info("member ={}", member);
@@ -84,8 +84,6 @@ public class SpringDataJpaMemberService implements MemberService {
             findMember.setBirth(oauthForm.getBirth());
             findMember.setAddress(address);
         }
-
-        log.info("findMember = {}", findMember);
 
         return Optional.of(findMember);
     }
@@ -152,31 +150,6 @@ public class SpringDataJpaMemberService implements MemberService {
     public boolean validateDuplicatedMemberNickname(CommonMemberForm form) {
         return memberRepository.findByNickname(form.getNickname()).isPresent();// member 과 같은 이름이 있는지 찾앗을때
     }
-
-//    @Override
-//    public boolean validateDuplicatedMemberNickname(MemberForm form, long memberId) {
-//        // 기존 멤버 정보를 조회합니다.
-//        Optional<Member> optionalMember = memberRepository.findById(memberId);
-//
-//        if (optionalMember.isPresent()) {
-//            Member existingMember = optionalMember.get();
-//            String newNickname = form.getNickname();
-//
-//            // 닉네임이 변경된 경우에만 중복 검사를 수행합니다.
-//            if (!Objects.equals(existingMember.getNickname(), newNickname)) {
-//                // 새로운 닉네임이 이미 사용 중인지 확인합니다. (자기자신 아님)
-//                Optional<Member> duplicateMember = memberRepository.findByNickname(newNickname);
-//                // 닉네임이 중복되는 멤버가 존재 하고 중복되는 멤버와 현재 멤버가 같지 않으면 true가 나와야함.
-//                return duplicateMember.isPresent() && !duplicateMember.get().getId().equals(existingMember.getId());
-//            }
-//            return false; // 닉네임이 바뀌지 않았으니, 검증 안해도됨.
-//        }
-//
-//        else{
-//            log.info("기존 멤버가 존재하지 않습니다. 멤버가 사리지지 않았나 확인해보세요.");
-//            return true;
-//        }
-//    }
 
     @Override
     public boolean validateDuplicatedMemberNickname(CommonMemberForm form, long memberId) {

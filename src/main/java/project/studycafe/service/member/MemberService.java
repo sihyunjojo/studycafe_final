@@ -10,9 +10,8 @@ import java.util.Optional;
 
 public interface MemberService {
 
-    public Object join(CommonMemberForm form);
+    public Long join(CommonMemberForm form);
     public Optional<Member> update(long memberId, MemberForm form) throws NotFoundException;
-//    public Optional<Member> oauthMemberUpdate(long memberId, MemberForm form) throws NotFoundException;
     public void deleteMember(Member member);
     public void removeForeignKeyMember(Member member);
     public Optional<Member> findById(Member member);

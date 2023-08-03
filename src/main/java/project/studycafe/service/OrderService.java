@@ -37,10 +37,10 @@ public class OrderService {
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         OrderItem orderItem = createOrderItem(productRepository.findById(form.getProductId()).orElseThrow(), form.getProductCount());
 
-//        Order order = Order.createOrder(member, new Delivery(member, new Address(), READY), orderItem);
         Order order = createOrder(member, orderItem);
 
-        orderItemRepository.save(orderItem);
+        //자동으로 해줌
+//        orderItemRepository.save(orderItem);
         orderRepository.save(order);
 
         return order.getId();
@@ -62,78 +62,13 @@ public class OrderService {
         if (orderItems.size() == 0) {
             throw new NotFindOrderItemException("장바구니에 구매할 상품을 체크 후 구매하기 버튼을 눌러주세요");
         }
-        Order order = createOrder(member,orderItems);
+        Order order = createOrder(member, orderItems);
         orderRepository.save(order);
         return order.getId();
     }
 
-    public void updateOrderNow(Long orderId, OrderNowForm form) {
-        Order order = orderRepository.findById(orderId).orElseThrow();
-        //속도 향상하려면 그대로면, 안 만들게 해주면 될듯.
-        OrderItem findOrderItem = orderRepository.findById(orderId).orElseThrow().getOrderItems().get(0);
-        // 새 count 값이 들어왔을 수 있으니 다시 계산해서 넣어줘야함.
-        findOrderItem.setCount(form.getProductCount());
-        findOrderItem.setAllPrice(form.getProductCount() * productRepository.findById(form.getProductId()).orElseThrow().getPrice());
 
-//        OrderItem orderItem = new OrderItem(productRepository.findById(form.getProductId()).orElseThrow(), form.getProductCount());
-
-        //추후 기존 address를 테이블로 만들어서 address 선택해서 넣어주는 것도 있으면 좋을듯.?
-        Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
-        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
-        Delivery updateDelivery = new Delivery(member, updateAddress, READY);
-
-        if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
-            log.info("add Delivery");
-            deliveryRepository.save(updateDelivery);
-        }
-
-        order.setMember(member);
-        order.setDelivery(updateDelivery);
-    }
-
-    public void updateOrderCart(Long orderId, OrderCartForm form) {
-        Order order = orderRepository.findById(orderId).orElseThrow();
-        //속도 향상하려면 그대로면, 안 만들게 해주면 될듯.
-        List<OrderItem> findOrderItems = orderRepository.findById(orderId).orElseThrow().getOrderItems();
-        Map<Long, OrderItem> orderItemMap = new HashMap<>();
-        for (OrderItem findOrderItem : findOrderItems) {
-            orderItemMap.put(findOrderItem.getProduct().getId(), findOrderItem);
-        }
-
-        log.info("orderItemMap ={}", orderItemMap);
-        //물건 겹쳐서 안 들어옴.
-        List<OrderItemForm> orderItemsForm = form.getOrderItems();
-
-        log.info("orderItemsForm = {}", orderItemsForm);
-        for (OrderItemForm orderItemForm : orderItemsForm) {
-            long orderItemId = orderItemForm.getId();
-
-            OrderItem findOrderItem = orderItemMap.get(orderItemId);
-
-            if (findOrderItem != null) {
-                findOrderItem.setCount(orderItemForm.getCount());
-                findOrderItem.setAllPrice(orderItemForm.getCount() * productRepository.findById(orderItemId).orElseThrow().getPrice());
-            } else {
-                throw new NotFindOrderItemException("The orderItem could not be found.");
-            }
-        }
-
-        //추후 기존 address를 테이블로 만들어서 address 선택해서 넣어주는 것도 있으면 좋을듯.?
-        Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
-        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
-        Delivery updateDelivery = new Delivery(member, updateAddress, READY);
-
-        if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
-            log.info("add Delivery");
-            deliveryRepository.save(updateDelivery);
-        }
-
-        order.setMember(member);
-        order.setDelivery(updateDelivery);
-    }
-
-
-    // master 전용?
+    // user 전용
     public void updateOrder(Long orderId, OrderForm form) {
         log.info("form = {}", form);
         Order order = orderRepository.findById(orderId).orElseThrow();
@@ -158,6 +93,65 @@ public class OrderService {
         order.setDelivery(updateDelivery);
 
         order.setStatus(stringToOrderStatus(form.getOrderStatus()));
+    }
+
+    public void updateUserOrder(Long orderId, OrderUserForm form) {
+        log.info("form = {}", form);
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
+
+
+        int updateOrderTotalPrice = 0;
+        for (OrderItemForm updateOrderItemform : form.getOrderItems()) {
+            if (!updateOrderItemform.isEmpty()) {
+                updateOrderTotalPrice += updateOrderItemform.getAllPrice();
+            }
+        }
+
+        order.setTotalPrice(updateOrderTotalPrice);
+
+        Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+        Delivery updateDelivery = new Delivery(member, updateAddress, READY);
+        if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
+            log.info("add Delivery");
+            deliveryRepository.save(updateDelivery);
+        }
+        order.setDelivery(updateDelivery);
+    }
+
+    public void deleteOrder(long orderId) {
+        orderRepository.deleteById(orderId);
+    }
+
+    public List<Order> findAllOrders() {
+        return orderRepository.findAllByOrderByUpdatedTimeDesc();
+    }
+
+    public void cancelOrder(long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        order.setStatus(CANCEL);
+    }
+
+    public List<Order> getOrderList(int page, Integer perPageNum, List<Order> orders) {
+        if (perPageNum == null) {
+            perPageNum = 10;
+        }
+
+        int startOrder = (page - 1) * perPageNum;
+        int endOder = Math.min(page * perPageNum, orders.size());
+
+        log.info("= {}, = {}", page, perPageNum);
+
+        return orders.subList(startOrder, endOder);
+    }
+
+
+    public Optional<Order> findById(long orderId) {
+        return orderRepository.findById(orderId);
+    }
+
+    public List<Order> findSearchedAndSortedOrder(OrderSearchCond cond) {
+        return orderQueryRepository.findSearchedAndSortedOrder(cond);
     }
 
     private OrderStatus stringToOrderStatus(String orderStatus) {
@@ -189,54 +183,8 @@ public class OrderService {
         }
     }
 
-    public void deleteOrder(long orderId) {
-        orderRepository.deleteById(orderId);
-    }
-
-    public List<Order> findAllOrders() {
-        return orderRepository.findAllByOrderByUpdatedTimeDesc();
-    }
-
-    public List<Order> getOrderList(int page, Integer perPageNum, List<Order> orders) {
-        if (perPageNum == null) {
-            perPageNum = 10;
-        }
-        int startOrder = (page - 1) * perPageNum;
-        int endOder = Math.min(page * perPageNum, orders.size());
-
-        log.info("= {}, = {}", page, perPageNum);
-
-        return orders.subList(startOrder, endOder);
-    }
-
-
-    public OrderNowForm orderToOrderNowForm(Order order) {
-        return new OrderNowForm(order.getId(), order.getMember().getId(), order.getOrderItems().get(0).getProduct().getId(),
-                order.getOrderItems().get(0).getCount(),
-                order.getDelivery().getAddress().getCity(), order.getDelivery().getAddress().getStreet(), order.getDelivery().getAddress().getZipcode(),
-                order.getTotalPrice());
-    }
-
-    public List<OrderNowForm> ordersToOrderNowForms(List<Order> orderList) {
-        return orderList.stream()
-                .map(o -> new OrderNowForm(o.getId(), o.getMember().getId(), o.getOrderItems().get(0).getProduct().getId(),
-                        o.getOrderItems().get(0).getCount(),
-                        o.getDelivery().getAddress().getCity(), o.getDelivery().getAddress().getStreet(), o.getDelivery().getAddress().getZipcode(),
-                        o.getTotalPrice()))
-                .collect(Collectors.toList());
-    }
-
-    public List<Order> findSearchedAndSortedOrder(OrderSearchCond cond) {
-        return orderQueryRepository.findSearchedAndSortedOrder(cond);
-    }
-
-    public Optional<Order> findById(long orderId) {
-        return orderRepository.findById(orderId);
-    }
-
-    public void cancelOrder(long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow();
-        order.setStatus(CANCEL);
+    public List<Order> findByMember(Member loginMember) {
+        return orderRepository.findAllByMember(loginMember);
     }
 }
 

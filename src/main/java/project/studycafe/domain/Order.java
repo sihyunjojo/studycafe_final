@@ -13,10 +13,11 @@ import static project.studycafe.domain.OrderStatus.WAIT;
 
 @Slf4j
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "orders")
-public class Order extends BaseTimeEntity{
+public class Order extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +54,7 @@ public class Order extends BaseTimeEntity{
         }
         if (this.totalPrice == 0) {
             for (OrderItem orderItem : orderItems) {
+                log.info("+ Price ={} , {} , {}", orderItem.getAllPrice(),orderItem, orderItems);
                 this.totalPrice += orderItem.getAllPrice();
             }
         }
@@ -68,6 +70,7 @@ public class Order extends BaseTimeEntity{
         log.info("orderItem = {}", orderItem);
         orderItems.add(orderItem);
         orderItem.setOrder(this);
+        log.info("orderItem4 = {}",this.totalPrice);
     }
 
     public void setDelivery(Delivery delivery) {
@@ -80,15 +83,6 @@ public class Order extends BaseTimeEntity{
         this.orderItems.remove(orderItem);
     }
 
-    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
-        Order order = new Order();
-        order.setMember(member);
-        order.setDelivery(delivery);
-        for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
-        }
-        return order;
-    }
 
     public static Order createOrder(Member member, OrderItem... orderItems) {
         Order order = new Order();
@@ -97,9 +91,14 @@ public class Order extends BaseTimeEntity{
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
+        log.info("orderItem1 = {}",orderItems);
+        log.info("orderItem2 = {}",order.totalPrice);
+
         return order;
     }
+
     public static Order createOrder(Member member, List<OrderItem> orderItems) {
+        log.info("orderItem2 = {}",orderItems);
         Order order = new Order();
         order.setMember(member);
         for (OrderItem orderItem : orderItems) {
@@ -109,6 +108,15 @@ public class Order extends BaseTimeEntity{
         return order;
     }
 
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
+    }
 
     //==비즈니스 로직==//
 

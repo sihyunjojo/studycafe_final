@@ -3,6 +3,7 @@ package project.studycafe.contoller.form;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class OrderForm {
 
     private List<OrderItemForm> orderItems = new ArrayList<>();
 
+    @NumberFormat(pattern = "###,###")
     private int orderTotalPrice;
 
     //delivery - address
@@ -35,7 +37,6 @@ public class OrderForm {
         sb.append(", memberId=").append(memberId);
         sb.append(", orderItems=[");
 
-        // Loop through the orderItems list and append their representations
         for (int i = 0; i < orderItems.size(); i++) {
             if (i > 0) {
                 sb.append(", ");

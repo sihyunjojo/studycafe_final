@@ -41,7 +41,7 @@
 <header th:insert="~{template/header :: header_copy}"></header>
 
 <div class="container">
-  <h3> 주문 내역 </h3>
+  <h3 th:text="|${memberLevel}의 주문목록|"></h3>
   <hr style="margin-bottom: 2em; margin-top: 2em;">
 
   <div>
@@ -69,7 +69,7 @@
           <input type="date" th:field="*{maxCreatedTime}" class="form-control" style="margin-left: 0" placeholder="yyyy-MM-dd"/>
         </div>
         <div class="col">
-          <select class="form-select" id="orderStatus" th:field="*{orderStatus}">
+          <select class="form-select" id="orderStatus" th:field="*{orderStatus}" th:placeholder="주문상태">
             <option th:value>주문상태</option>
             <option th:value="WAIT" th:selected="${orderStatus == T(project.studycafe.domain.OrderStatus).WAIT}">WAIT</option>
             <option th:value="DELIVERING" th:selected="${orderStatus == T(project.studycafe.domain.OrderStatus).DELIVERING}">DELIVERING</option>

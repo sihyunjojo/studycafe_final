@@ -28,9 +28,6 @@ public class CartController {
     public String cart(@Login Member loginmember, Model model) {
         Cart cart = cartService.findByMemberId(loginmember.getId());
         log.info("cart ={}", cart);
-//        List<CartProduct> cartProducts = cartService.findCartProducts(loginmember);
-//        List<CartProductForm> cartProductForms = cartService.cartProductToCartProductForm(cartProducts);
-//        CartForm cartForm = new CartForm(loginmember.getId(), cartProductForms);
         model.addAttribute("cart", cart);
 
         return "cart/cart";
@@ -55,8 +52,6 @@ public class CartController {
     public String editDown(@Login Member loginmember, @PathVariable long itemId) {
         cartService.editDownQuantityCartProduct(loginmember, itemId);
         return "redirect:/cart";
-        // 여기도 비동기 코드도 해야할거 같기도하고,,
-        // 좋아요 같이 해야할거같은데
     }
 
     @PostMapping("/{itemId}/delete")
@@ -66,15 +61,4 @@ public class CartController {
         // 여기도 비동기 코드도 해야할거 같기도하고,,
         // 좋아요 같이 해야할거같은데
     }
-//
-//    // 장바구니에서 수량 변경
-//    @GetMapping("/edit")
-//    public String editCartProduct(Cart cart, Model model) {
-//        // 여기도 좋아요 처럼 ajax로 해서 해야할거 같은데...
-//        // 실시간 필요하니까 비동기 코드도 해야될거 같기도 하고
-//        return "redirect:/";
-//    }
-//
-    // 장바구니에서 삭제
-
 }

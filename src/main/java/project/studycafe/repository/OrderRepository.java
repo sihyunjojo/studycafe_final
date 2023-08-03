@@ -2,6 +2,7 @@ package project.studycafe.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import project.studycafe.domain.Member;
 import project.studycafe.domain.Order;
 
 import java.util.List;
@@ -10,4 +11,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findAllByOrderByUpdatedTimeDesc();
+    List<Order> findAllByMember(Member member);
 }

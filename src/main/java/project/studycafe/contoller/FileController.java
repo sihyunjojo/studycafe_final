@@ -32,7 +32,6 @@ public class FileController {
 
     @GetMapping("download/{boardId}/{attachmentFileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long boardId, @PathVariable String attachmentFileName) throws MalformedURLException {
-        // 다운받을 수 있는 권한이 있는 사람만 되게 걸러주는 코드
 
         Board board = boardService.findById(boardId).orElseThrow();
         AttachmentFile findFile = fileService.findFirstByBoardAndAttachmentFileName(board, attachmentFileName).orElseThrow();
@@ -56,7 +55,7 @@ public class FileController {
     }
 
     @GetMapping("delete/{boardId}/{attachmentFileName}")
-    public String deleteFile(@PathVariable Long boardId, @PathVariable String attachmentFileName) throws MalformedURLException {
+    public String deleteFile(@PathVariable Long boardId, @PathVariable String attachmentFileName){
         Board board = boardService.findById(boardId).orElseThrow();
         AttachmentFile findFile = fileService.findFirstByBoardAndAttachmentFileName(board, attachmentFileName).orElseThrow();
 

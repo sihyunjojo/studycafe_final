@@ -6,9 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.studycafe.contoller.form.CartForm;
-import project.studycafe.contoller.form.OrderCartForm;
 import project.studycafe.contoller.form.OrderForm;
 import project.studycafe.contoller.form.OrderNowForm;
+import project.studycafe.contoller.form.OrderUserForm;
 import project.studycafe.domain.*;
 import project.studycafe.repository.OrderSearchCond;
 import project.studycafe.resolver.argumentresolver.Login;
@@ -16,6 +16,7 @@ import project.studycafe.service.OrderService;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -28,24 +29,22 @@ public class OrderController {
 
     private static final int BASIC_PER_PAGE_NUM = 10;    // 페이지당 보여줄 게시판 개수
 
-    //master의 경우에는 전부 보여주고, 개인은 개인꺼만 보여주게 해야할듯
     @GetMapping()
-    public String orders(@ModelAttribute("orderSearch") OrderSearchCond orderSearch, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
-        List<Order> orders = orderService.findAllOrders();
+    public String orders(@Login Member loginMember, @ModelAttribute("orderSearch") OrderSearchCond orderSearch, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
+        List<Order> orders;
+        if (loginMember.getMemberLevel().equals(MemberLevel.MASTER)) {
+            orders = orderService.findAllOrders();
+            model.addAttribute("memberLevel", "모든사람");
+        } else {
+            orders = orderService.findByMember(loginMember);
+            model.addAttribute("memberLevel", loginMember.getNickname() +"의");
+        }
         orderSearch.setPerPageNum(BASIC_PER_PAGE_NUM);
 
-        log.info("ordersearch={}", orderSearch);
-
         List<Order> orderList = orderService.getOrderList(page, BASIC_PER_PAGE_NUM, orders);
-
-        log.info("ordersearch={}", orderSearch);
-
         PageMaker pageMaker = new PageMaker(orders.size(), page, BASIC_PER_PAGE_NUM);
 
-        log.info("ordersearch={}", orderSearch);
-
-        //클랄이언트 처리
-//        List<OrderNowForm> orderForms = orderService.ordersToOrderNowForms(orderList);
+        //클라이언트 처리
         model.addAttribute("orders", orderList);
         model.addAttribute("pageMaker", pageMaker);
 
@@ -77,7 +76,6 @@ public class OrderController {
             log.info("searchtype = {}", orderSearch.getMinCreatedTime().getClass());
         }
 
-//        List<OrderNowForm> orderNowForms = orderService.ordersToOrderNowForms(findOrderList);
         model.addAttribute("pageMaker", pageMaker);
         model.addAttribute("orders", findOrderList);
         log.info("orderSearch = {}", orderSearch);
@@ -98,13 +96,13 @@ public class OrderController {
     //product.html에서 구매하면 member,product 로 order 만들어서 추가정보 입력하게해주게 보내줌.
     @PostMapping("/add/{productId}/now")
     public String addOrderNow(@Login Member loginMember, @PathVariable Long productId, OrderNowForm form) {
-        log.info("add loginMember = {}", loginMember);
+        log.info("add loginMember = {}", form);
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/product/" + productId;
         }
         long orderId = orderService.addOrderNow(form);
-        return "redirect:/order/edit/" + orderId;
-//                + "/now";
+        return "redirect:/order/edit/" + orderId
+                + "/user";
     }
 
     @PostMapping("/add/cart")
@@ -115,8 +113,8 @@ public class OrderController {
         }
         long orderId = orderService.addOrderCart(form);
         //결제 창으로 넘겨줘야함.
-        return "redirect:/order/edit/" + orderId;
-//                +"/cart";
+        return "redirect:/order/edit/" + orderId
+                +"/user";
     }
 
 
@@ -128,19 +126,12 @@ public class OrderController {
         model.addAttribute("order", order);
         return "order/editOrderForm";
     }
-    //받은 order로 추가정보 입력하는 form 보내줌.
-//    @GetMapping("/edit/{orderId}/now")
-//    public String editOrderNowForm(@PathVariable long orderId, Model model) {
-//        Order order = orderService.findById(orderId).orElseThrow();
-//        model.addAttribute("order", order);
-//        return "order/editOrderNowForm";
-//    }
-//    @GetMapping("/edit/{orderId}/cart")
-//    public String editOrderCartForm(@PathVariable long orderId, Model model) {
-//        Order order = orderService.findById(orderId).orElseThrow();
-//        model.addAttribute("order", order);
-//        return "order/editOrderCartForm";
-//    }
+    @GetMapping("/edit/{orderId}/user")
+    public String editOrderCartForm(@PathVariable long orderId, Model model) {
+        Order order = orderService.findById(orderId).orElseThrow();
+        model.addAttribute("order", order);
+        return "order/editOrderUserForm";
+    }
 
 
     @PostMapping("/edit/{orderId}")
@@ -149,20 +140,13 @@ public class OrderController {
         orderService.updateOrder(orderId, form);
         return "redirect:/order/" + orderId;
     }
-//    @PostMapping("/edit/{orderId}/now")
-//    public String editOrderNow(@PathVariable long orderId, OrderNowForm form) {
-//        log.info("form = {}", form);
-//        orderService.updateOrderNow(orderId, form);
-//        // 지금은 오더화면으로 넘겨주지만, 나중에는 결제창으로 넘겨줘야함.
-//        return "redirect:/order/" + orderId;
-//    }
-//    @PostMapping("/edit/{orderId}/cart")
-//    public String editOrderNow(@PathVariable long orderId, OrderCartForm form) {
-//        log.info("OrderCartForm = {}", form);
-//        orderService.updateOrderCart(orderId, form);
-//        // 지금은 오더화면으로 넘겨주지만, 나중에는 결제창으로 넘겨줘야함.
-//        return "redirect:/order/" + orderId;
-//    }
+    @PostMapping("/edit/{orderId}/user")
+    public String editOrderNow(@PathVariable long orderId, OrderUserForm form) {
+        log.info("OrderCartForm = {}", form);
+        orderService.updateUserOrder(orderId, form);
+        // 지금은 오더화면으로 넘겨주지만, 나중에는 결제창으로 넘겨줘야함.
+        return "redirect:/order/" + orderId;
+    }
 
 
     @GetMapping("/{orderId}/delete")

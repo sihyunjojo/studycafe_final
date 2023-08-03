@@ -30,7 +30,6 @@ public class CartService {
     private final JpaMemberRepository memberRepository;
 
     public Optional<Cart> addCart(Member member) {
-        log.info("member_id ={}",member.getId());
         log.info("member ={}", member);
 
         Cart cart = new Cart();
@@ -38,21 +37,6 @@ public class CartService {
 
         cartRepository.save(cart);
         return Optional.of(cart);
-    }
-
-    public List<CartProduct> findCartProducts(Member member) {
-        log.info("member ={}", member);
-        Optional<Cart> cart = cartRepository.findFirstByMemberId(member.getId());
-        log.info("cart = {}", cart);
-        log.info("allcart = {}", cartRepository.findAll());
-
-        if (cart.isEmpty()) {
-            Optional<Cart> newCart = addCart(member);
-            cart = newCart;
-        }
-
-        List<CartProduct> cartProducts = cartProductRepository.findAllByCartId(cart.orElseThrow().getId());
-        return cartProducts;
     }
 
     public void addCartProduct(Member member, long itemId) {

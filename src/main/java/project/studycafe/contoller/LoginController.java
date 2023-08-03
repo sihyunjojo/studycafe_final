@@ -27,7 +27,7 @@ public class LoginController {
         return "/login/loginForm";
     }
 
-    //@ModelAttribute가 form에서 loginForm객체 내부의 필드와 이름이 같은 값을 가져와서 객체에 넣어줌
+    //@ModelAttribute 가 form에서 loginForm객체 내부의 필드와 이름이 같은 값을 가져와서 객체에 넣어줌
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
                         @RequestParam(required = false, defaultValue = "/") String redirectURL,
@@ -45,22 +45,6 @@ public class LoginController {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다");
             return "/login/loginForm";
         }
-
-        //나중에 master, 회원
-//        if (id.equals("ex")) {
-//            throw new RuntimeException("잘못된 사용자");
-//        }
-
-
-//        if (loginMember.getUserLoginId().equals("ex")) {
-//            throw new RuntimeException("잘못된 사용자");
-//        }
-//        if (loginMember.getUserLoginId().equals("bad")) {
-//            throw new IllegalArgumentException("잘못된 입력 값");
-//        }
-//        if (loginMember.getUserLoginId().equals("user-ex")) {
-//            throw new UserException("사용자 오류");
-//        }
 
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, loginMember);

@@ -19,28 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class PopupController {
 
-//    @GetMapping()
-//    public String showPopup(HttpServletRequest request) {
-//        log.info("popup Start");
-//        String noticeCookie = getCookie(request, "name");
-//        if (noticeCookie == null || !noticeCookie.equals("value")) {
-//            return "popup/hello";
-//        }
-//        return "redirect:/"; // 쿠키 값이 있는 경우 메인 페이지로 리다이렉트
-//    }
-//
-//    public String getCookie(HttpServletRequest request, String name) {
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals(name)) {
-//                    return cookie.getValue();
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
     @GetMapping()
     public String home(Model model, HttpServletRequest request) {
         // 쿠키 확인
