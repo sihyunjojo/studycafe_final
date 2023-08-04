@@ -4,12 +4,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import project.studycafe.domain.base.BaseTimeEntity;
+import project.studycafe.domain.enums.status.DeliveryStatus;
+import project.studycafe.domain.enums.status.OrderStatus;
+import project.studycafe.domain.member.Member;
+import project.studycafe.domain.product.OrderItem;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static project.studycafe.domain.OrderStatus.WAIT;
+import static project.studycafe.domain.enums.status.OrderStatus.WAIT;
+
 
 @Slf4j
 @Entity

@@ -3,7 +3,7 @@ package project.studycafe.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.studycafe.domain.Address;
 import project.studycafe.domain.Delivery;
-import project.studycafe.domain.Member;
+import project.studycafe.domain.member.Member;
 
 import java.util.Optional;
 

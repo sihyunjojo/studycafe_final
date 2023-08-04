@@ -1,7 +1,8 @@
 package project.studycafe.repository.board.reply;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.studycafe.domain.Reply;
+import project.studycafe.domain.board.Reply;
 
 import java.util.List;
 

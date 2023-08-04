@@ -1,7 +1,7 @@
 package project.studycafe.repository.cart;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.studycafe.domain.CartProduct;
+import project.studycafe.domain.product.CartProduct;
 
 import java.util.List;
 import java.util.Optional;

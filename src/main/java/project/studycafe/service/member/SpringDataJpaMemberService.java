@@ -5,13 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.contoller.form.CommonMemberForm;
-import project.studycafe.contoller.form.MemberForm;
-import project.studycafe.contoller.form.OauthMemberForm;
+import project.studycafe.domain.board.Board;
+import project.studycafe.domain.board.Comment;
+import project.studycafe.domain.form.member.CommonMemberForm;
+import project.studycafe.domain.form.member.MemberForm;
+import project.studycafe.domain.form.member.OauthMemberForm;
 import project.studycafe.domain.*;
+import project.studycafe.domain.member.Member;
 import project.studycafe.repository.member.JpaMemberRepository;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -93,24 +95,24 @@ public class SpringDataJpaMemberService implements MemberService {
         memberRepository.delete(member);
     }
 
-    @Override
-    public void removeForeignKeyMember(Member member) {
-        List<Board> boards = member.getBoards();
-        for (Board board : boards) {
-            log.info("board = {}", board);
-            board.setMember(null);
-        }
-
-        List<Comment> comments = member.getComments();
-        for (Comment comment : comments) {
-            comment.setMember(null);
-        }
-
-        List<Reply> replies = member.getReplies();
-        for (Reply reply : replies) {
-            reply.setMember(null);
-        }
-    }
+//    @Override
+//    public void removeForeignKeyMember(Member member) {
+//        List<Board> boards = member.getBoards();
+//        for (Board board : boards) {
+//            log.info("board = {}", board);
+//            board.setMember(null);
+//        }
+//
+//        List<Comment> comments = member.getComments();
+//        for (Comment comment : comments) {
+//            comment.setMember(null);
+//        }
+//
+//        List<Reply> replies = member.getReplies();
+//        for (Reply reply : replies) {
+//            reply.setMember(null);
+//        }
+//    }
 
     @Override
     public Optional<Member> findById(Member member) {

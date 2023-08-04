@@ -6,12 +6,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.contoller.form.CommonMemberForm;
-import project.studycafe.domain.Member;
-import project.studycafe.domain.Order;
-import project.studycafe.domain.OrderItem;
-import project.studycafe.domain.Product;
+import project.studycafe.domain.form.member.CommonMemberForm;
+import project.studycafe.domain.product.OrderItem;
+import project.studycafe.domain.product.Product;
 import project.studycafe.service.member.MemberService;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import java.util.List;
 @Slf4j
 @Transactional
 @SpringBootTest
+@ActiveProfiles("test") //프로파일을 지정할 때 사용됩니다. application-{profile}.properties
 public class OrderServiceTest {
 
     OrderItem item1;

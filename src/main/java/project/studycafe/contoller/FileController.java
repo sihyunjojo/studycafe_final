@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriUtils;
-import project.studycafe.domain.AttachmentFile;
-import project.studycafe.domain.Board;
+import project.studycafe.domain.board.AttachmentFile;
+import project.studycafe.domain.board.Board;
 import project.studycafe.service.FileService;
 import project.studycafe.service.board.BoardService;
 

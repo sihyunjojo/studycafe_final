@@ -1,7 +1,7 @@
 package project.studycafe.repository.product;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.studycafe.domain.Product;
+import project.studycafe.domain.product.Product;
 
 import java.util.List;
 

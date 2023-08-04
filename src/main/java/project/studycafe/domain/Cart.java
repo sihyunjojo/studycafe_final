@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import project.studycafe.domain.base.BaseTimeEntity;
+import project.studycafe.domain.member.Member;
+import project.studycafe.domain.product.CartProduct;
 
 import javax.persistence.*;
 import java.util.List;

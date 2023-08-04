@@ -1,8 +1,8 @@
 package project.studycafe.repository.board.board;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.studycafe.domain.AttachmentFile;
-import project.studycafe.domain.Board;
+import project.studycafe.domain.board.AttachmentFile;
+import project.studycafe.domain.board.Board;
 
 import java.util.List;
 

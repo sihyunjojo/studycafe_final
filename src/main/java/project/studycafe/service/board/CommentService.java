@@ -5,14 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.contoller.form.CommentForm;
-import project.studycafe.domain.Board;
-import project.studycafe.domain.Comment;
+import project.studycafe.domain.board.Comment;
+import project.studycafe.domain.form.board.CommentForm;
 import project.studycafe.repository.board.board.JpaBoardRepository;
 import project.studycafe.repository.board.comment.JpaCommentRepository;
 import project.studycafe.repository.member.JpaMemberRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j

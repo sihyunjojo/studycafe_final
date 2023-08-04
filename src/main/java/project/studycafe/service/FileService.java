@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import project.studycafe.domain.AttachmentFile;
-import project.studycafe.domain.Board;
+import project.studycafe.domain.board.AttachmentFile;
+import project.studycafe.domain.board.Board;
 import project.studycafe.repository.board.board.JpaBoardRepository;
 import project.studycafe.repository.file.JpaFileRepository;
 

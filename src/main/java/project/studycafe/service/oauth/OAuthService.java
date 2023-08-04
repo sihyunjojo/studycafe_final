@@ -11,10 +11,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.domain.OAuthAttributes;
+import project.studycafe.domain.enums.OAuthAttributes;
+import project.studycafe.domain.member.Member;
+import project.studycafe.domain.member.MemberProfile;
 import project.studycafe.repository.member.JpaMemberRepository;
-import project.studycafe.domain.Member;
-import project.studycafe.domain.MemberProfile;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

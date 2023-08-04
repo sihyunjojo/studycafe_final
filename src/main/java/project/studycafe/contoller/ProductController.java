@@ -7,11 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import project.studycafe.domain.base.PageMaker;
+import project.studycafe.domain.member.Member;
+import project.studycafe.domain.product.Product;
 import project.studycafe.resolver.argumentresolver.Login;
-import project.studycafe.domain.Member;
-import project.studycafe.domain.PageMaker;
-import project.studycafe.domain.Product;
-import project.studycafe.repository.product.dto.ProductSearchCond;
+import project.studycafe.domain.form.search.ProductSearchCond;
 import project.studycafe.service.product.ProductService;
 
 import java.util.List;

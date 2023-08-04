@@ -11,4 +11,5 @@ public class StudycafeApplication {
 		SpringApplication.run(StudycafeApplication.class, args);
 	}
 
+
 }

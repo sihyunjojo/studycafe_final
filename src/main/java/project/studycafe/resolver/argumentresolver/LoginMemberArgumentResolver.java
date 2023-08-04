@@ -7,8 +7,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import project.studycafe.SessionConst;
-import project.studycafe.resolver.argumentresolver.Login;
-import project.studycafe.domain.Member;
+import project.studycafe.domain.member.Member;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

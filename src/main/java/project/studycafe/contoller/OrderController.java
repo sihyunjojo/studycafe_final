@@ -5,18 +5,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.studycafe.contoller.form.CartForm;
-import project.studycafe.contoller.form.OrderForm;
-import project.studycafe.contoller.form.OrderNowForm;
-import project.studycafe.contoller.form.OrderUserForm;
+import project.studycafe.domain.base.PageMaker;
+import project.studycafe.domain.enums.MemberLevel;
+import project.studycafe.domain.form.CartForm;
+import project.studycafe.domain.form.order.OrderForm;
+import project.studycafe.domain.form.order.OrderNowForm;
+import project.studycafe.domain.form.order.OrderUserForm;
 import project.studycafe.domain.*;
-import project.studycafe.repository.OrderSearchCond;
+import project.studycafe.domain.form.search.OrderSearchCond;
+import project.studycafe.domain.member.Member;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.service.OrderService;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -106,7 +108,7 @@ public class OrderController {
     }
 
     @PostMapping("/add/cart")
-    public String addOrderCart(@Login Member loginMember, CartForm form) throws IOException, NoSuchAlgorithmException {
+    public String addOrderCart(@Login Member loginMember, CartForm form) {
         log.info("cartForm = {}", form);
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/cart";

@@ -3,9 +3,8 @@ package project.studycafe.service.login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import project.studycafe.domain.Member;
+import project.studycafe.domain.member.Member;
 import project.studycafe.repository.member.JpaMemberRepository;
-import project.studycafe.service.login.LoginService;
 
 @Service
 @RequiredArgsConstructor

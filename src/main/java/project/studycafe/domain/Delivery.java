@@ -1,18 +1,20 @@
 package project.studycafe.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import project.studycafe.domain.base.BaseTimeEntity;
+import project.studycafe.domain.member.Member;
+import project.studycafe.domain.enums.status.DeliveryStatus;
 
 import javax.persistence.*;
 
-import static project.studycafe.domain.DeliveryStatus.READY;
+import static project.studycafe.domain.enums.status.DeliveryStatus.READY;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class Delivery extends BaseTimeEntity{
+public class Delivery extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.domain.Product;
+import project.studycafe.domain.product.Product;
 import project.studycafe.repository.product.JpaQueryProductRepository;
 import project.studycafe.repository.product.JpaProductRepository;
-import project.studycafe.repository.product.dto.ProductSearchCond;
+import project.studycafe.domain.form.search.ProductSearchCond;
 
 import java.util.List;
 import java.util.Optional;

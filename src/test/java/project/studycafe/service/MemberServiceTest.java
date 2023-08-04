@@ -9,12 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.contoller.form.CommonMemberForm;
-import project.studycafe.domain.Member;
+import project.studycafe.domain.form.member.CommonMemberForm;
+import project.studycafe.domain.member.Member;
 import project.studycafe.repository.member.JpaMemberRepository;
 import project.studycafe.service.member.MemberService;
-
-import java.time.LocalDate;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.Assert.assertEquals;

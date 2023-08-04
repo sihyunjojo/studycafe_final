@@ -114,8 +114,8 @@ mysql
   OAuth2.0 (2) 감이 안잡히
 
 ## 6/12
-bindResult를 통한 error controll(member)
-ㅁ
+bindResult를 통한 error controll(member)  
+
 ## 6/13
 editmember 잘 작동하나 체크해야함.
 
@@ -131,7 +131,7 @@ ouath아이디 비밀번호, github에 안올라가게 하기.
 git이랑 sourcetree확실하게 공부해서 쓰자  
 
 ## 7/11 
-mac 백틱 = option + ~
+mac 백틱 = option + ~  
 ```
 //==연관관계 메서드==//
 public void setBoard(Board board) {  
@@ -190,6 +190,9 @@ board 연관관계 수정
 # 8/2
 사용자 오류 발생시, Exception만든 후, Advice 활용하여서 사용자에게 어떻게 해야하는지 안내하기  
 
+# 8/4
+3개 이상의 인스턴스 변수를 가진 클래스를 쓰지 않는다.
+getter 쓰지 말라고 함. setter도 쓰지말라고 함.
 
 ### 해야할 것들
         // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.

@@ -2,7 +2,7 @@ package project.studycafe.service.login;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.studycafe.domain.Member;
+import project.studycafe.domain.member.Member;
 import project.studycafe.repository.member.JpaMemberRepository;
 
 @Service

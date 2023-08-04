@@ -5,14 +5,14 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.util.StringUtils;
-import project.studycafe.domain.Board;
-import project.studycafe.repository.board.board.dto.BoardSearchCond;
+import project.studycafe.domain.board.Board;
+import project.studycafe.domain.form.search.BoardSearchCond;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.studycafe.domain.QBoard.board;
-import static project.studycafe.domain.QOrder.order;
+import static project.studycafe.domain.board.QBoard.board;
+
 
 public class JpaQueryBoardRepository {
     private final JPAQueryFactory query;
