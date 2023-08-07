@@ -5,9 +5,8 @@ import lombok.*;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Getter
+@Getter @ToString
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode
 public class Address {
 

@@ -3,13 +3,16 @@ package project.studycafe.domain.board;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import project.studycafe.domain.base.BaseTimeEntity;
+import project.studycafe.domain.base.Statistics;
 import project.studycafe.domain.member.Member;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Entity
@@ -30,25 +33,18 @@ public class Board extends BaseTimeEntity {
     private String content;
     private String popup; // 추후에 객체 따로만들어야할지도
 
-    @NotNull
-    private Integer readCount;
-    @NotNull
-    private Integer likeCount;
+    @Embedded
+    private Statistics statistics;
 
     //Cascadetype.all을 하게되면 세션에 2개의 같은 pk를 가진 attach엔티티가 발생하여서 에러가 발생한다.
     @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AttachmentFile> attachmentFiles = new ArrayList<>(); // 추후에 객체 따로만들어야할지도
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<Comment> Comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
-    //영속상태로 변하기 직전에 시점에 시작됨.
-    @PrePersist
-    public void setting() {
-        if (this.readCount == null && this.likeCount == null) {
-            this.readCount = 0;
-            this.likeCount = 0;
-        }
+    public void removeAttachmentFile(AttachmentFile attachmentFile) {
+        this.attachmentFiles.remove(attachmentFile);
     }
 
     //==연관관계 메서드==//
@@ -59,11 +55,40 @@ public class Board extends BaseTimeEntity {
         log.info("member.getBoards() = {}", this.member.getBoards());
     }
 
-    public void removeAttachmentFile(AttachmentFile attachmentFile) {
-        this.attachmentFiles.remove(attachmentFile);
+
+    //==비즈니스코드==//
+    public Map<String, Object> toMap() {
+        Map<String, Object> statisticsMap = statistics.toMap();
+        Map<String, Object> boardMap = new HashMap<>();
+        boardMap.put("id", id);
+        boardMap.put("member", member);
+        boardMap.put("title", title);
+        boardMap.put("category", category);
+        boardMap.put("content", content);
+        boardMap.put("popup", popup);
+        boardMap.put("readCount", statisticsMap.get("readCount"));
+        boardMap.put("likeCount", statisticsMap.get("likeCount"));
+        boardMap.put("attachmentFiles", attachmentFiles);
+        boardMap.put("comments", comments);
+        return boardMap;
     }
 
 
+    public void upLikeCount() {
+        this.statistics.upLikeCount();
+    }
+    public void downLikeCount() {
+        this.statistics.downLikeCount();
+    }
+    public void upReadCount() {
+        this.statistics.upReadCount();
+    }
+    public void downReadCount() {
+        this.statistics.downReadCount();
+    }
+
+
+    //==편의 메서드==//
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -74,8 +99,7 @@ public class Board extends BaseTimeEntity {
                 .append(", category='").append(category).append('\'')
                 .append(", content='").append(content).append('\'')
                 .append(", popup='").append(popup).append('\'')
-                .append(", readCount=").append(readCount)
-                .append(", likeCount=").append(likeCount)
+                .append(", statistics=").append(statistics.toString())
                 .append(", attachmentFiles=[");
 
         for (AttachmentFile attachmentFile : attachmentFiles) {
@@ -91,21 +115,4 @@ public class Board extends BaseTimeEntity {
 
         return sb.toString();
     }
-
-
-//    @Override
-//    public String toString() {
-//        return "Board{" +
-//                "id=" + id +
-//                ", member=" + member.getName() +
-//                ", title='" + title + '\'' +
-//                ", category='" + category + '\'' +
-//                ", content='" + content + '\'' +
-//                ", popup='" + popup + '\'' +
-//                ", readCount=" + readCount +
-//                ", likeCount=" + likeCount +
-//                ", attachmentFiles=" + attachmentFiles.forEach(); +
-//                '}';
-//    }
-
 }

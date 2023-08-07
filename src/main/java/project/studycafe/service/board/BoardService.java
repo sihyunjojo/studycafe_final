@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.domain.base.Statistics;
+import project.studycafe.domain.board.AttachmentFile;
 import project.studycafe.domain.board.Board;
 import project.studycafe.domain.form.board.BoardCreateForm;
 import project.studycafe.domain.form.board.BoardForm;
@@ -14,9 +16,12 @@ import project.studycafe.repository.board.board.JpaBoardRepository;
 import project.studycafe.domain.form.search.BoardSearchCond;
 import project.studycafe.repository.member.JpaMemberRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -96,37 +101,60 @@ public class BoardService {
     }
 
     public void increaseReadCount(Board board) {
-        board.setReadCount(board.getReadCount() + 1);
+        board.upReadCount();
     }
 
     public void upLikeCountBoard(Long boardId) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow();
-        findBoard.setLikeCount(findBoard.getLikeCount() + 1);
-        if (findBoard.getReadCount() > 0) {
-            findBoard.setReadCount(findBoard.getReadCount() - 1);
-        }
+        findBoard.upLikeCount();
+        findBoard.downReadCount();
     }
 
     public void downLikeCountBoard(Long boardId) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow();
-        if (findBoard.getLikeCount() > 0) {
-            findBoard.setLikeCount(findBoard.getLikeCount() - 1);
-        }
-        if (findBoard.getReadCount() > 0) {
-            findBoard.setReadCount(findBoard.getReadCount() - 1);
-        }
+        findBoard.downLikeCount();
+        findBoard.downReadCount();
     }
 
     public List<BoardForm> boardsToBoardForms(List<Board> boards) {
         return boards.stream()
-                .map(b -> new BoardForm(b.getId(), b.getMember().getNickname(), b.getMember().getName(), b.getTitle(), b.getCategory(), b.getContent(),
-                        b.getCreatedTime(), b.getAttachmentFiles(), b.getPopup(), b.getReadCount(), b.getLikeCount()))
+                .map(Board::toMap)
+                .map(boardMap -> new BoardForm(
+                        (Long) boardMap.get("id"),
+                        ((Member) boardMap.get("member")).getNickname(),
+                        ((Member) boardMap.get("member")).getName(),
+                        (String) boardMap.get("title"),
+                        (String) boardMap.get("category"),
+                        (String) boardMap.get("content"),
+                        (LocalDateTime) boardMap.get("createdTime"),
+                        (List<AttachmentFile>) boardMap.get("attachmentFiles"),
+                        (String) boardMap.get("popup"),
+                        (Integer) boardMap.get("readCount"),
+                        (Integer) boardMap.get("likeCount")
+                ))
                 .collect(Collectors.toList());
     }
 
     public BoardForm boardToBoardForm(Board board) {
-        return new BoardForm(board.getId(), board.getMember().getNickname(), board.getMember().getName(), board.getTitle(), board.getCategory(), board.getContent(),
-                board.getCreatedTime(), board.getAttachmentFiles(), board.getPopup(), board.getReadCount(), board.getLikeCount());
+
+        Map<String, Object> boardMap = board.toMap();
+
+        return new BoardForm(
+                (Long) boardMap.get("id"),
+                ((Member) boardMap.get("member")).getNickname(),
+                ((Member) boardMap.get("member")).getName(),
+                (String) boardMap.get("title"),
+                (String) boardMap.get("category"),
+                (String) boardMap.get("content"),
+                (LocalDateTime) boardMap.get("createdTime"),
+                (List<AttachmentFile>) boardMap.get("attachmentFiles"),
+                (String) boardMap.get("popup"),
+                (Integer) boardMap.get("readCount"),
+                (Integer) boardMap.get("likeCount")
+        );
+
+//        return new BoardForm(board.getId(), board.getMember().getNickname(), board.getMember().getName(), board.getTitle(), board.getCategory(), board.getContent(),
+//                board.getCreatedTime(), board.getAttachmentFiles(), board.getPopup(), board.getReadCount(), board.getLikeCount());
 
     }
 }

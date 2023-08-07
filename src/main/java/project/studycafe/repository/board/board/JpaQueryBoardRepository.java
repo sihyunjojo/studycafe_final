@@ -41,13 +41,13 @@ public class JpaQueryBoardRepository {
     public OrderSpecifier<?> sortedBoardBySort(String sort) {
         if (StringUtils.hasText(sort)) {
             if ("boardReadCountUp".equalsIgnoreCase(sort)) {
-                return board.readCount.asc();
+                return board.statistics.readCount.asc();
             } else if ("boardReadCountDown".equalsIgnoreCase(sort)) {
-                return board.readCount.desc();
+                return board.statistics.readCount.desc();
             } else if ("boardLikeCountUp".equalsIgnoreCase(sort)) {
-                return board.likeCount.asc();
+                return board.statistics.likeCount.asc();
             } else if ("boardLikeCountDown".equalsIgnoreCase(sort)) {
-                return board.likeCount.desc();
+                return board.statistics.likeCount.desc();
             }
         }
         return board.createdTime.desc();
