@@ -194,6 +194,15 @@ board 연관관계 수정
 패키지 파일 하위파일은 10개 이하로,
 3개 이상의 인스턴스 변수를 가진 클래스를 쓰지 않는다.
 
+# 8/8
+Board 의 Id를 진짜 조회만 하기위해서 하지만 변경을 막기위해서 board의 id를 새로운 객체로 깊은 복사해서 조회했다.
+첨부파일을 받아오는 방법도
+```
+return attachmentFiles.stream()
+                .map(attachmentFile -> AttachmentFile.createAttachmentFile(attachmentFile))
+                .collect(Collectors.toUnmodifiableList());
+```
+이렇게 하여서, 완전 새로운 값을 받아옴.
 ### 해야할 것들
 getter 쓰지 말라고 함. setter도 쓰지말라고 함.
         // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.

@@ -56,9 +56,6 @@ public class BoardController {
         model.addAttribute("boards", boardForms);
         model.addAttribute("pageMaker", pageMaker);
 
-        boardList.stream()
-                .flatMap(b -> b.getAttachmentFiles().stream())
-                .forEach(a -> log.info("attach = {}", a.getBoard()));
         return "board/boards";
     }
 
@@ -155,6 +152,7 @@ public class BoardController {
         // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.
         BoardForm boardForm = boardService.boardToBoardForm(board);
 
+        log.info("file = {}", boardForm.getAttachmentFiles().toString());
         model.addAttribute("board", boardForm);
         return "board/editBoardForm";
     }
@@ -171,7 +169,9 @@ public class BoardController {
 
     @GetMapping("/{boardId}/delete")
     public String delete(@PathVariable long boardId) {
-        List<AttachmentFile> attachmentFiles = boardService.findById(boardId).orElseThrow().getAttachmentFiles();
+        Board board = boardService.findById(boardId).orElseThrow();
+        List<AttachmentFile> attachmentFiles = board.getAttachmentFiles();
+
         for (AttachmentFile attachmentFile : attachmentFiles) {
             fileService.deleteFileFromStorage(attachmentFile);
         }

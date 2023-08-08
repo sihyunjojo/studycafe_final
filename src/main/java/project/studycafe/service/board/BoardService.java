@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.domain.base.Statistics;
 import project.studycafe.domain.board.AttachmentFile;
 import project.studycafe.domain.board.Board;
+import project.studycafe.domain.board.Info.BoardBaseInfo;
+import project.studycafe.domain.form.board.AttachmentFileForm;
 import project.studycafe.domain.form.board.BoardCreateForm;
 import project.studycafe.domain.form.board.BoardForm;
 import project.studycafe.domain.form.board.BoardUpdateForm;
@@ -23,6 +24,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static project.studycafe.domain.board.QBoard.board;
+
 @Slf4j
 @Service
 @Transactional
@@ -35,8 +38,8 @@ public class BoardService {
 
 
     public List<Board> getHomeBoards() {
-        List<Board> boardsWithoutNotice = boardRepository.findAllByCategoryNotOrderByCreatedTimeDesc("공지사항");
-        List<Board> notices = boardRepository.findAllByCategoryOrderByCreatedTimeDesc("공지사항");
+        List<Board> boardsWithoutNotice = boardRepository.findAllByBoardBaseInfo_CategoryNotOrderByCreatedTimeDesc("공지사항");
+        List<Board> notices = boardRepository.findAllByBoardBaseInfo_CategoryOrderByCreatedTimeDesc("공지사항");
         List<Board> homeBoards = boardsWithoutNotice;
 
         if (notices.size() > 3) {
@@ -57,12 +60,10 @@ public class BoardService {
     }
 
     public Long addBoard(BoardCreateForm form) {
-        Board board = new Board();
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
-        board.setMember(member);
-        board.setTitle(form.getTitle());
-        board.setCategory(form.getCategory());
-        board.setContent(form.getContent());
+        BoardBaseInfo boardBaseInfo = BoardBaseInfo.createBoardInfo(form.getTitle(), form.getCategory(), form.getContent());
+        Board board = Board.createBoard(member, boardBaseInfo);
+
         log.info("save board ={}", board);
 
         boardRepository.save(board);
@@ -72,10 +73,8 @@ public class BoardService {
 
     public void updateBoard(Long boardId, BoardUpdateForm form) {
         Board board = boardRepository.findById(boardId).orElseThrow();
-
-        board.setTitle(form.getTitle());
-        board.setContent(form.getContent());
-        board.setCategory(form.getCategory());
+        BoardBaseInfo boardBaseInfo = BoardBaseInfo.createBoardInfo(form.getTitle(), form.getCategory(), form.getContent());
+        board.updateBoardBaseInfo(boardBaseInfo);
     }
 
     public void deleteBoard(Long boardId) {
@@ -93,11 +92,11 @@ public class BoardService {
     }
 
     public List<Board> getBoardsByCategoryNotOrderByCreatedTimeDesc(String category) {
-        return boardRepository.findAllByCategoryNotOrderByCreatedTimeDesc(category);
+        return boardRepository.findAllByBoardBaseInfo_CategoryNotOrderByCreatedTimeDesc(category);
     }
 
     public List<Board> getBoardsByCategoryByCreatedTimeDesc(String category) {
-        return boardRepository.findAllByCategoryOrderByCreatedTimeDesc(category);
+        return boardRepository.findAllByBoardBaseInfo_CategoryOrderByCreatedTimeDesc(category);
     }
 
     public void increaseReadCount(Board board) {
@@ -127,8 +126,7 @@ public class BoardService {
                         (String) boardMap.get("category"),
                         (String) boardMap.get("content"),
                         (LocalDateTime) boardMap.get("createdTime"),
-                        (List<AttachmentFile>) boardMap.get("attachmentFiles"),
-                        (String) boardMap.get("popup"),
+                        (List<AttachmentFileForm>) boardMap.get("attachmentFiles"),
                         (Integer) boardMap.get("readCount"),
                         (Integer) boardMap.get("likeCount")
                 ))
@@ -139,6 +137,7 @@ public class BoardService {
 
         Map<String, Object> boardMap = board.toMap();
 
+        log.info(boardMap.get("attachmentFiles").toString());
         return new BoardForm(
                 (Long) boardMap.get("id"),
                 ((Member) boardMap.get("member")).getNickname(),
@@ -147,8 +146,7 @@ public class BoardService {
                 (String) boardMap.get("category"),
                 (String) boardMap.get("content"),
                 (LocalDateTime) boardMap.get("createdTime"),
-                (List<AttachmentFile>) boardMap.get("attachmentFiles"),
-                (String) boardMap.get("popup"),
+                AttachmentFileForm.createAttachmentFileForms((List<AttachmentFile>) boardMap.get("attachmentFiles")),
                 (Integer) boardMap.get("readCount"),
                 (Integer) boardMap.get("likeCount")
         );

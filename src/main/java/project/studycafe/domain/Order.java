@@ -19,8 +19,7 @@ import static project.studycafe.domain.enums.status.OrderStatus.WAIT;
 
 @Slf4j
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @Table(name = "orders")
 public class Order extends BaseTimeEntity {

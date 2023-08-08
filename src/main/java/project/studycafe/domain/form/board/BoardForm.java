@@ -18,8 +18,7 @@ public class BoardForm {
     private String category;
     private String content;
     private LocalDateTime createdTime;
-    private List<AttachmentFile> attachmentFiles; // 추후에 객체 따로만들어야할지도
-    private String popup;
+    private List<AttachmentFileForm> attachmentFiles; // 추후에 객체 따로만들어야할지도
     private long readCount;
     private long likeCount;
 

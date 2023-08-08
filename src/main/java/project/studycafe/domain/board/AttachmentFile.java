@@ -8,12 +8,12 @@ import project.studycafe.domain.board.Board;
 import project.studycafe.domain.enums.FileType;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
-@Entity
-@Getter @Setter
+@Entity 
 @NoArgsConstructor
-@EqualsAndHashCode
 public class AttachmentFile extends BaseTimeEntity {
     @Id
     private String uniqueFileName;
@@ -28,6 +28,25 @@ public class AttachmentFile extends BaseTimeEntity {
     @JoinColumn(name = "board_id") // AttachmentFile 테이블의 외래 키 컬럼의 이름을 지정하는 것
     private Board board;
 
+    public static AttachmentFile createAttachmentFile(AttachmentFile attachmentFile) {
+        AttachmentFile newAttachmentFile = new AttachmentFile();
+        newAttachmentFile.setUniqueFileName(attachmentFile.getUniqueFileName());
+        newAttachmentFile.setAttachmentFileName(attachmentFile.getAttachmentFileName());
+        newAttachmentFile.setAttachmentFileSize(attachmentFile.getAttachmentFileSize());
+        newAttachmentFile.setAttachmentFileType(attachmentFile.getAttachmentFileType());
+        return newAttachmentFile;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> Map = new HashMap<>();
+        Map.put("uniqueFileName", uniqueFileName);
+        Map.put("attachmentFileName", attachmentFileName);
+        Map.put("attachmentFileSize", attachmentFileSize);
+        Map.put("attachmentFileType", attachmentFileType);
+        return Map;
+    }
+
+
     public AttachmentFile(String uniqueFileName, String attachmentFileName) {
         this.uniqueFileName = uniqueFileName;
         this.attachmentFileName = attachmentFileName;
@@ -40,11 +59,9 @@ public class AttachmentFile extends BaseTimeEntity {
     }
 
     //==연관관계 메서드==//
-    // 이게 도대체 뭔 코드임???
-    // 삭제했다가 그냥 다시 넣어주는 코드인데?
     public void setBoard(Board board) {
         this.board = board;
-        board.getAttachmentFiles().add(this);
+        board.addAttachmentFile(this);
     }
 
     @Override
@@ -54,4 +71,41 @@ public class AttachmentFile extends BaseTimeEntity {
                 "uniqueFileName='" + uniqueFileName + '\'' +
                 '}';
     }
+
+
+    public String getUniqueFileName() {
+        String newUniqueFileName = this.uniqueFileName;
+        return newUniqueFileName;
+    }
+
+    private String getAttachmentFileName() {
+        String newAttachmentFileName = this.attachmentFileName;
+        return newAttachmentFileName;    }
+
+    private long getAttachmentFileSize() {
+        long newAttachmentFileSize = this.attachmentFileSize;
+        return newAttachmentFileSize;
+    }
+
+    private FileType getAttachmentFileType() {
+        FileType newFileType = this.attachmentFileType;
+        return newFileType;
+    }
+
+    private void setUniqueFileName(String uniqueFileName) {
+        this.uniqueFileName = uniqueFileName;
+    }
+
+    private void setAttachmentFileName(String attachmentFileName) {
+        this.attachmentFileName = attachmentFileName;
+    }
+
+    private void setAttachmentFileSize(long attachmentFileSize) {
+        this.attachmentFileSize = attachmentFileSize;
+    }
+
+    private void setAttachmentFileType(FileType attachmentFileType) {
+        this.attachmentFileType = attachmentFileType;
+    }
+    
 }

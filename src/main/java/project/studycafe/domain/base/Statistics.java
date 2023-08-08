@@ -1,8 +1,6 @@
 package project.studycafe.domain.base;
 
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Embeddable;
@@ -34,10 +32,11 @@ public class Statistics {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("readCount", readCount);
-        map.put("likeCount", likeCount);
+        map.put("readCount", (Integer)this.readCount);
+        map.put("likeCount", (Integer)this.likeCount);
         return map;
     }
+
     public void upLikeCount() {
         this.likeCount += 1;
     }

@@ -28,7 +28,7 @@ public class JpaQueryBoardRepository {
                 .from(board)
                 .where(
                         likeBoardTitle(cond.getTitle()),
-                        eqCreatedMemberNickName(cond.getUserNickname()),
+                        likeCreatedMemberNickName(cond.getUserNickname()),
                         eqBoardCategory(cond.getCategory())
                 )
                 .orderBy(
@@ -55,30 +55,23 @@ public class JpaQueryBoardRepository {
 
     private BooleanExpression likeBoardTitle(String boardName) {
         if (StringUtils.hasText(boardName)) {
-            return board.title.like("%" + boardName + "%");
+            return board.boardBaseInfo.title.like("%" + boardName + "%");
         }
         return null;
     }
 
-//    private BooleanExpression likeBoardCreatedUserName(String userName) {
-//        if (StringUtils.hasText(userName)) {
-//            return board.member.like("%" + userName + "%");
-//        }
-//        return null;
-//    }
-
-    private Predicate eqCreatedMemberNickName(String userNickname) {
+    private Predicate likeCreatedMemberNickName(String userNickname) {
         if (StringUtils.hasText(userNickname)) {
-            return board.member.nickname.eq(userNickname);
+            return board.member.nickname.like("%" + userNickname + "%");
         }
         return null;
     }
 
     private Predicate eqBoardCategory(String category) {
         if (StringUtils.hasText(category)) {
-            return board.category.eq(category);
+            return board.boardBaseInfo.category.eq(category);
         }
-        return board.category.ne("공지사항");
+        return board.boardBaseInfo.category.ne("공지사항");
     }
 
 

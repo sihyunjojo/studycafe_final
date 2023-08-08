@@ -87,7 +87,7 @@ public class FileService {
 
     public void deleteFile(AttachmentFile findFile) {
         log.info("findFile = {}", findFile);
-        List<Board> boardContainedAttachmentFile = boardRepository.findALlByAttachmentFiles(findFile);
+        List<Board> boardContainedAttachmentFile = boardRepository.findALlByBoardAddInfo_AttachmentFiles(findFile);
         log.info("boardContainedAttachmentFile ={}", boardContainedAttachmentFile);
         for (Board board : boardContainedAttachmentFile) {
             //보드에서 연관된 파일 없애기
