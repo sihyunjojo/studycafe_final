@@ -92,10 +92,10 @@
                 <button type="submit">댓글 작성</button>
             </form>
         </div>
-        <div th:each="comment : ${comments}">
-            <p th:text="|${comment.member.name} : ${comment.content}|"></p>
+        <div th:each="comment : ${board.comments}">
+            <p th:text="|${comment.memberName} : ${comment.memberName}|"></p>
             <div th:each="reply : ${comment.replies}">
-                <p th:text="| ㄴ ${reply.member.name} : ${reply.content}|"></p>
+                <p th:text="| ㄴ ${reply.memberName} : ${reply.content}|"></p>
             </div>
             <th:block th:if="${comment != null}" style="display: flex; align-items: center;">
                 <form th:action="@{/reply}" method="post">

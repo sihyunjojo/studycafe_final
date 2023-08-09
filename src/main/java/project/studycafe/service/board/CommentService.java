@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.domain.board.Board;
 import project.studycafe.domain.board.Comment;
 import project.studycafe.domain.form.board.CommentForm;
+import project.studycafe.domain.member.Member;
 import project.studycafe.repository.board.board.JpaBoardRepository;
 import project.studycafe.repository.board.comment.JpaCommentRepository;
 import project.studycafe.repository.member.JpaMemberRepository;
@@ -29,16 +31,16 @@ public class CommentService {
 
 
     public void addComment(CommentForm form) {
-        Comment comment = new Comment();
-        comment.setBoard(boardRepository.findById(form.getBoardId()).orElseThrow());
-        comment.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
-        comment.setContent(form.getContent());
+        Board board = boardRepository.findById(form.getBoardId()).orElseThrow();
+        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
+        Comment comment = Comment.createComment(member, board, form.getContent());
+
         commentRepository.save(comment);
     }
 
-    public void editComment(Long commentId, Comment updateComment) {
+    public void editComment(Long commentId, CommentForm updateComment) {
         Comment findComment = commentRepository.findById(commentId).orElseThrow();
-        findComment.setContent(updateComment.getContent());
+        findComment.updateComment(updateComment.getContent());
     }
 
     public void deleteComment(long commentId) {

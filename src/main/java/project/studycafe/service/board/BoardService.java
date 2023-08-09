@@ -6,11 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.studycafe.domain.board.AttachmentFile;
 import project.studycafe.domain.board.Board;
+import project.studycafe.domain.board.Comment;
 import project.studycafe.domain.board.Info.BoardBaseInfo;
-import project.studycafe.domain.form.board.AttachmentFileForm;
-import project.studycafe.domain.form.board.BoardCreateForm;
-import project.studycafe.domain.form.board.BoardForm;
-import project.studycafe.domain.form.board.BoardUpdateForm;
+import project.studycafe.domain.form.board.*;
 import project.studycafe.domain.member.Member;
 import project.studycafe.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.repository.board.board.JpaBoardRepository;
@@ -22,9 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static project.studycafe.domain.board.QBoard.board;
 
 @Slf4j
 @Service
@@ -62,6 +58,7 @@ public class BoardService {
     public Long addBoard(BoardCreateForm form) {
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         BoardBaseInfo boardBaseInfo = BoardBaseInfo.createBoardInfo(form.getTitle(), form.getCategory(), form.getContent());
+
         Board board = Board.createBoard(member, boardBaseInfo);
 
         log.info("save board ={}", board);
@@ -127,6 +124,7 @@ public class BoardService {
                         (String) boardMap.get("content"),
                         (LocalDateTime) boardMap.get("createdTime"),
                         (List<AttachmentFileForm>) boardMap.get("attachmentFiles"),
+                        CommentForm.createCommentForms((List<Comment>) boardMap.get("comments")),
                         (Integer) boardMap.get("readCount"),
                         (Integer) boardMap.get("likeCount")
                 ))
@@ -147,6 +145,7 @@ public class BoardService {
                 (String) boardMap.get("content"),
                 (LocalDateTime) boardMap.get("createdTime"),
                 AttachmentFileForm.createAttachmentFileForms((List<AttachmentFile>) boardMap.get("attachmentFiles")),
+                CommentForm.createCommentForms((List<Comment>) boardMap.get("comments")),
                 (Integer) boardMap.get("readCount"),
                 (Integer) boardMap.get("likeCount")
         );

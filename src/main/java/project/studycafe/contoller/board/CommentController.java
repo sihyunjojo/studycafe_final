@@ -45,9 +45,9 @@ public class CommentController {
 
     // 댓글 수정
     @PostMapping("/{commentId}/edit")
-    public String edit(Comment comment, @PathVariable Long commentId) {
+    public String edit(CommentForm comment, @PathVariable Long commentId) {
         commentService.editComment(commentId, comment);
-        return "redirect:/board/" + comment.getBoard().getId();
+        return "redirect:/board/" + comment.getBoardId();
     }
 
 

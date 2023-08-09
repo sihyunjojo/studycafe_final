@@ -10,7 +10,6 @@ import project.studycafe.domain.member.Member;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
 @NoArgsConstructor
 public class Reply extends BaseTimeEntity {
     @Id
@@ -26,15 +25,21 @@ public class Reply extends BaseTimeEntity {
     private Comment comment;
 
     private String content;
-    private Integer likeCount;
 
-    @PrePersist
-    public void prePersist() {
-        if (this.likeCount == null) {
-            this.likeCount = 0;
-        }
+    public static Reply createReply(Member member, Comment comment, String content) {
+        Reply newReply = new Reply();
+
+        newReply.setComment(comment);
+        newReply.setMember(member);
+        newReply.setContent(content);
+
+        return newReply;
     }
 
+    public void updateReply(String content) {
+        this.content = content;
+    }
+    
     @Override
     public String toString() {
         return "Reply{" +
@@ -42,7 +47,27 @@ public class Reply extends BaseTimeEntity {
                 ", member=" + member.getId() +
                 ", comment=" + comment.getId() +
                 ", content='" + content + '\'' +
-                ", likeCount=" + likeCount +
                 '}';
+    }
+
+    public long getId() {
+        long newId = this.id;
+        return newId;
+    }
+
+    private void setId(Long id) {
+        this.id = id;
+    }
+
+    private void setMember(Member member) {
+        this.member = member;
+    }
+
+    private void setComment(Comment comment) {
+        this.comment = comment;
+    }
+
+    private void setContent(String content) {
+        this.content = content;
     }
 }

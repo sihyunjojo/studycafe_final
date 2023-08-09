@@ -127,7 +127,10 @@ public class Board extends BaseTimeEntity {
     }
     // 진짜 조회만 하는 getId()
     public long getId(){
-        long nowId = this.id;
+        if (id == null) {
+            throw new RuntimeException();
+        }
+        long nowId = id;
         return nowId;
     }
 

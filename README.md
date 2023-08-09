@@ -196,17 +196,21 @@ board 연관관계 수정
 
 # 8/8
 Board 의 Id를 진짜 조회만 하기위해서 하지만 변경을 막기위해서 board의 id를 새로운 객체로 깊은 복사해서 조회했다.
-첨부파일을 받아오는 방법도
+첨부파일을 받아오는 방법도 마찬가지로 바꿈.
 ```
 return attachmentFiles.stream()
                 .map(attachmentFile -> AttachmentFile.createAttachmentFile(attachmentFile))
                 .collect(Collectors.toUnmodifiableList());
 ```
+
+# 8/9
+setter와 getter를 사용을 자제하자!
+
 이렇게 하여서, 완전 새로운 값을 받아옴.
 ### 해야할 것들
-getter 쓰지 말라고 함. setter도 쓰지말라고 함.
-        // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.
-master ,user 권한에 따라서 다르게 만들기.
+getter 쓰지 말라고 함. setter도 쓰지말라고 함.  
+// 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.  
+master ,user 권한에 따라서 다르게 만들기.  
 
 
 알고리즘  
@@ -217,16 +221,17 @@ master ,user 권한에 따라서 다르게 만들기.
 카카오 지도 api도 사용해보고 싶다.  
 유닛테스트(SpringBootTest) (유지보수 기간의 생산성을 높여주고 새로 프로젝트에 투입될 사람에게도 이득을 주는 테스트   
 프로젝트 오픈 일정 직전까지의 코드 변경과 버그 발견에 도움을 주는 테스트  
-오늘 당장 프로그램을 목표한 곳까지 작성하는 일을 더 빨리 마치게 해주는 테스트)    단위 테스트: JUnit + Mockito 활용
-AOP(관점지향 프로그래밍) -  로그추적기, 김영한님
-Cache 적용(Global/Local cache 적용범위, 라이프 싸이클, 솔루션 선택)
+오늘 당장 프로그램을 목표한 곳까지 작성하는 일을 더 빨리 마치게 해주는 테스트)    단위 테스트: JUnit + Mockito 활용  
+AOP(관점지향 프로그래밍) -  로그추적기, 김영한님  
+Cache 적용(Global/Local cache 적용범위, 라이프 싸이클, 솔루션 선택)  
+중복 쿼리 제거  
 
-컨테이너 - 도커
-쿠버네티스 -
-CI - 젠킨스 , 깃허브 액션 (지속통합)
-CD -  (지속배포)
+컨테이너 - 도커  
+쿠버네티스 -  
+CI - 젠킨스 , 깃허브 액션 (지속통합)  
+CD -  (지속배포)  
   
-@Validated @ModelAttribute("member") CommonMemberForm form 이거에 대해서 좀 알아야함  
+@Validated @ModelAttribute("member") CommonMemberForm form 이거에 대해서 좀 알아야함    
 
 
 (Docker)  
@@ -235,12 +240,12 @@ CD -  (지속배포)
 (aws)(EC2)(RDM)  
 (EDR)  
 (Swagger) - Swagger 는 REST API를 설계, 빌드, 문서화 및 사용하는 데 도움이되는 OpenAPI 사양을 중심으로 구축 된 오픈 소스 도구 세트입니다.
-(Test code를 통한 시간 단축 (성능 향상 테스트))
-(ajax)
-(Exception 처리 ex) 결제기능 같은 경우는 실행되는거보다 예외처리가 더 중요함.)
+(Test code를 통한 시간 단축 (성능 향상 테스트))  
+(ajax)  
+(Exception 처리 ex) 결제기능 같은 경우는 실행되는거보다 예외처리가 더 중요함.)  
 
-개발도구의 공식 레퍼런스를 보고 사용법을 스스로 익힐 수 있음
-자신이 경험한 사용법을 문서화해서 팀 내에 전파할 수 있음
+개발도구의 공식 레퍼런스를 보고 사용법을 스스로 익힐 수 있음  
+자신이 경험한 사용법을 문서화해서 팀 내에 전파할 수 있음  
  
 
 #### 할까말까 고민...

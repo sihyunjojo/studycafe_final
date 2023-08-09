@@ -38,12 +38,12 @@ public class AttachmentFile extends BaseTimeEntity {
     }
 
     public Map<String, Object> toMap() {
-        Map<String, Object> Map = new HashMap<>();
-        Map.put("uniqueFileName", uniqueFileName);
-        Map.put("attachmentFileName", attachmentFileName);
-        Map.put("attachmentFileSize", attachmentFileSize);
-        Map.put("attachmentFileType", attachmentFileType);
-        return Map;
+        Map<String, Object> map = new HashMap<>();
+        map.put("uniqueFileName", uniqueFileName);
+        map.put("attachmentFileName", attachmentFileName);
+        map.put("attachmentFileSize", attachmentFileSize);
+        map.put("attachmentFileType", attachmentFileType);
+        return map;
     }
 
 

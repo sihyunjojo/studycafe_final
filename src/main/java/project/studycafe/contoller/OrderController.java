@@ -98,10 +98,10 @@ public class OrderController {
     //product.html에서 구매하면 member,product 로 order 만들어서 추가정보 입력하게해주게 보내줌.
     @PostMapping("/add/{productId}/now")
     public String addOrderNow(@Login Member loginMember, @PathVariable Long productId, OrderNowForm form) {
-        log.info("add loginMember = {}", form);
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/product/" + productId;
         }
+
         long orderId = orderService.addOrderNow(form);
         return "redirect:/order/edit/" + orderId
                 + "/user";
@@ -109,10 +109,10 @@ public class OrderController {
 
     @PostMapping("/add/cart")
     public String addOrderCart(@Login Member loginMember, CartForm form) {
-        log.info("cartForm = {}", form);
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/cart";
         }
+
         long orderId = orderService.addOrderCart(form);
         //결제 창으로 넘겨줘야함.
         return "redirect:/order/edit/" + orderId
@@ -124,7 +124,7 @@ public class OrderController {
     @GetMapping("/edit/{orderId}")
     public String editForm(@PathVariable Long orderId, Model model) {
         Order order = orderService.findById(orderId).orElseThrow();
-        log.info("order = {}", order);
+
         model.addAttribute("order", order);
         return "order/editOrderForm";
     }

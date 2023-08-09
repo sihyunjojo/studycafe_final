@@ -104,18 +104,18 @@ public class BoardController {
         boardService.increaseReadCount(board);
         BoardForm boardForm = boardService.boardToBoardForm(board);
 
-        List<Comment> comments = commentService.findByBoardId(boardId);
-
-        for (Comment comment : comments) {
-            List<Reply> replies = replyService.getRepliesByCommentId(comment.getId()); // 해당 댓글에 대한 답변 목록 조회
-            comment.setReplies(replies); // 댓글 객체에 답변 목록 설정
-        }
+//        List<Comment> comments = commentService.findByBoardId(boardId);
+//
+//        for (Comment comment : comments) {
+//            List<Reply> replies = replyService.getRepliesByCommentId(comment.getId()); // 해당 댓글에 대한 답변 목록 조회
+//            comment.setReplies(replies); // 댓글 객체에 답변 목록 설정
+//        }
 
         log.info("board = {}", board);
         log.info("board form = {}", boardForm);
 
         model.addAttribute("board", boardForm);
-        model.addAttribute("comments", comments);
+//        model.addAttribute("comments", comments);
         return "board/board";
     }
 

@@ -32,9 +32,10 @@ public class ReplyController {
     //헤당 comment와 관련 댓글들 전부 불러오기
     @GetMapping("/{commentId}")
     public String reply(@PathVariable long commentId, Model model) {
-        List<Reply> replys = replyService.findReplys();
-
-        return "redirect:/board/" + replys.get(0).getComment().getBoard().getId();
+        List<Reply> replies = replyService.findReplys();
+        //repliesform을 만들어줘야할거같
+        model.addAttribute("replies", replies);
+        return "redirect:/board/" + commentId;
     }
 
     // 댓글 생성
@@ -51,9 +52,9 @@ public class ReplyController {
 
     // 댓글 수정
     @PostMapping("/{replyId}/edit")
-    public String edit(Reply reply, @PathVariable Long replyId) {
+    public String edit(ReplyForm reply, @PathVariable Long replyId) {
         replyService.editReply(replyId, reply);
-        return "redirect:/board/" + reply.getComment().getBoard().getId();
+        return "redirect:/board/" + reply.getCommentId();
     }
 
     // 댓글 삭제

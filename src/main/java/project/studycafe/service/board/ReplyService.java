@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.studycafe.domain.board.Comment;
 import project.studycafe.domain.board.Reply;
 import project.studycafe.domain.form.board.ReplyForm;
+import project.studycafe.domain.member.Member;
 import project.studycafe.repository.board.comment.JpaCommentRepository;
 import project.studycafe.repository.board.reply.JpaReplyRepository;
 import project.studycafe.repository.member.JpaMemberRepository;
@@ -29,16 +31,16 @@ public class ReplyService {
 
 
     public void addReply(ReplyForm form) {
-        Reply reply = new Reply();
-        reply.setComment(commentRepository.findById(form.getCommentId()).orElseThrow());
-        reply.setMember(memberRepository.findById(form.getMemberId()).orElseThrow());
-        reply.setContent(form.getContent());
+        Comment comment = commentRepository.findById(form.getCommentId()).orElseThrow();
+        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
+        Reply reply = Reply.createReply(member, comment, form.getContent());
+
         replyRepository.save(reply);
     }
 
-    public void editReply(Long replyId, Reply updateReply) {
+    public void editReply(Long replyId, ReplyForm updateReply) {
         Reply findReply = replyRepository.findById(replyId).orElseThrow();
-        findReply.setContent(updateReply.getContent());
+        findReply.updateReply(updateReply.getContent());
     }
 
 

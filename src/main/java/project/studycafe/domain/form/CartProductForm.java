@@ -16,6 +16,5 @@ public class CartProductForm {
     private boolean purchasedCheck;
     private Integer count;
 
-    @NumberFormat(pattern = "###,###")
     private Integer totalPrice;
 }

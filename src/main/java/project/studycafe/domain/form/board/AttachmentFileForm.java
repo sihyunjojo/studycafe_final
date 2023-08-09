@@ -20,16 +20,6 @@ public class AttachmentFileForm {
     private long attachmentFileSize;
     private FileType attachmentFileType;
 
-    public static AttachmentFileForm createAttachmentFileForm(AttachmentFile attachmentFile) {
-        Map<String, Object> attachmentFileMap = attachmentFile.toMap();
-        AttachmentFileForm attachmentFileForm = new AttachmentFileForm();
-        
-        attachmentFileForm.setUniqueFileName((String) attachmentFileMap.get("uniqueFileName"));
-        attachmentFileForm.setAttachmentFileName((String) attachmentFileMap.get("attachmentFileName"));
-        attachmentFileForm.setAttachmentFileSize((Long) attachmentFileMap.get("attachmentFileSize"));
-        attachmentFileForm.setAttachmentFileType((FileType) attachmentFileMap.get("attachmentFileType"));
-        return attachmentFileForm;
-    }
     public static List<AttachmentFileForm> createAttachmentFileForms(List<AttachmentFile> attachmentFiles) {
         List<AttachmentFileForm> attachmentFileForms = new ArrayList<>();
 
