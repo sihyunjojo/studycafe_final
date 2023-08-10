@@ -1,7 +1,10 @@
 package project.studycafe.domain.base;
 
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
@@ -10,8 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 //통계
-@Embeddable
 @ToString
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class Statistics {
     @NotNull
     private Integer readCount;
@@ -32,8 +37,8 @@ public class Statistics {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("readCount", (Integer)this.readCount);
-        map.put("likeCount", (Integer)this.likeCount);
+        map.put("readCount", readCount);
+        map.put("likeCount", likeCount);
         return map;
     }
 
@@ -53,5 +58,4 @@ public class Statistics {
             this.readCount -= 1;
         }
     }
-
 }

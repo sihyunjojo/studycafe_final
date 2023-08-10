@@ -1,13 +1,12 @@
 package project.studycafe.domain.board;
 
-import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import project.studycafe.domain.base.BaseTimeEntity;
 import project.studycafe.domain.member.Member;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @NoArgsConstructor
@@ -39,7 +38,17 @@ public class Reply extends BaseTimeEntity {
     public void updateReply(String content) {
         this.content = content;
     }
-    
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", this.getId());
+        map.put("member", member);
+        map.put("comment", comment);
+        map.put("content", content);
+        return map;
+    }
+
+
     @Override
     public String toString() {
         return "Reply{" +
@@ -50,21 +59,19 @@ public class Reply extends BaseTimeEntity {
                 '}';
     }
 
-    public long getId() {
-        long newId = this.id;
+    public Long getId() {
+        Long newId = this.id;
         return newId;
-    }
-
-    private void setId(Long id) {
-        this.id = id;
     }
 
     private void setMember(Member member) {
         this.member = member;
+        member.addReply(this);
     }
 
     private void setComment(Comment comment) {
         this.comment = comment;
+        comment.addReply(this);
     }
 
     private void setContent(String content) {

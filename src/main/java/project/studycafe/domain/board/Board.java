@@ -1,7 +1,6 @@
 package project.studycafe.domain.board;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import project.studycafe.domain.base.BaseTimeEntity;
 import project.studycafe.domain.base.Statistics;
 import project.studycafe.domain.board.Info.BoardAddInfo;
@@ -14,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @Entity
 @NoArgsConstructor
 public class Board extends BaseTimeEntity {
@@ -38,8 +36,11 @@ public class Board extends BaseTimeEntity {
 
     public static Board createBoard(Member member, BoardBaseInfo boardBaseInfo) {
         Board board = new Board();
+
         board.setMember(member);
         board.setBoardBaseInfo(boardBaseInfo);
+        board.setStatistics(new Statistics(0, 0));
+
         return board;
     }
 
@@ -56,24 +57,22 @@ public class Board extends BaseTimeEntity {
     }
 
     //==연관관계 메서드==//
-    public void setMember(Member member) {
-        this.member = member;
-        member.getBoards().add(this);
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
-
 
     //==비즈니스코드==//
     public Map<String, Object> toMap() {
-        Map<String, Object> statisticsMap = statistics.toMap();
-
         Map<String, Object> boardMap = new HashMap<>();
         boardMap.put("id", id);
         boardMap.put("member", member);
         boardMap.put("title", boardBaseInfo.toMap().get("title"));
         boardMap.put("category", boardBaseInfo.toMap().get("category"));
         boardMap.put("content", boardBaseInfo.toMap().get("content"));
-        boardMap.put("readCount", statisticsMap.get("readCount"));
-        boardMap.put("likeCount", statisticsMap.get("likeCount"));
+        boardMap.put("createTime", super.getCreatedTime());
+        boardMap.put("updateTime", super.getUpdatedTime());
+        boardMap.put("readCount", statistics.toMap().get("readCount"));
+        boardMap.put("likeCount", statistics.toMap().get("likeCount"));
         boardMap.put("attachmentFiles", boardAddInfo.toMap().get("attachmentFiles"));
         boardMap.put("comments", comments);
         return boardMap;
@@ -111,31 +110,35 @@ public class Board extends BaseTimeEntity {
                 .append(", statistics=").append(statistics.toString())
                 .append(", attachmentFiles=[");
 
-        List<AttachmentFile> attachmentFiles = (List<AttachmentFile>) boardAddInfo.toMap().get("attachmentFiles");
-        for (AttachmentFile attachmentFile : attachmentFiles) {
-            sb.append(attachmentFile.toString()).append(", ");
+        if ((List<AttachmentFile>) boardAddInfo.toMap().get("attachmentFiles") != null) {
+            List<AttachmentFile> attachmentFiles = (List<AttachmentFile>) boardAddInfo.toMap().get("attachmentFiles");
+            for (AttachmentFile attachmentFile : attachmentFiles) {
+                sb.append(attachmentFile.toString()).append(", ");
+            }
+            // 마지막 쉼표 제거
+            if (!attachmentFiles.isEmpty()) {
+                sb.delete(sb.length() - 2, sb.length());
+            }
         }
-
-        // 마지막 쉼표 제거
-        if (!attachmentFiles.isEmpty()) {
-            sb.delete(sb.length() - 2, sb.length());
-        }
-
         sb.append("]}");
 
         return sb.toString();
     }
+
     // 진짜 조회만 하는 getId()
-    public long getId(){
-        if (id == null) {
-            throw new RuntimeException();
-        }
-        long nowId = id;
-        return nowId;
+    public Long getId() {
+        Long newId = id;
+        return newId;
     }
 
     public List<AttachmentFile> getAttachmentFiles() {
         return boardAddInfo.getAttachmentFiles();
+    }
+
+    //==연관관계 메서드==//
+    private void setMember(Member member) {
+        this.member = member;
+        member.addBoard(this);
     }
 
     private void setBoardBaseInfo(BoardBaseInfo boardBaseInfo) {
@@ -148,9 +151,5 @@ public class Board extends BaseTimeEntity {
 
     private void setStatistics(Statistics statistics) {
         this.statistics = statistics;
-    }
-
-    private void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 }

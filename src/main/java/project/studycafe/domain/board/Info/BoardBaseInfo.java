@@ -1,15 +1,14 @@
 package project.studycafe.domain.board.Info;
 
 import lombok.ToString;
-import project.studycafe.domain.board.Board;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.Map;
 
-@Embeddable
 @ToString
+@Embeddable
 public class BoardBaseInfo {
     @NotEmpty
     private String title;

@@ -31,6 +31,7 @@ public class CommentService {
 
 
     public void addComment(CommentForm form) {
+        log.info("form = {}", form);
         Board board = boardRepository.findById(form.getBoardId()).orElseThrow();
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         Comment comment = Comment.createComment(member, board, form.getContent());

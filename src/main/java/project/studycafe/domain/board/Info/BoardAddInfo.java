@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Embeddable
 @ToString
+@Embeddable
 public class BoardAddInfo {
 
     //Cascadetype.all을 하게되면 세션에 2개의 같은 pk를 가진 attach 엔티티가 발생하여서 에러가 발생한다.

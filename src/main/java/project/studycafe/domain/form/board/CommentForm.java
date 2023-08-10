@@ -1,8 +1,10 @@
 package project.studycafe.domain.form.board;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import project.studycafe.domain.board.Board;
 import project.studycafe.domain.board.Comment;
+import project.studycafe.domain.board.Reply;
 import project.studycafe.domain.enums.FileType;
 import project.studycafe.domain.member.Member;
 
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Data
 public class CommentForm {
 
@@ -30,11 +33,18 @@ public class CommentForm {
             Map<String, Object> commentMap = comment.toMap();
             CommentForm commentForm = new CommentForm();
 
-            commentForm.setId((Long) comment.toMap().get("id"));
-            commentForm.setBoardId(((Board) comment.toMap().get("board")).getId());
-            commentForm.setMemberId(( (Member) comment.toMap().get("member")).getId());
-            commentForm.setMemberName(( (Member) comment.toMap().get("member")).getName());
-            commentForm.setContent((String) comment.toMap().get("content"));
+            List<Reply> getReplies = (List<Reply>) commentMap.get("replies");
+            List<ReplyForm> replyForms = ReplyForm.createReplyForms(getReplies);
+
+
+            log.info("map ={}", commentMap);
+
+            commentForm.setId((Long) commentMap.get("id"));
+            commentForm.setBoardId(((Board) commentMap.get("board")).getId());
+            commentForm.setMemberId(( (Member) commentMap.get("member")).getId());
+            commentForm.setMemberName(( (Member) commentMap.get("member")).getName());
+            commentForm.setContent((String) commentMap.get("content"));
+            commentForm.setReplies(replyForms);
             commentForms.add(commentForm);
         }
 

@@ -205,6 +205,11 @@ return attachmentFiles.stream()
 
 # 8/9
 setter와 getter를 사용을 자제하자!
+// createBoard, createComment() 를 만든 이후 생성에서 id 값을 못가져옴... domain단에서 만들어서 그런가..  
+// 
+
+# 8/10
+nullporintException이 터지면 자료형이 null을 받을 수 있는지 확인해라.  
 
 이렇게 하여서, 완전 새로운 값을 받아옴.
 ### 해야할 것들

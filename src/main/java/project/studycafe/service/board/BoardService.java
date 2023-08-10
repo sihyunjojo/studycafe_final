@@ -61,7 +61,7 @@ public class BoardService {
 
         Board board = Board.createBoard(member, boardBaseInfo);
 
-        log.info("save board ={}", board);
+//        log.info("save board ={}", board);
 
         boardRepository.save(board);
 
@@ -123,7 +123,7 @@ public class BoardService {
                         (String) boardMap.get("category"),
                         (String) boardMap.get("content"),
                         (LocalDateTime) boardMap.get("createdTime"),
-                        (List<AttachmentFileForm>) boardMap.get("attachmentFiles"),
+                        AttachmentFileForm.createAttachmentFileForms((List<AttachmentFile>) boardMap.get("attachmentFiles")),
                         CommentForm.createCommentForms((List<Comment>) boardMap.get("comments")),
                         (Integer) boardMap.get("readCount"),
                         (Integer) boardMap.get("likeCount")

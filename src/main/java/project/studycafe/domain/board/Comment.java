@@ -35,11 +35,17 @@ public class Comment extends BaseTimeEntity {
 
     public static Comment createComment(Member member, Board board, String content) {
         Comment newComment = new Comment();
-        newComment.setBoard(board);
+
         newComment.setMember(member);
+        newComment.setBoard(board);
         newComment.setContent(content);
 
         return newComment;
+    }
+
+    public void addReply(Reply reply){
+        this.replies.add(reply);
+
     }
 
     public void updateComment(String content) {
@@ -49,8 +55,8 @@ public class Comment extends BaseTimeEntity {
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", this.getId());
-        map.put("memberId", member);
-        map.put("boardId", board);
+        map.put("member", member);
+        map.put("board", board);
         map.put("content", content);
         map.put("replies", replies);
         return map;
@@ -68,10 +74,7 @@ public class Comment extends BaseTimeEntity {
     }
 
     public Long getId(){
-        if (id == null) {
-            throw new RuntimeException();
-        }
-        long newId = id;
+        Long newId = id;
         return newId;
     }
 
@@ -81,18 +84,15 @@ public class Comment extends BaseTimeEntity {
 
     private void setMember(Member member) {
         this.member = member;
+        member.addComment(this);
     }
 
     private void setBoard(Board board) {
         this.board = board;
+        board.addComment(this);
     }
 
     private void setContent(String content) {
         this.content = content;
     }
-
-    private void setReplies(List<Reply> replies) {
-        this.replies = replies;
-    }
-
 }

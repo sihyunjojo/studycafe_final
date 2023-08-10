@@ -1,17 +1,13 @@
 package project.studycafe.domain.board;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.common.reflection.XMember;
 import project.studycafe.domain.base.BaseTimeEntity;
-import project.studycafe.domain.board.Board;
 import project.studycafe.domain.enums.FileType;
 
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Entity 
 @NoArgsConstructor
 public class AttachmentFile extends BaseTimeEntity {

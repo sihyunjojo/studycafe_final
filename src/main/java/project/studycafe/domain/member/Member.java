@@ -10,6 +10,7 @@ import project.studycafe.domain.board.Board;
 import project.studycafe.domain.board.Comment;
 import project.studycafe.domain.board.Reply;
 import project.studycafe.domain.enums.MemberLevel;
+import project.studycafe.domain.form.member.MemberForm;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -78,6 +79,16 @@ public class Member extends BaseTimeEntity {
         if (this.address == null) {
             this.address = new Address(null,null,null);
         }
+    }
+
+    public void addBoard(Board board) {
+        this.boards.add(board);
+    }
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+    public void addReply(Reply reply) {
+        this.replies.add(reply);
     }
 
     @Builder //생성을 Builder 패턴으로 하기 위해서

@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BoardForm {
 
-    private long id;
+    private Long id;
     private String memberNickname;
     private String memberName;
     private String title;
@@ -19,7 +19,7 @@ public class BoardForm {
     private LocalDateTime createdTime;
     private List<AttachmentFileForm> attachmentFiles; // 추후에 객체 따로만들어야할지도
     private List<CommentForm> comments;
-    private long readCount;
-    private long likeCount;
+    private Integer readCount;
+    private Integer likeCount;
 
 }
