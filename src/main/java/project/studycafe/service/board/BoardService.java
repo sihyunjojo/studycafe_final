@@ -12,7 +12,7 @@ import project.studycafe.domain.form.board.*;
 import project.studycafe.domain.member.Member;
 import project.studycafe.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.repository.board.board.JpaBoardRepository;
-import project.studycafe.domain.form.search.BoardSearchCond;
+import project.studycafe.domain.Dto.search.BoardSearchCond;
 import project.studycafe.repository.member.JpaMemberRepository;
 
 import java.time.LocalDateTime;
@@ -29,8 +29,9 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final JpaBoardRepository boardRepository;
-    private final JpaMemberRepository memberRepository;
     private final JpaQueryBoardRepository boardQueryRepository;
+    private final JpaMemberRepository memberRepository;
+
 
 
     public List<Board> getHomeBoards() {
@@ -110,6 +111,16 @@ public class BoardService {
         Board findBoard = boardRepository.findById(boardId).orElseThrow();
         findBoard.downLikeCount();
         findBoard.downReadCount();
+    }
+
+    public Board getBoardWithMemberCommentAttachmentFile(long boardId){
+        Board board = boardQueryRepository.findByIdWithMemberComment(boardId);
+//        List<AttachmentFile> attachmentFiles = boardQueryRepository.getAttachmentFilesByBoardId(boardId);
+//        board.addAttachmentFiles(attachmentFiles);
+
+        log.info("board ={}", board);
+        return board;
+
     }
 
     public List<BoardForm> boardsToBoardForms(List<Board> boards) {

@@ -10,7 +10,7 @@ import project.studycafe.domain.form.board.BoardForm;
 import project.studycafe.domain.member.Member;
 import project.studycafe.domain.product.Product;
 import project.studycafe.resolver.argumentresolver.Login;
-import project.studycafe.domain.form.search.ProductSearchCond;
+import project.studycafe.domain.Dto.search.ProductSearchCond;
 import project.studycafe.service.board.BoardService;
 import project.studycafe.service.product.ProductService;
 

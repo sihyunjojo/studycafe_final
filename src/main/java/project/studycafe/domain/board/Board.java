@@ -19,17 +19,16 @@ public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id") // member 를 어떤 이름으로 order 테이블의 컬럼명으로 저장하는지
-    private Member member;
-
     @Embedded
     private BoardBaseInfo boardBaseInfo;
     @Embedded
     private BoardAddInfo boardAddInfo;
     @Embedded
     private Statistics statistics;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id") // member 를 어떤 이름으로 order 테이블의 컬럼명으로 저장하는지
+    private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
@@ -54,6 +53,9 @@ public class Board extends BaseTimeEntity {
 
     public void addAttachmentFile(AttachmentFile attachmentFile) {
         this.boardAddInfo.addAttachmentFile(attachmentFile);
+    }
+    public void addAttachmentFiles(List<AttachmentFile> attachmentFiles) {
+        attachmentFiles.stream().forEach(a -> boardAddInfo.addAttachmentFile(a));
     }
 
     //==연관관계 메서드==//

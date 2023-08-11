@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import project.studycafe.domain.Order;
 import project.studycafe.domain.enums.status.OrderStatus;
-import project.studycafe.domain.form.search.OrderSearchCond;
+import project.studycafe.domain.Dto.search.OrderSearchCond;
 
 
 import javax.persistence.EntityManager;

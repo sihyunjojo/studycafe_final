@@ -28,7 +28,6 @@ public class ReplyForm {
         for (Reply reply : replys) {
             Map<String, Object> replyMap = reply.toMap();
             ReplyForm replyForm = new ReplyForm();
-            log.info("map ={}", replyMap);
 
             replyForm.setId((Long) replyMap.get("id"));
             replyForm.setBoardId(((Comment) replyMap.get("comment")).getId());

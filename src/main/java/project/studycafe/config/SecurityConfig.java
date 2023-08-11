@@ -1,4 +1,4 @@
-package project.studycafe;
+package project.studycafe.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

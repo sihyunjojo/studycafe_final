@@ -10,7 +10,7 @@ import project.studycafe.domain.enums.status.OrderStatus;
 import project.studycafe.domain.form.order.OrderForm;
 import project.studycafe.domain.form.order.OrderNowForm;
 import project.studycafe.domain.form.order.OrderUserForm;
-import project.studycafe.domain.form.search.OrderSearchCond;
+import project.studycafe.domain.Dto.search.OrderSearchCond;
 import project.studycafe.domain.form.*;
 import project.studycafe.domain.member.Member;
 import project.studycafe.domain.product.OrderItem;

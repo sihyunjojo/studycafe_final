@@ -1,4 +1,4 @@
-package project.studycafe.domain.form.search;
+package project.studycafe.domain.Dto.search;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

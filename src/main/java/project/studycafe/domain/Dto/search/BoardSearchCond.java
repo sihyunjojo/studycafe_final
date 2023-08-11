@@ -1,11 +1,10 @@
-package project.studycafe.domain.form.search;
+package project.studycafe.domain.Dto.search;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 public class BoardSearchCond {
     private String title;

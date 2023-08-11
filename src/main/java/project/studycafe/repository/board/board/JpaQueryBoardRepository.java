@@ -5,8 +5,9 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.util.StringUtils;
+import project.studycafe.domain.board.AttachmentFile;
 import project.studycafe.domain.board.Board;
-import project.studycafe.domain.form.search.BoardSearchCond;
+import project.studycafe.domain.Dto.search.BoardSearchCond;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -15,11 +16,46 @@ import static project.studycafe.domain.board.QBoard.board;
 
 
 public class JpaQueryBoardRepository {
+    private final EntityManager em;
     private final JPAQueryFactory query;
 
     public JpaQueryBoardRepository(EntityManager em) {
+        this.em = em;
         this.query = new JPAQueryFactory(em);
     }
+
+    public List<Board> findAllWithMemberCommentReply() {
+        return em.createQuery(
+                "select b from Board b" +
+                        " join fetch b.member m" +
+                        " join fetch b.comments c" +
+                        " join fetch c.replies r", Board.class
+        ).getResultList();
+    }
+
+    public Board findByIdWithMemberComment(long boardId) {
+        return em.createQuery(
+                        "select b from Board b" +
+                                " join fetch b.member m" +
+                                " join fetch b.comments c" +
+                                " where b.id = :boardId", Board.class
+                ).setParameter("boardId", boardId).
+                getSingleResult();
+    } //JPA에서 Fetch Join의 조건은 다음과 같다.
+    //ToOne은 몇개든 사용 가능
+    //ToMany는 1개만 가능
+
+    public List<AttachmentFile> getAttachmentFilesByBoardId(long boardId) {
+        return em.createQuery(
+                        "select a from AttachmentFile a" +
+                                " where a.board.id = :boardId", AttachmentFile.class
+                ).setParameter("boardId", boardId).
+                getResultList();
+    }
+
+
+
+
 
 
     // 기본이 최신순임.
@@ -73,6 +109,4 @@ public class JpaQueryBoardRepository {
         }
         return board.boardBaseInfo.category.ne("공지사항");
     }
-
-
 }

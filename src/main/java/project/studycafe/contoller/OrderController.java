@@ -12,13 +12,11 @@ import project.studycafe.domain.form.order.OrderForm;
 import project.studycafe.domain.form.order.OrderNowForm;
 import project.studycafe.domain.form.order.OrderUserForm;
 import project.studycafe.domain.*;
-import project.studycafe.domain.form.search.OrderSearchCond;
+import project.studycafe.domain.Dto.search.OrderSearchCond;
 import project.studycafe.domain.member.Member;
 import project.studycafe.resolver.argumentresolver.Login;
 import project.studycafe.service.OrderService;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Slf4j
@@ -122,12 +120,19 @@ public class OrderController {
 
     //master control
     @GetMapping("/edit/{orderId}")
-    public String editForm(@PathVariable Long orderId, Model model) {
+    public String editForm(@Login Member loginMember, @PathVariable Long orderId, Model model) {
         Order order = orderService.findById(orderId).orElseThrow();
-
         model.addAttribute("order", order);
-        return "order/editOrderForm";
+
+        if (loginMember.getMemberLevel().equals(MemberLevel.MASTER)) {
+            return "order/editOrderForm";
+        } else if (loginMember.getMemberLevel().equals(MemberLevel.USER)) {
+            return "order/editOrderUserForm";
+        }
+
+        return "order/editOrderUserForm";
     }
+
     @GetMapping("/edit/{orderId}/user")
     public String editOrderCartForm(@PathVariable long orderId, Model model) {
         Order order = orderService.findById(orderId).orElseThrow();

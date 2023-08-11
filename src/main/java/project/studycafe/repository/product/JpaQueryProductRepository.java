@@ -5,7 +5,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.util.StringUtils;
-import project.studycafe.domain.form.search.ProductSearchCond;
+import project.studycafe.domain.Dto.search.ProductSearchCond;
 import project.studycafe.domain.product.Product;
 
 import javax.persistence.EntityManager;

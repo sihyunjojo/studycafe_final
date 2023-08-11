@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import project.studycafe.domain.base.PageMaker;
 import project.studycafe.domain.board.AttachmentFile;
 import project.studycafe.domain.board.Board;
-import project.studycafe.domain.board.Comment;
-import project.studycafe.domain.board.Reply;
 import project.studycafe.domain.form.board.BoardCreateForm;
 import project.studycafe.domain.form.board.BoardForm;
 import project.studycafe.domain.form.board.BoardUpdateForm;
 import project.studycafe.domain.member.Member;
 import project.studycafe.resolver.argumentresolver.Login;
-import project.studycafe.domain.form.search.BoardSearchCond;
+import project.studycafe.domain.Dto.search.BoardSearchCond;
 import project.studycafe.service.FileService;
 import project.studycafe.service.board.BoardService;
 import project.studycafe.service.board.CommentService;
@@ -100,16 +98,11 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public String board(@PathVariable long boardId, Model model) {
-        Board board = boardService.findById(boardId).orElseThrow();
+//        Board board = boardService.findById(boardId).orElseThrow();
+        Board board = boardService.getBoardWithMemberCommentAttachmentFile(boardId);
+        log.info("board = {}", board);
         boardService.increaseReadCount(board);
         BoardForm boardForm = boardService.boardToBoardForm(board);
-
-//        List<Comment> comments = commentService.findByBoardId(boardId);
-//
-//        for (Comment comment : comments) {
-//            List<Reply> replies = replyService.getRepliesByCommentId(comment.getId()); // 해당 댓글에 대한 답변 목록 조회
-//            comment.setReplies(replies); // 댓글 객체에 답변 목록 설정
-//        }
 
         log.info("board = {}", board);
         log.info("board form = {}", boardForm);
