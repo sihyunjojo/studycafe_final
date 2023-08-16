@@ -4,6 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import project.studycafe.domain.board.AttachmentFile;
 import project.studycafe.domain.board.Board;
@@ -13,8 +14,12 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static project.studycafe.domain.board.QBoard.board;
+import static project.studycafe.domain.board.QComment.comment;
+import static project.studycafe.domain.member.QMember.member;
 
 
+
+@Slf4j
 public class JpaQueryBoardRepository {
     private final EntityManager em;
     private final JPAQueryFactory query;
@@ -41,7 +46,17 @@ public class JpaQueryBoardRepository {
                                 " where b.id = :boardId", Board.class
                 ).setParameter("boardId", boardId).
                 getSingleResult();
+    }
+    public Board findByIdWithMemberCommentByQuery(long boardId) {
+        log.info("Query");
+        return query
+                .selectFrom(board)
+                .join(board.member, member).fetchJoin()
+                .join(board.comments, comment).fetchJoin()
+                .where(board.id.eq(boardId))
+                .fetchOne();
     } //JPA에서 Fetch Join의 조건은 다음과 같다.
+
     //ToOne은 몇개든 사용 가능
     //ToMany는 1개만 가능
 

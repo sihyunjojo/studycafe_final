@@ -114,7 +114,7 @@ public class BoardService {
     }
 
     public Board getBoardWithMemberCommentAttachmentFile(long boardId){
-        Board board = boardQueryRepository.findByIdWithMemberComment(boardId);
+        Board board = boardQueryRepository.findByIdWithMemberCommentByQuery(boardId);
 //        List<AttachmentFile> attachmentFiles = boardQueryRepository.getAttachmentFilesByBoardId(boardId);
 //        board.addAttachmentFiles(attachmentFiles);
 
