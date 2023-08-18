@@ -6,11 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import project.studycafe.exception.BadRequestException;
-import project.studycafe.exception.NotFindOrderItemException;
-import project.studycafe.exception.UserException;
+import project.studycafe.helper.exception.BadRequestException;
+import project.studycafe.helper.exception.NotFindOrderItemException;
+import project.studycafe.helper.exception.UserException;
 import project.studycafe.handler.exceptionHandler.ErrorResult;
 
+// 핸들러는 요청을 처리하는 객체 또는 메서드를 가리키며, 해당 요청을 처리하는 로직을 포함한다.
 @Slf4j
 @ControllerAdvice
 @RestControllerAdvice

@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import project.studycafe.domain.form.member.CommonMemberForm;
-import project.studycafe.domain.product.OrderItem;
-import project.studycafe.domain.product.Product;
-import project.studycafe.service.member.MemberService;
+import project.studycafe.app.service.OrderService;
+import project.studycafe.app.domain.Order;
+import project.studycafe.app.controller.form.member.CommonMemberForm;
+import project.studycafe.app.domain.product.OrderItem;
+import project.studycafe.app.domain.product.Product;
+import project.studycafe.app.service.member.MemberService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,7 @@ public class OrderServiceTest {
         orderItems.add(item3);
         log.info("{}", item3.getCount());
 
-//        Order order = Order.createOrder()
+        Order order = Order.createOrder()
 
     }
 

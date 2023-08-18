@@ -6,16 +6,17 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import project.studycafe.formatter.LocalDateTimeFormatter;
-import project.studycafe.interceptor.LoginCheckInterceptor;
-import project.studycafe.interceptor.SessionInterceptor;
-import project.studycafe.resolver.argumentresolver.LoginMemberArgumentResolver;
+import project.studycafe.helper.formatter.LocalDateTimeFormatter;
+import project.studycafe.helper.interceptor.LoginCheckInterceptor;
+import project.studycafe.helper.interceptor.SessionInterceptor;
+import project.studycafe.helper.resolver.argumentresolver.LoginMemberArgumentResolver;
 
 import java.util.List;
 
+
+@Configuration
 //BaseTimeEntity 클래스를 사용하는 패키지의 Configuration 클래스에서 @EnableJpaAuditing 어노테이션을 추가하여 Auditing 기능을 활성화해야 합니다.
 @EnableJpaAuditing
-@Configuration
 public class OptionConfig implements WebMvcConfigurer {
 
     @Override
