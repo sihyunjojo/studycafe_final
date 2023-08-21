@@ -105,9 +105,9 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public String board(@PathVariable long boardId, Model model) {
-        log.info("class = {}", getClass());
 //        Board board = boardService.findById(boardId).orElseThrow();
-        Board board = boardService.getBoardWithMemberCommentAttachmentFile(boardId);
+        Board board = boardService.getBoardWithMemberCommentReplyAttachmentFile(boardId);
+
         boardService.increaseReadCount(board);
         BoardForm boardForm = boardService.boardToBoardForm(board);
 

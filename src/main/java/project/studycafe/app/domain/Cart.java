@@ -1,5 +1,6 @@
 package project.studycafe.app.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,20 +12,26 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor
+@Getter @Setter(AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cart extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CartProduct> cartProductList;
+
+    public static Cart createCart(Member member) {
+        Cart cart = new Cart();
+        cart.setMember(member);
+        return cart;
+    }
 
     @Override
     public String toString() {

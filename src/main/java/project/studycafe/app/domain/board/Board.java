@@ -8,13 +8,13 @@ import project.studycafe.app.domain.board.Info.BoardBaseInfo;
 import project.studycafe.app.domain.member.Member;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static project.studycafe.app.domain.base.Statistics.createStatistics;
 
 @Entity
-@NoArgsConstructor
+@Setter(AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,15 +31,16 @@ public class Board extends BaseTimeEntity {
     private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new HashSet<>();
 
     public static Board createBoard(Member member, BoardBaseInfo boardBaseInfo) {
         Board board = new Board();
 
         board.setMember(member);
         board.setBoardBaseInfo(boardBaseInfo);
-        board.setStatistics(new Statistics(0, 0));
-
+        board.setBoardAddInfo(BoardAddInfo.createBoardAddInfo(new ArrayList<>()));
+        board.setComments(new HashSet<>());
+        board.setStatistics(createStatistics(0, 0));
         return board;
     }
 
@@ -67,7 +68,8 @@ public class Board extends BaseTimeEntity {
     public Map<String, Object> toMap() {
         Map<String, Object> boardMap = new HashMap<>();
         boardMap.put("id", id);
-        boardMap.put("member", member);
+        boardMap.put("memberName", member.toMap().get("name"));
+        boardMap.put("memberNickname", member.toMap().get("nickname"));
         boardMap.put("title", boardBaseInfo.toMap().get("title"));
         boardMap.put("category", boardBaseInfo.toMap().get("category"));
         boardMap.put("content", boardBaseInfo.toMap().get("content"));
@@ -75,7 +77,7 @@ public class Board extends BaseTimeEntity {
         boardMap.put("updateTime", super.getUpdatedTime());
         boardMap.put("readCount", statistics.toMap().get("readCount"));
         boardMap.put("likeCount", statistics.toMap().get("likeCount"));
-        boardMap.put("attachmentFiles", boardAddInfo.toMap().get("attachmentFiles"));
+        boardMap.put("attachmentFiles", (List<AttachmentFile>) boardAddInfo.toMap().get("attachmentFiles"));
         boardMap.put("comments", comments);
         return boardMap;
     }
@@ -141,17 +143,5 @@ public class Board extends BaseTimeEntity {
     private void setMember(Member member) {
         this.member = member;
         member.addBoard(this);
-    }
-
-    private void setBoardBaseInfo(BoardBaseInfo boardBaseInfo) {
-        this.boardBaseInfo = boardBaseInfo;
-    }
-
-    private void setBoardAddInfo(BoardAddInfo boardAddInfo) {
-        this.boardAddInfo = boardAddInfo;
-    }
-
-    private void setStatistics(Statistics statistics) {
-        this.statistics = statistics;
     }
 }

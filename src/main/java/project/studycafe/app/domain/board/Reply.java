@@ -1,5 +1,6 @@
 package project.studycafe.app.domain.board;
 
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import project.studycafe.app.domain.base.BaseTimeEntity;
 import project.studycafe.app.domain.member.Member;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reply extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

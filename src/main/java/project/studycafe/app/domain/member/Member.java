@@ -14,7 +14,9 @@ import project.studycafe.app.domain.enums.MemberLevel;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Entity
@@ -65,7 +67,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Delivery> deliveries = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Cart cart;
 
     @PrePersist
@@ -78,6 +80,12 @@ public class Member extends BaseTimeEntity {
         }
     }
 
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("nickname", nickname);
+        return map;
+    }
     public void addBoard(Board board) {
         this.boards.add(board);
     }
@@ -98,10 +106,7 @@ public class Member extends BaseTimeEntity {
     }
 
     //==연관관계 메서드==//
-    public void setCart(Cart cart) {
-        this.cart = cart;
-        cart.setMember(this);
-    }
+
 
 
     @Override

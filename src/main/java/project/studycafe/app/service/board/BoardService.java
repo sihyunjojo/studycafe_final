@@ -16,6 +16,7 @@ import project.studycafe.app.repository.board.board.JpaBoardRepository;
 import project.studycafe.app.repository.member.JpaMemberRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -95,6 +96,7 @@ public class BoardService {
     }
 
     public void increaseReadCount(Board board) {
+        log.info("board ={}", board);
         board.upReadCount();
     }
 
@@ -110,10 +112,12 @@ public class BoardService {
         findBoard.downReadCount();
     }
 
-    public Board getBoardWithMemberCommentAttachmentFile(long boardId){
-        Board board = boardQueryRepository.findByIdWithMemberCommentByQuery(boardId);
-//        List<AttachmentFile> attachmentFiles = boardQueryRepository.getAttachmentFilesByBoardId(boardId);
-//        board.addAttachmentFiles(attachmentFiles);
+    public Board getBoardWithMemberCommentReplyAttachmentFile(long boardId){
+        Board board = boardQueryRepository.findByIdWithMemberAttachmentFileByQuery(boardId);
+        log.info("board = {}", board);
+//        List<Comment> commentsAndReplys= boardQueryRepository.getCommentReplyByBoardId(boardId);
+//        log.info("comment = {}", commentsAndReplys);
+//        board.addComment(commentsAndReplys);
 
         return board;
 
@@ -124,14 +128,16 @@ public class BoardService {
                 .map(Board::toMap)
                 .map(boardMap -> new BoardForm(
                         (Long) boardMap.get("id"),
-                        ((Member) boardMap.get("member")).getNickname(),
-                        ((Member) boardMap.get("member")).getName(),
+                        (String) boardMap.get("memberName"),
+                        (String) boardMap.get("memberNickname"),
                         (String) boardMap.get("title"),
                         (String) boardMap.get("category"),
                         (String) boardMap.get("content"),
                         (LocalDateTime) boardMap.get("createdTime"),
-                        AttachmentFileForm.createAttachmentFileForms((List<AttachmentFile>) boardMap.get("attachmentFiles")),
-                        CommentForm.createCommentForms((List<Comment>) boardMap.get("comments")),
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+//                        AttachmentFileForm.createAttachmentFileForms((List<AttachmentFile>) boardMap.get("attachmentFiles")),
+//                        CommentForm.createCommentForms((List<Comment>) boardMap.get("comments")),
                         (Integer) boardMap.get("readCount"),
                         (Integer) boardMap.get("likeCount")
                 ))
@@ -140,12 +146,15 @@ public class BoardService {
 
     public BoardForm boardToBoardForm(Board board) {
 
+        log.info("board = {}", board);
         Map<String, Object> boardMap = board.toMap();
 
+        log.info("attachmentFiles = {}", boardMap.get("attachmentFiles")); //sql 발생 = 처음으로 attachentFiles를 찾는 곳에서
+        log.info("comments = {}", boardMap.get("comments"));
         return new BoardForm(
                 (Long) boardMap.get("id"),
-                ((Member) boardMap.get("member")).getNickname(),
-                ((Member) boardMap.get("member")).getName(),
+                (String) boardMap.get("memberName"),
+                (String) boardMap.get("memberNickname"),
                 (String) boardMap.get("title"),
                 (String) boardMap.get("category"),
                 (String) boardMap.get("content"),
@@ -155,9 +164,5 @@ public class BoardService {
                 (Integer) boardMap.get("readCount"),
                 (Integer) boardMap.get("likeCount")
         );
-
-//        return new BoardForm(board.getId(), board.getMember().getNickname(), board.getMember().getName(), board.getTitle(), board.getCategory(), board.getContent(),
-//                board.getCreatedTime(), board.getAttachmentFiles(), board.getPopup(), board.getReadCount(), board.getLikeCount());
-
     }
 }

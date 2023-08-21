@@ -1,10 +1,10 @@
 package project.studycafe.app.domain.base;
 
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
@@ -15,8 +15,8 @@ import java.util.Map;
 //통계
 @ToString
 @Embeddable
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Statistics {
     @NotNull
     private Integer readCount;
@@ -24,7 +24,6 @@ public class Statistics {
     private Integer likeCount;
 
     //영속상태로 변하기 직전에 시점에 시작됨.
-
     @PrePersist
     public void setting(){
         if (this.likeCount == null) {
@@ -33,6 +32,11 @@ public class Statistics {
         if (this.readCount == null) {
             this.readCount = 0;
         }
+    }
+
+    public static Statistics createStatistics(int readCount,int likeCount) {
+        Statistics statistics = new Statistics(readCount, likeCount);
+        return statistics;
     }
 
     public Map<String, Object> toMap() {

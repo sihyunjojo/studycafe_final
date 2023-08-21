@@ -6,8 +6,7 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter @ToString
-@NoArgsConstructor
-@EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
 
     private String city = "";

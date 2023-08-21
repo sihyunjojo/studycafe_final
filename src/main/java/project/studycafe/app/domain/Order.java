@@ -1,5 +1,6 @@
 package project.studycafe.app.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import static project.studycafe.app.domain.enums.status.OrderStatus.WAIT;
 @Slf4j
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Table(name = "orders")
 public class Order extends BaseTimeEntity {
 
@@ -59,7 +60,7 @@ public class Order extends BaseTimeEntity {
         }
         if (this.totalPrice == 0) {
             for (OrderItem orderItem : orderItems) {
-                log.info("+ Price ={} , {} , {}", orderItem.getAllPrice(),orderItem, orderItems);
+                log.info("+ Price ={} , {} , {}", orderItem.getAllPrice(), orderItem, orderItems);
                 this.totalPrice += orderItem.getAllPrice();
             }
         }
@@ -75,7 +76,7 @@ public class Order extends BaseTimeEntity {
         log.info("orderItem = {}", orderItem);
         orderItems.add(orderItem);
         orderItem.setOrder(this);
-        log.info("orderItem4 = {}",this.totalPrice);
+        log.info("orderItem4 = {}", this.totalPrice);
     }
 
     public void setDelivery(Delivery delivery) {
@@ -96,14 +97,14 @@ public class Order extends BaseTimeEntity {
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
-        log.info("orderItem1 = {}",orderItems);
-        log.info("orderItem2 = {}",order.totalPrice);
+        log.info("orderItem1 = {}", orderItems);
+        log.info("orderItem2 = {}", order.totalPrice);
 
         return order;
     }
 
     public static Order createOrder(Member member, List<OrderItem> orderItems) {
-        log.info("orderItem2 = {}",orderItems);
+        log.info("orderItem2 = {}", orderItems);
         Order order = new Order();
         order.setMember(member);
         for (OrderItem orderItem : orderItems) {

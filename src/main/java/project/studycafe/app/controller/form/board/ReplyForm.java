@@ -31,8 +31,8 @@ public class ReplyForm {
 
             replyForm.setId((Long) replyMap.get("id"));
             replyForm.setBoardId(((Comment) replyMap.get("comment")).getId());
-            replyForm.setMemberId(( (Member) replyMap.get("member")).getId());
-            replyForm.setMemberName(( (Member) replyMap.get("member")).getName());
+            replyForm.setMemberId(((Member) replyMap.get("member")).getId());
+            replyForm.setMemberName(((Member) replyMap.get("member")).getName());
             replyForm.setContent((String) replyMap.get("content"));
             replyForms.add(replyForm);
         }

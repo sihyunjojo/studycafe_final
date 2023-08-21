@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static project.studycafe.app.domain.Cart.createCart;
+
 @Slf4j
 @Service
 @Transactional
@@ -30,12 +32,9 @@ public class CartService {
     private final JpaMemberRepository memberRepository;
 
     public Optional<Cart> addCart(Member member) {
-        log.info("member ={}", member);
-
-        Cart cart = new Cart();
-        cart.setMember(member);
-
+        Cart cart = createCart(member);
         cartRepository.save(cart);
+
         return Optional.of(cart);
     }
 

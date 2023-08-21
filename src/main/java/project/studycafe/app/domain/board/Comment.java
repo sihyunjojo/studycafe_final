@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,17 +62,6 @@ public class Comment extends BaseTimeEntity {
         return map;
     }
 
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", member=" + member.getId() +
-                ", board=" + board.getId() +
-                ", content='" + content + '\'' +
-                '}';
-    }
-
     public Long getId(){
         Long newId = id;
         return newId;
@@ -94,5 +83,16 @@ public class Comment extends BaseTimeEntity {
 
     private void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", member=" + member.getId() +
+                ", board=" + board.getId() +
+                ", content='" + content + '\'' +
+                ", replies size=" + replies.size() +
+                '}';
     }
 }

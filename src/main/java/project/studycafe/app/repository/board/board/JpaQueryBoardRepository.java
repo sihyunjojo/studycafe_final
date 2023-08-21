@@ -4,6 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.util.StringUtils;
 import project.studycafe.app.domain.board.AttachmentFile;
 import project.studycafe.app.domain.board.Board;
@@ -14,65 +15,45 @@ import java.util.List;
 
 import static project.studycafe.app.domain.board.QBoard.board;
 import static project.studycafe.app.domain.board.QComment.comment;
+import static project.studycafe.app.domain.board.QReply.reply;
+import static project.studycafe.app.domain.board.QAttachmentFile.attachmentFile;
 import static project.studycafe.app.domain.member.QMember.member;
 
 
 public class JpaQueryBoardRepository {
-    private final EntityManager em;
     private final JPAQueryFactory query;
 
     public JpaQueryBoardRepository(EntityManager em) {
-        this.em = em;
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<Board> findAllWithMemberCommentReply() {
-        return em.createQuery(
-                "select b from Board b" +
-                        " join fetch b.member m" +
-                        " join fetch b.comments c" +
-                        " join fetch c.replies r", Board.class
-        ).getResultList();
-    }
 
-    public Board findByIdWithMemberComment(long boardId) {
-        return em.createQuery(
-                        "select b from Board b" +
-                                " join fetch b.member m" +
-                                " join fetch b.comments c" +
-                                " where b.id = :boardId", Board.class
-                ).setParameter("boardId", boardId).
-                getSingleResult();
-    }
-    public Board findByIdWithMemberCommentByQuery(long boardId) {
-        return query
+    @EntityGraph(attributePaths = {"boardAddInfo.attachmentFiles"})
+    public Board findByIdWithMemberAttachmentFileByQuery(long boardId) {
+        Board result = query
                 .selectFrom(board)
                 .join(board.member, member).fetchJoin()
-                .join(board.comments, comment).fetchJoin()
+                .join(member.cart).fetchJoin() // member의 cart필드까지 한번에 가져와야해서, 이렇게 안하면 sql2번 되더라.
+                .join(board.boardAddInfo.attachmentFiles, attachmentFile).fetchJoin()
                 .where(board.id.eq(boardId))
                 .fetchOne();
-    } //JPA에서 Fetch Join의 조건은 다음과 같다.
-
-    //ToOne은 몇개든 사용 가능
-    //ToMany는 1개만 가능
-
-    public List<AttachmentFile> getAttachmentFilesByBoardId(long boardId) {
-        return em.createQuery(
-                        "select a from AttachmentFile a" +
-                                " where a.board.id = :boardId", AttachmentFile.class
-                ).setParameter("boardId", boardId).
-                getResultList();
+//        if (result == null) {
+//            return query
+//                    .selectFrom(board)
+//                    .join(board.member, member).fetchJoin()
+//                    .join(member.cart).fetchJoin() // member의 cart필드까지 한번에 가져와야해서, 이렇게 안하면 sql2번 되더라.
+//                    .where(board.id.eq(boardId))
+//                    .fetchOne();
+//        }
+        return result;
     }
-
-
-
-
+    //JPA에서 Fetch Join의 조건은 다음과 같다.
+    //ToOne은 몇개든 사용 가능, ToMany는 1개만 가능
 
 
     // 기본이 최신순임.
     public List<Board> findSearchedAndSortedBoards(BoardSearchCond cond) {
-        return query.select(board)
-                .from(board)
+        return query.selectFrom(board)
                 .where(
                         likeBoardTitle(cond.getTitle()),
                         likeCreatedMemberNickName(cond.getUserNickname()),

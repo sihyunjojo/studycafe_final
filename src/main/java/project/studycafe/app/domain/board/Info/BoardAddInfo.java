@@ -1,6 +1,6 @@
 package project.studycafe.app.domain.board.Info;
 
-import lombok.ToString;
+import lombok.*;
 import project.studycafe.app.domain.board.AttachmentFile;
 
 import javax.persistence.CascadeType;
@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 @ToString
 @Embeddable
+@Setter(AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardAddInfo {
 
     //Cascadetype.all을 하게되면 세션에 2개의 같은 pk를 가진 attach 엔티티가 발생하여서 에러가 발생한다.
@@ -21,6 +23,11 @@ public class BoardAddInfo {
     private List<AttachmentFile> attachmentFiles = new ArrayList<>(); // 추후에 객체 따로만들어야할지도
 
 
+    public static BoardAddInfo createBoardAddInfo(List<AttachmentFile> attachmentFiles) {
+        BoardAddInfo boardAddInfo = new BoardAddInfo();
+        boardAddInfo.setAttachmentFiles(attachmentFiles);
+        return boardAddInfo;
+    }
     public void removeAttachmentFile(AttachmentFile attachmentFile) {
         this.attachmentFiles.remove(attachmentFile);
     }
