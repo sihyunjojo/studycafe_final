@@ -231,6 +231,17 @@ fetch join을 이용한 성능향상에서
 board를 조회할때, comment나 attachment처럼 선택적으로 들어가는 것들을 fetch join 을 하니 없을시 null값이 반환되었다.  
 그 뒤에 하나씩 존재하는 것을 하나씩 불러오는게 좋을거 같은데, 더 좋은 방법이 없을까?
 
+우선 member는 board와 뗄 수 없는 관계이고, cart또한 member의 연관관계이므로
+
+# 8/22
+board의 선택적인 객체들을 어떻게 조회할까 고민하였는데, board 와 직접적인 연관관계가 맺혀있는 엔티티들은 어쩔 수 없이, 각각 따로 불러오는 방식을 사용했고,    
+reply의 경우는 comment와 연관관계가 맺혀있기 떄문에  
+삼항연산자로 comment 가 없으면 reply 쿼리를 안 불러와도 되게 하여 쿼리를 하나 줄였다.  
+
+Error 발생시 , error 컨트롤(기본 error 화면이 아니라, 사용자 오류시, 어떤 원인으로 오류가 발생했는지 알려주고, 이전 페이지로 안내)
+interceptor와 spring error controll로 만듬.  
+
+
 ### 해야할 것들
 AOP(관점지향 프로그래밍) -  로그추적기, 김영한님
 getter 쓰지 말라고 함. setter도 쓰지말라고 함.  

@@ -28,13 +28,11 @@ public class JpaQueryBoardRepository {
     }
 
 
-    @EntityGraph(attributePaths = {"boardAddInfo.attachmentFiles"})
-    public Board findByIdWithMemberAttachmentFileByQuery(long boardId) {
+    public Board findByIdWithMemberByQuery(long boardId) {
         Board result = query
                 .selectFrom(board)
-                .join(board.member, member).fetchJoin()
-                .join(member.cart).fetchJoin() // member의 cart필드까지 한번에 가져와야해서, 이렇게 안하면 sql2번 되더라.
-                .join(board.boardAddInfo.attachmentFiles, attachmentFile).fetchJoin()
+//                .join(board.member, member).fetchJoin()
+//                .join(member.cart).fetchJoin() // member의 cart필드까지 한번에 가져와야해서, 이렇게 안하면 sql2번 되더라.
                 .where(board.id.eq(boardId))
                 .fetchOne();
 //        if (result == null) {

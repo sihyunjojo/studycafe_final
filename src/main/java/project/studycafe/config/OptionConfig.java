@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.studycafe.helper.formatter.LocalDateTimeFormatter;
 import project.studycafe.helper.interceptor.LoginCheckInterceptor;
+import project.studycafe.helper.interceptor.PreAddressInterceptor;
 import project.studycafe.helper.interceptor.SessionInterceptor;
 import project.studycafe.helper.resolver.argumentresolver.LoginMemberArgumentResolver;
 
@@ -44,6 +45,13 @@ public class OptionConfig implements WebMvcConfigurer {
                 );
         registry.addInterceptor(new SessionInterceptor())
                 .order(2)
+                .addPathPatterns("/**")
+                .excludePathPatterns
+                        (
+                                "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**"
+                        );
+        registry.addInterceptor(new PreAddressInterceptor())
+                .order(3)
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (

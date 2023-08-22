@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import project.studycafe.app.domain.base.BaseTimeEntity;
-import project.studycafe.helper.exception.NotEnoughStockException;
+import project.studycafe.helper.exception.order.NotEnoughStockException;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

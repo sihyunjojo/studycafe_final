@@ -1,4 +1,4 @@
-package project.studycafe.handler.exceptionHandler;
+package project.studycafe.helper.handler.exceptionHandler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

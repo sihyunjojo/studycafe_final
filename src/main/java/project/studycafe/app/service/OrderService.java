@@ -20,7 +20,7 @@ import project.studycafe.app.controller.form.order.OrderUserForm;
 import project.studycafe.app.service.dto.searchDto.OrderSearchCond;
 import project.studycafe.app.domain.member.Member;
 import project.studycafe.app.domain.product.OrderItem;
-import project.studycafe.helper.exception.NotFindOrderItemException;
+import project.studycafe.helper.exception.order.NotFindOrderItemException;
 import project.studycafe.app.repository.member.JpaMemberRepository;
 import project.studycafe.app.repository.order.OrderQueryRepository;
 import project.studycafe.app.repository.order.OrderRepository;
@@ -98,17 +98,14 @@ public class OrderService {
             }
         }
 
-        order.setTotalPrice(updateOrderTotalPrice);
-
         Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
         Delivery updateDelivery = new Delivery(member, updateAddress, stringToDeliveryStatus(form.getDeliveryStatus()));
         if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
             log.info("add Delivery");
             deliveryRepository.save(updateDelivery);
         }
-        order.setDelivery(updateDelivery);
 
-        order.setStatus(stringToOrderStatus(form.getOrderStatus()));
+        order.updateOrder(updateOrderTotalPrice, updateDelivery, stringToOrderStatus(form.getOrderStatus()));
     }
 
     public void updateUserOrder(Long orderId, OrderUserForm form) {
@@ -124,15 +121,15 @@ public class OrderService {
             }
         }
 
-        order.setTotalPrice(updateOrderTotalPrice);
-
         Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
         Delivery updateDelivery = new Delivery(member, updateAddress, READY);
         if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
             log.info("add Delivery");
             deliveryRepository.save(updateDelivery);
         }
-        order.setDelivery(updateDelivery);
+
+        order.updateOrder(updateOrderTotalPrice, updateDelivery);
+
     }
 
     public void deleteOrder(long orderId) {
@@ -145,7 +142,7 @@ public class OrderService {
 
     public void cancelOrder(long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
-        order.setStatus(CANCEL);
+        order.updateOrderStatus(CANCEL);
     }
 
     public List<Order> getOrderList(int page, Integer perPageNum, List<Order> orders) {

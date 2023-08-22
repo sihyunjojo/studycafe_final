@@ -10,8 +10,9 @@ import java.util.List;
 
 
 public interface JpaBoardRepository extends JpaRepository<Board, Long> { ;
-    @EntityGraph(attributePaths = {"boardAddInfo.attachmentFiles"})
+    @EntityGraph(attributePaths = {"member"})
     List<Board> findAllByBoardBaseInfo_CategoryNotOrderByCreatedTimeDesc(String category);
+    @EntityGraph(attributePaths = {"member"})
     List<Board> findAllByBoardBaseInfo_CategoryOrderByCreatedTimeDesc(String category);
     //Containing은 해당 리스트 필드에서 포함되는 값을 찾는 조건을 나타냅니다.
     List<Board> findALlByBoardAddInfo_AttachmentFiles(AttachmentFile File);

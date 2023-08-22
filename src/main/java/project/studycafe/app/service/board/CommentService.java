@@ -47,8 +47,4 @@ public class CommentService {
     public void deleteComment(long commentId) {
         commentRepository.deleteById(commentId);
     }
-
-    public List<Comment> findByBoardId(Long boardId) {
-        return  commentRepository.findByBoardId(boardId);
-    }
 }

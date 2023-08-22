@@ -10,14 +10,18 @@ import project.studycafe.app.controller.form.order.OrderForm;
 import project.studycafe.app.controller.form.order.OrderNowForm;
 import project.studycafe.app.controller.form.order.OrderUserForm;
 import project.studycafe.app.domain.Order;
+import project.studycafe.app.domain.enums.status.OrderStatus;
 import project.studycafe.app.service.dto.PageMaker;
 import project.studycafe.app.domain.enums.MemberLevel;
 import project.studycafe.app.service.dto.searchDto.OrderSearchCond;
 import project.studycafe.app.domain.member.Member;
+import project.studycafe.helper.exception.order.DoNotEditByDeliveryStartedException;
 import project.studycafe.helper.resolver.argumentresolver.Login;
 import project.studycafe.app.service.OrderService;
 
 import java.util.List;
+
+import static project.studycafe.app.domain.enums.status.OrderStatus.WAIT;
 
 @Slf4j
 @Controller
@@ -126,8 +130,13 @@ public class OrderController {
 
         if (loginMember.getMemberLevel().equals(MemberLevel.MASTER)) {
             return "order/editOrderForm";
-        } else if (loginMember.getMemberLevel().equals(MemberLevel.USER)) {
-            return "order/editOrderUserForm";
+        }
+
+        if (loginMember.getMemberLevel().equals(MemberLevel.USER)) {
+            if (order.getOrderStatus().equals(WAIT)) {
+                return "order/editOrderUserForm";
+            }
+            throw new DoNotEditByDeliveryStartedException("배송이 이미 시작되어서, 변경 하실 수 없습니다.");
         }
 
         return "order/editOrderUserForm";

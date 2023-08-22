@@ -20,9 +20,12 @@ import static project.studycafe.app.domain.enums.status.OrderStatus.WAIT;
 
 @Slf4j
 @Entity
-@Getter @Setter
+// 타임리프에 객체 통째로 보내서 getter public 으로 해야함..
+@Getter @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Table(name = "orders")
+@NamedEntityGraph(name = "Order.withMember", attributeNodes = {
+        @NamedAttributeNode("member")})
 public class Order extends BaseTimeEntity {
 
     @Id
@@ -45,10 +48,10 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "delivery_Id") // delivery 를 어떤 이름으로 order 테이블의 컬럼명으로 저장하는지
     private Delivery delivery;
 
-    // 추후 결재 할시 결재 정보
-
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    // 추후 결재 할시 결재 정보
 
     @PrePersist
     void setting() {
@@ -66,30 +69,7 @@ public class Order extends BaseTimeEntity {
         }
     }
 
-    //==연관관계 메서드==//
-    public void setMember(Member member) {
-        this.member = member;
-        member.getOrders().add(this);
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-        log.info("orderItem = {}", orderItem);
-        orderItems.add(orderItem);
-        orderItem.setOrder(this);
-        log.info("orderItem4 = {}", this.totalPrice);
-    }
-
-    public void setDelivery(Delivery delivery) {
-        this.delivery = delivery;
-        delivery.setOrder(this);
-    }
-
-    public void removeOrderItems(OrderItem orderItem) {
-        orderItem.setOrder(null); // Set the order item's order reference to null
-        this.orderItems.remove(orderItem);
-    }
-
-
+    //==비즈니스 로직==//
     public static Order createOrder(Member member, OrderItem... orderItems) {
         Order order = new Order();
         order.setDelivery(new Delivery(member, new Address(), DeliveryStatus.READY));
@@ -124,7 +104,25 @@ public class Order extends BaseTimeEntity {
         return order;
     }
 
-    //==비즈니스 로직==//
+    public void updateOrder(Integer totalPrice, Delivery delivery, OrderStatus orderStatus) {
+        setDelivery(delivery);
+        setTotalPrice(totalPrice);
+        setStatus(orderStatus);
+    }
+
+    public void updateOrder(Integer totalPrice, Delivery delivery) {
+        setDelivery(delivery);
+        setTotalPrice(totalPrice);
+    }
+
+    public void updateOrderStatus(OrderStatus orderStatus) {
+        setStatus(orderStatus);
+    }
+
+    public void removeOrderItems(OrderItem orderItem) {
+        orderItem.setOrder(null); // Set the order item's order reference to null
+        this.orderItems.remove(orderItem);
+    }
 
     /**
      * 주문 취소
@@ -138,6 +136,33 @@ public class Order extends BaseTimeEntity {
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }
+    }
+
+
+    //==연관관계 메서드==//
+    public void setMember(Member member) {
+        this.member = member;
+        member.getOrders().add(this);
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        log.info("orderItem = {}", orderItem);
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+        log.info("orderItem4 = {}", this.totalPrice);
+    }
+
+    private void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
+
+    public long getId(){
+        return id;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return status;
     }
 
     @Override
@@ -163,19 +188,5 @@ public class Order extends BaseTimeEntity {
         sb.append('}');
         return sb.toString();
     }
-
-
-    //    public void setOrderItem(OrderItem orderItem) {
-//        log.info("orderItem = {}", orderItem);
-//        this.orderItems = new ArrayList<>();
-//        addOrderItem(orderItem);
-//    }
-
-//    public void setOrderItems(List<OrderItem> orderItems) {
-////        this.orderItems = orderItems;
-//        for (OrderItem orderItem : orderItems) {
-//            orderItem.setOrder(this);
-//        }
-//    }
 
 }

@@ -54,8 +54,6 @@ public class OrderServiceTest {
         orderItems.add(item3);
         log.info("{}", item3.getCount());
 
-        Order order = Order.createOrder()
-
     }
 
 }

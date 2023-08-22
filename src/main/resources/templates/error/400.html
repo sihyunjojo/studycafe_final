@@ -1,17 +1,24 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
+    <head th:insert="~{template/styleCss :: css_copy}"></head>
 </head>
 <body>
 <div class="container" style="max-width: 600px">
-  <div class="py-5 text-center">
-    <h2>400 오류 화면 스프링 부트 제공</h2> </div>
-  <div>
-    <p>사용자 오류 화면 입니다.</p>
-    <th th:text="${errorMessage}">Error Message Placeholder</th>
-  </div>
-  <hr class="my-4">
-</div> <!-- /container -->
+    <div class="py-5 text-center">
+        <!--    <h2>400 오류 화면 스프링 부트 제공</h2> </div>-->
+        <h1>사용자 오류 화면 입니다.</h1>
+        <br>
+        <br>
+
+        <h3 th:text="${errorMessage}">Error Message Placeholder</h3>
+        <br>
+        <br>
+
+        <form th:action="${previousUrl}" method="get">
+            <button type="submit" class="btn btn-success btn-lg">이전으로 돌아가기</button>
+        </form>
+    </div> <!-- /container -->
 </body>
 </html>

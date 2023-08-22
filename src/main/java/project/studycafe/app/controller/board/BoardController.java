@@ -112,7 +112,6 @@ public class BoardController {
         BoardForm boardForm = boardService.boardToBoardForm(board);
 
         model.addAttribute("board", boardForm);
-//        model.addAttribute("comments", comments);
         return "board/board";
     }
 

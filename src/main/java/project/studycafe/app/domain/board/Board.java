@@ -1,6 +1,7 @@
 package project.studycafe.app.domain.board;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import project.studycafe.app.domain.base.BaseTimeEntity;
 import project.studycafe.app.domain.base.Statistics;
 import project.studycafe.app.domain.board.Info.BoardAddInfo;
@@ -12,9 +13,12 @@ import java.util.*;
 
 import static project.studycafe.app.domain.base.Statistics.createStatistics;
 
+@Slf4j
 @Entity
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedEntityGraph(name = "Board.withMember", attributeNodes = {
+        @NamedAttributeNode("member")})
 public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +35,7 @@ public class Board extends BaseTimeEntity {
     private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public static Board createBoard(Member member, BoardBaseInfo boardBaseInfo) {
         Board board = new Board();
@@ -39,7 +43,7 @@ public class Board extends BaseTimeEntity {
         board.setMember(member);
         board.setBoardBaseInfo(boardBaseInfo);
         board.setBoardAddInfo(BoardAddInfo.createBoardAddInfo(new ArrayList<>()));
-        board.setComments(new HashSet<>());
+        board.setComments(new ArrayList<>());
         board.setStatistics(createStatistics(0, 0));
         return board;
     }
@@ -78,7 +82,8 @@ public class Board extends BaseTimeEntity {
         boardMap.put("readCount", statistics.toMap().get("readCount"));
         boardMap.put("likeCount", statistics.toMap().get("likeCount"));
         boardMap.put("attachmentFiles", (List<AttachmentFile>) boardAddInfo.toMap().get("attachmentFiles"));
-        boardMap.put("comments", comments);
+        // 삼항연산자로 comment 가 없으면 reply 쿼리를 안 불러와도 됨.
+        boardMap.put("comments", comments.isEmpty() ? null : comments);
         return boardMap;
     }
 

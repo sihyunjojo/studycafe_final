@@ -71,10 +71,10 @@
         <div class="col">
           <select class="form-select" id="orderStatus" th:field="*{orderStatus}" th:placeholder="주문상태">
             <option th:value>주문상태</option>
-            <option th:value="WAIT" th:selected="${orderStatus == T(project.studycafe.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
-            <option th:value="DELIVERING" th:selected="${orderStatus == T(project.studycafe.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
-            <option th:value="COMPLETE" th:selected="${orderStatus == T(project.studycafe.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
-            <option th:value="CANCEL" th:selected="${orderStatus == T(project.studycafe.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
+            <option th:value="WAIT" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
+            <option th:value="DELIVERING" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
+            <option th:value="COMPLETE" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
+            <option th:value="CANCEL" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
           </select>
         </div>
         <div class="col">

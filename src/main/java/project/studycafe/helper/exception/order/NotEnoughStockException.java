@@ -1,6 +1,8 @@
-package project.studycafe.helper.exception;
+package project.studycafe.helper.exception.order;
 
-public class NotEnoughStockException extends RuntimeException {
+import project.studycafe.helper.exception.UserException;
+
+public class NotEnoughStockException extends UserException {
 
     public NotEnoughStockException() {
         super();

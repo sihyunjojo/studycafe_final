@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class BoardAddInfo {
 
     //Cascadetype.all을 하게되면 세션에 2개의 같은 pk를 가진 attach 엔티티가 발생하여서 에러가 발생한다.
-    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AttachmentFile> attachmentFiles = new ArrayList<>(); // 추후에 객체 따로만들어야할지도
 
 

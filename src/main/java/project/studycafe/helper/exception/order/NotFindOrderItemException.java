@@ -1,7 +1,9 @@
-package project.studycafe.helper.exception;
+package project.studycafe.helper.exception.order;
 
 
-public class NotFindOrderItemException extends RuntimeException {
+import project.studycafe.helper.exception.UserException;
+
+public class NotFindOrderItemException extends UserException {
     public NotFindOrderItemException() {
         super();
     }

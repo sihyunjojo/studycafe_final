@@ -26,6 +26,9 @@ public class CommentForm {
     private String content;
 
     public static List<CommentForm> createCommentForms(List<Comment> comments) {
+        if (comments == null) {
+            return new ArrayList<>();
+        }
         List<CommentForm> commentForms = new ArrayList<>();
 
         for (Comment comment : comments) {
