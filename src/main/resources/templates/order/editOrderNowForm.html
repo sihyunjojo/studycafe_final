@@ -12,7 +12,7 @@
 <div class="container">
     <h3 th:text="|${order.orderItems.get(0).product.name} 바로 주문|"> 주문 </h3>
     <hr>
-    <form th:action="@{|/order/edit/${orderId}/now|}" method="post">
+    <form th:action="@{|/order/${orderId}/edit/now|}" method="post">
         <input type="hidden" name="id" th:value="${order.id}">
         <input type="hidden" name="memberId" th:value="${order.member.id}">
         <input type="hidden" name="productId" th:value="${order.orderItems[0].product.id}">

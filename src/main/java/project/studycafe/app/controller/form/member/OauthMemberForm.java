@@ -23,7 +23,6 @@ public class OauthMemberForm implements MemberForm {
     private String nickname;
     private String gender;
 
-    @NotNull
     private String phone;
 
     private String city;

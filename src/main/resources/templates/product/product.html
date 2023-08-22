@@ -83,7 +83,7 @@
                th:value="${{product.updatedTime}}" readonly>
     </div>
     <hr>
-    <form th:action="@{|/order/add/${productId}/now|}" method="post">
+    <form th:action="@{|/order/${productId}/add/now|}" method="post">
         <label for="productCount">구매 수량</label>
         <input type="text" id="productCount" name="productCount" th:value="${1}" required>
         <input type="hidden" th:name="memberId" th:value="${loginMember != null ? loginMember.id : ''}"/>

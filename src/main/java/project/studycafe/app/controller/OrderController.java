@@ -98,15 +98,14 @@ public class OrderController {
 
 
     //product.html에서 구매하면 member,product 로 order 만들어서 추가정보 입력하게해주게 보내줌.
-    @PostMapping("/add/{productId}/now")
+    @PostMapping("/{productId}/add/now")
     public String addOrderNow(@Login Member loginMember, @PathVariable Long productId, OrderNowForm form) {
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/product/" + productId;
         }
 
         long orderId = orderService.addOrderNow(form);
-        return "redirect:/order/edit/" + orderId
-                + "/user";
+        return "redirect:/order/" + orderId + "/edit/user";
     }
 
     @PostMapping("/add/cart")
@@ -117,13 +116,12 @@ public class OrderController {
 
         long orderId = orderService.addOrderCart(form);
         //결제 창으로 넘겨줘야함.
-        return "redirect:/order/edit/" + orderId
-                +"/user";
+        return "redirect:/order/" + orderId + "/edit/user";
     }
 
 
     //master control
-    @GetMapping("/edit/{orderId}")
+    @GetMapping("/{orderId}/edit")
     public String editForm(@Login Member loginMember, @PathVariable Long orderId, Model model) {
         Order order = orderService.findById(orderId).orElseThrow();
         model.addAttribute("order", order);
@@ -142,7 +140,7 @@ public class OrderController {
         return "order/editOrderUserForm";
     }
 
-    @GetMapping("/edit/{orderId}/user")
+    @GetMapping("/{orderId}/edit/user")
     public String editOrderCartForm(@PathVariable long orderId, Model model) {
         Order order = orderService.findById(orderId).orElseThrow();
         model.addAttribute("order", order);
@@ -150,14 +148,14 @@ public class OrderController {
     }
 
 
-    @PostMapping("/edit/{orderId}")
-    public String editOrderNow(@PathVariable Long orderId, OrderForm form) {
+    @PostMapping("/{orderId}/edit")
+    public String editOrder(@PathVariable Long orderId, OrderForm form) {
         log.info("form = {}", form);
         orderService.updateOrder(orderId, form);
         return "redirect:/order/" + orderId;
     }
-    @PostMapping("/edit/{orderId}/user")
-    public String editOrderNow(@PathVariable long orderId, OrderUserForm form) {
+    @PostMapping("/{orderId}/edit/user")
+    public String editOrderUser(@PathVariable long orderId, OrderUserForm form) {
         log.info("OrderCartForm = {}", form);
         orderService.updateUserOrder(orderId, form);
         // 지금은 오더화면으로 넘겨주지만, 나중에는 결제창으로 넘겨줘야함.

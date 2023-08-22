@@ -157,7 +157,7 @@ public class Order extends BaseTimeEntity {
         delivery.setOrder(this);
     }
 
-    public long getId(){
+    public Long getId(){
         return id;
     }
 

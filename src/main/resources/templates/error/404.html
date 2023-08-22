@@ -19,10 +19,20 @@
     </div>
     <br>
     <br>
-    <form th:action="${previousUrl}" method="get">
-        <button type="submit" class="btn btn-success btn-lg">이전으로 돌아가기</button>
-    </form>
-    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <form th:action="${previousUrl}" method="get">
+                <button type="submit" class="btn btn-success btn-lg">이전으로 돌아가기</button>
+            </form>
+        </div>
+        <div class="col">
+            <button th:onclick="|location.href='@{/}'|"
+                    type="button" class="btn btn-success btn-lg">홈으로 돌아가기
+            </button>
+        </div>
+    </div>
+
 </div> <!-- /container -->
 </body>
 </html>

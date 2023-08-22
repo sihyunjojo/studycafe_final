@@ -12,7 +12,7 @@
 <div class="container">
     <h3 th:text="|${order.id}주문 수정|"> 주문 </h3>
     <hr>
-    <form th:action="@{|/order/edit/${orderId}|}" method="post">
+    <form th:action="@{|/order/${orderId}/edit|}" method="post">
         <input type="hidden" name="id" th:value="${order.id}">
         <input type="hidden" name="memberId" th:value="${order.member.id}">
 
@@ -75,32 +75,20 @@
             <div class="form-group">
                 <label for="orderStatus">주문 상태</label><br>
                 <select class="form-select" id="orderStatus" name="orderStatus" required>
-                    <option th:value="WAIT" th:selected="${order.status == T(project.studycafe.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
-                    <option th:value="DELIVERING" th:selected="${order.status == T(project.studycafe.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
-                    <option th:value="COMPLETE" th:selected="${order.status == T(project.studycafe.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
-                    <option th:value="CANCEL" th:selected="${order.status == T(project.studycafe.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
+                    <option th:value="WAIT" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
+                    <option th:value="DELIVERING" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
+                    <option th:value="COMPLETE" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
+                    <option th:value="CANCEL" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="deliveryStatus">배달 상태</label><br>
                 <select class="form-select" id = "deliveryStatus" name="deliveryStatus" th:value="${order.delivery.status}" required>
-                    <option th:value="READY" th:selected="${order.delivery.status == T(project.studycafe.domain.enums.status.DeliveryStatus).READY}">READY</option>
-                    <option th:value="DELIVERING" th:selected="${order.delivery.status == T(project.studycafe.domain.enums.status.DeliveryStatus).DELIVERING}">DELIVERING</option>
-                    <option th:value="COMP" th:selected="${order.delivery.status == T(project.studycafe.domain.enums.status.DeliveryStatus).COMP}">COMP</option>
+                    <option th:value="READY" th:selected="${order.delivery.status == T(project.studycafe.app.domain.enums.status.DeliveryStatus).READY}">READY</option>
+                    <option th:value="DELIVERING" th:selected="${order.delivery.status == T(project.studycafe.app.domain.enums.status.DeliveryStatus).DELIVERING}">DELIVERING</option>
+                    <option th:value="COMP" th:selected="${order.delivery.status == T(project.studycafe.app.domain.enums.status.DeliveryStatus).COMP}">COMP</option>
                 </select>
             </div>
-<!--            <div class="form-group">-->
-<!--                <label for="order_status">주문 상태</label><br>-->
-<!--                <input type="text"-->
-<!--                       class="form-control" id="order_status" name="order_status"-->
-<!--                       th:value="${order.status}" readonly>-->
-<!--            </div>-->
-<!--            <div class="form-group">-->
-<!--                <label for="delivery_status">배달 상태</label><br>-->
-<!--                <input type="text"-->
-<!--                       class="form-control" id="delivery_status" name="delivery_status"-->
-<!--                       th:value="${order.delivery.status}" readonly>-->
-<!--            </div>-->
 
             <div class="form-group">
                 <label for="createdTime">주문 생성 일시</label><br>

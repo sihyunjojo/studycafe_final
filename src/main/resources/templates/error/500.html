@@ -13,10 +13,20 @@
         <p>불편 사항을 이메일이나 전화를 통해 전달해 주시면 최대한 빠르게 처리 도와드리겠습니다.</p>
     </div>
     <br><br>
-    <form th:action="${previousUrl}" method="get">
-        <button type="submit" class="btn btn-success btn-lg">이전으로 돌아가기</button>
-    </form>
-    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <form th:action="${previousUrl}" method="get">
+                <button type="submit" class="btn btn-success btn-lg">이전으로 돌아가기</button>
+            </form>
+        </div>
+        <div class="col">
+            <button th:onclick="|location.href='@{/}'|"
+                    type="button" class="btn btn-success btn-lg">홈으로 돌아가기
+            </button>
+        </div>
+    </div>
+
 </div> <!-- /container -->
 </body>
 </html>

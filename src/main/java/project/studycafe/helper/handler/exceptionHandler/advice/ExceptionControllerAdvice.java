@@ -16,6 +16,7 @@ import project.studycafe.helper.exception.UserException;
 import project.studycafe.helper.handler.exceptionHandler.ErrorResult;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 // 핸들러는 요청을 처리하는 객체 또는 메서드를 가리키며, 해당 요청을 처리하는 로직을 포함한다.
 @Slf4j
@@ -37,7 +38,33 @@ public class ExceptionControllerAdvice {
         model.addAttribute("errorMessage", e.getMessage());
 
         String postUrl = (String) request.getAttribute("postUrl");
-        String previousUrl = postUrl.replace("/edit", "");
+        log.info("postUrl = {}", postUrl);
+
+        // 이게 안됨.
+        String[] urlParts = postUrl.split("/");
+        log.info("urlparts = {},{},{},{}", urlParts[0],urlParts[1],urlParts[2],urlParts[3]);
+
+        String previousUrl;
+        // previousUrl 결정
+        switch (urlParts[1]) {
+            case "board":
+            case "product":
+            case "member":
+                previousUrl = postUrl.replace(urlParts[-1], "");
+                break;
+            case "order":
+                if (postUrl.contains("cart")) {
+                    previousUrl = "/cart";
+                } else if (postUrl.contains("now")) {
+                    previousUrl = "/product/" + urlParts[2];
+                } else {
+                    previousUrl = "/order/" + urlParts[2];
+                }
+                break;
+            default:
+                previousUrl = "";
+        }
+
 
         model.addAttribute("previousUrl", previousUrl);
         return new ModelAndView("error/400");

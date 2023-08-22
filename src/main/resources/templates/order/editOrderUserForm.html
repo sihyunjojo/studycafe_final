@@ -12,7 +12,7 @@
 <div class="container">
     <h3 th:text="|${order.member.nickname}님 주문|"> 주문 </h3>
     <hr>
-    <form th:action="@{|/order/edit/${order.id}/user|}" method="post">
+    <form th:action="@{|/order/${order.id}/edit/user|}" method="post">
         <input type="hidden" name="id" th:value="${order.id}">
         <input type="hidden" name="memberId" th:value="${order.member.id}">
 

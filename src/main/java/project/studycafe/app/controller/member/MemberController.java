@@ -60,7 +60,7 @@ public class MemberController {
         if (loginMember.getProvider() != null) {
             OauthMemberForm oauthMemberForm = memberService.memberToOauthMemberForm(loginMember);
             model.addAttribute(LOGIN_MEMBER, oauthMemberForm);
-            return "member/editOauthMemberForm";
+            return "member/editOauthMemberNicknameForm";
         }
 
         CommonMemberForm commonMemberForm = memberService.memberToMemberForm(loginMember);
@@ -72,7 +72,7 @@ public class MemberController {
 
     //updateform의 필드들이 어자피 login
     @PostMapping("/edit")
-    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("loginMember") CommonMemberForm form, BindingResult bindingResult, Model model, HttpServletRequest request) throws NotFoundException {
+    public String edit(@Login Member loginMember, @Validated @ModelAttribute("loginMember") CommonMemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
         if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
@@ -92,7 +92,7 @@ public class MemberController {
 
     //updateform의 필드들이 어자피 login
     @PostMapping("/edit/oauth")
-    public String Edit(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, Model model, HttpServletRequest request) throws NotFoundException {
+    public String editOauthMember(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
         if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
@@ -101,6 +101,26 @@ public class MemberController {
             log.info("수정 실패");
             log.info("binding result = {}", bindingResult);
             return "member/editOauthMemberForm";
+        }
+
+        Member updatedMember = memberService.update(loginMember.getId(), form).orElseThrow();
+
+        HttpSession session = request.getSession();
+        session.setAttribute(LOGIN_MEMBER, updatedMember);
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/edit/oauth/nickname")
+    public String editOauthMemberNickname(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
+        if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
+            bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            log.info("수정 실패");
+            log.info("binding result = {}", bindingResult);
+            return "member/editOauthMemberNicknameForm";
         }
 
         Member updatedMember = memberService.update(loginMember.getId(), form).orElseThrow();
