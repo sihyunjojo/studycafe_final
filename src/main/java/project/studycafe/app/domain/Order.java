@@ -2,7 +2,6 @@ package project.studycafe.app.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import project.studycafe.app.domain.enums.status.DeliveryStatus;
@@ -15,6 +14,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static project.studycafe.app.domain.Address.createAddress;
+import static project.studycafe.app.domain.enums.status.DeliveryStatus.READY;
 import static project.studycafe.app.domain.enums.status.OrderStatus.WAIT;
 
 
@@ -22,7 +23,6 @@ import static project.studycafe.app.domain.enums.status.OrderStatus.WAIT;
 @Entity
 // 타임리프에 객체 통째로 보내서 getter public 으로 해야함..
 @Getter @Setter(AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Table(name = "orders")
 @NamedEntityGraph(name = "Order.withMember", attributeNodes = {
         @NamedAttributeNode("member")})
@@ -44,22 +44,32 @@ public class Order extends BaseTimeEntity {
     private Integer totalPrice = 0;
 
     //1:1 관계에서 외래키는 주테이블에 존재하는 것으로 하자. 그게 제일 편하다.
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "delivery_Id") // delivery 를 어떤 이름으로 order 테이블의 컬럼명으로 저장하는지
-    private Delivery delivery;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "delivery_Id") // delivery 를 어떤 이름으로 order 테이블의 컬럼명으로 저장하는지
+
+    @Embedded
+    private Address address;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus orderstatus;
+
+    @Enumerated(EnumType.STRING)
+    private DeliveryStatus deliveryStatus;
+
+    protected Order() {}
 
     // 추후 결재 할시 결재 정보
 
     @PrePersist
     void setting() {
-        if (this.status == null) {
-            this.status = WAIT;
+        if (this.orderstatus == null) {
+            this.orderstatus = WAIT;
         }
-        if (this.delivery == null) {
-            this.delivery = new Delivery(member, new Address(), DeliveryStatus.READY);
+        if (this.deliveryStatus == null) {
+            this.deliveryStatus = READY;
+        }
+        if (this.address == null) {
+            address = createAddress("", "", "");
         }
         if (this.totalPrice == 0) {
             for (OrderItem orderItem : orderItems) {
@@ -72,20 +82,17 @@ public class Order extends BaseTimeEntity {
     //==비즈니스 로직==//
     public static Order createOrder(Member member, OrderItem... orderItems) {
         Order order = new Order();
-        order.setDelivery(new Delivery(member, new Address(), DeliveryStatus.READY));
         order.setMember(member);
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
-        log.info("orderItem1 = {}", orderItems);
-        log.info("orderItem2 = {}", order.totalPrice);
-
         return order;
     }
 
     public static Order createOrder(Member member, List<OrderItem> orderItems) {
-        log.info("orderItem2 = {}", orderItems);
+        log.info("create List - > orderItem2 = {}", orderItems);
         Order order = new Order();
+        order.setAddress(new Address());
         order.setMember(member);
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
@@ -94,29 +101,30 @@ public class Order extends BaseTimeEntity {
         return order;
     }
 
-    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+    public static Order createOrder(Member member, Address address, OrderItem... orderItems) {
         Order order = new Order();
         order.setMember(member);
-        order.setDelivery(delivery);
+        order.setAddress(address);
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
         return order;
     }
 
-    public void updateOrder(Integer totalPrice, Delivery delivery, OrderStatus orderStatus) {
-        setDelivery(delivery);
+    public void updateOrder(Integer totalPrice, Address address, OrderStatus orderStatus, DeliveryStatus deliveryStatus) {
+        setAddress(address);
         setTotalPrice(totalPrice);
-        setStatus(orderStatus);
+        setOrderstatus(orderStatus);
+        setDeliveryStatus(deliveryStatus);
     }
 
-    public void updateOrder(Integer totalPrice, Delivery delivery) {
-        setDelivery(delivery);
+    public void updateOrder(Integer totalPrice, Address address) {
+        setAddress(address);
         setTotalPrice(totalPrice);
     }
 
     public void updateOrderStatus(OrderStatus orderStatus) {
-        setStatus(orderStatus);
+        setOrderstatus(orderStatus);
     }
 
     public void removeOrderItems(OrderItem orderItem) {
@@ -128,11 +136,11 @@ public class Order extends BaseTimeEntity {
      * 주문 취소
      */
     public void cancel() {
-        if (delivery.getStatus() == DeliveryStatus.COMP) {
+        if (deliveryStatus == DeliveryStatus.COMPLETE) {
             throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
         }
 
-        this.setStatus(OrderStatus.CANCEL);
+        this.setOrderstatus(OrderStatus.CANCEL);
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }
@@ -146,15 +154,11 @@ public class Order extends BaseTimeEntity {
     }
 
     public void addOrderItem(OrderItem orderItem) {
-        log.info("orderItem = {}", orderItem);
+        log.info("addOrderItem -> orderItem = {}", orderItem);
         orderItems.add(orderItem);
         orderItem.setOrder(this);
-        log.info("orderItem4 = {}", this.totalPrice);
-    }
-
-    private void setDelivery(Delivery delivery) {
-        this.delivery = delivery;
-        delivery.setOrder(this);
+        totalPrice += orderItem.getAllPrice();
+        log.info("addOrderItem -> orderTotalPrice = {}", totalPrice);
     }
 
     public Long getId(){
@@ -162,7 +166,7 @@ public class Order extends BaseTimeEntity {
     }
 
     public OrderStatus getOrderStatus() {
-        return status;
+        return orderstatus;
     }
 
     @Override
@@ -183,8 +187,9 @@ public class Order extends BaseTimeEntity {
 
         sb.append("]");
         sb.append(", orderTotalPrice=").append(totalPrice);
-        sb.append(", delivery=").append(delivery.toString());
-        sb.append(", status=").append(status);
+        sb.append(", delivery=").append(address.toString());
+        sb.append(", orderStatus=").append(orderstatus);
+        sb.append(", deliveryStatus=").append(deliveryStatus);
         sb.append('}');
         return sb.toString();
     }

@@ -58,35 +58,35 @@
                 <label for="delivery_city">배달 도시</label><br>
                 <input type="text"
                        class="form-control" id="delivery_city" name="city"
-                       th:value="${order.delivery.address.city}">
+                       th:value="${order.address.city}">
             </div>
             <div class="form-group">
                 <label for="delivery_street">배달 거리</label><br>
                 <input type="text"
                        class="form-control" id="delivery_street" name="street"
-                       th:value="${order.delivery.address.street}">
+                       th:value="${order.address.street}">
             </div>
             <div class="form-group">
                 <label for="delivery_zipcode">배달 우편번호</label><br>
                 <input type="text"
                        class="form-control" id="delivery_zipcode" name="zipcode"
-                       th:value="${order.delivery.address.zipcode}">
+                       th:value="${order.address.zipcode}">
             </div>
             <div class="form-group">
                 <label for="orderStatus">주문 상태</label><br>
                 <select class="form-select" id="orderStatus" name="orderStatus" required>
-                    <option th:value="WAIT" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
-                    <option th:value="DELIVERING" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
-                    <option th:value="COMPLETE" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
-                    <option th:value="CANCEL" th:selected="${order.status == T(project.studycafe.app.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
+                    <option th:value="WAIT" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
+                    <option th:value="DELIVERING" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
+                    <option th:value="COMPLETE" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
+                    <option th:value="CANCEL" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="deliveryStatus">배달 상태</label><br>
-                <select class="form-select" id = "deliveryStatus" name="deliveryStatus" th:value="${order.delivery.status}" required>
-                    <option th:value="READY" th:selected="${order.delivery.status == T(project.studycafe.app.domain.enums.status.DeliveryStatus).READY}">READY</option>
-                    <option th:value="DELIVERING" th:selected="${order.delivery.status == T(project.studycafe.app.domain.enums.status.DeliveryStatus).DELIVERING}">DELIVERING</option>
-                    <option th:value="COMP" th:selected="${order.delivery.status == T(project.studycafe.app.domain.enums.status.DeliveryStatus).COMP}">COMP</option>
+                <select class="form-select" id = "deliveryStatus" name="deliveryStatus" required>
+                    <option th:value="READY" th:selected="${order.deliveryStatus == T(project.studycafe.app.domain.enums.status.DeliveryStatus).READY}">READY</option>
+                    <option th:value="DELIVERING" th:selected="${order.deliveryStatus == T(project.studycafe.app.domain.enums.status.DeliveryStatus).DELIVERING}">DELIVERING</option>
+                    <option th:value="COMPLETE" th:selected="${order.deliveryStatus == T(project.studycafe.app.domain.enums.status.DeliveryStatus).COMPLETE}">COMPLETE</option>
                 </select>
             </div>
 

@@ -241,9 +241,14 @@ reply의 경우는 comment와 연관관계가 맺혀있기 떄문에
 Error 발생시 , error 컨트롤(기본 error 화면이 아니라, 사용자 오류시, 어떤 원인으로 오류가 발생했는지 알려주고, 이전 페이지로 안내)
 interceptor와 spring error controll로 만듬.  
 
+# 8/23
+oauth member 
 
 ### 해야할 것들
-naver login 로그인할떄마다 다른 로그인으로됨. 분명 같은 id인데
+`naver login 로그인할떄마다 다른 로그인으로됨. 분명 같은 id인데
+`board와 member에서 named~ 확인 
+aop domain은 적용 안됨.
+
 AOP(관점지향 프로그래밍) -  로그추적기, 김영한님
 getter 쓰지 말라고 함. setter도 쓰지말라고 함.  
 // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.  

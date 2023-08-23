@@ -51,35 +51,35 @@
         </div>
         <hr>
         <div class="form-group">
-            <label for="delivery_city">배달 도시</label><br>
+            <label for="city">배달 도시</label><br>
             <input type="text"
-                   class="form-control" id="delivery_city" name="delivery_city"
-                   th:value="${order.delivery.address.city}" readonly>
+                   class="form-control" id="city" name="delivery_city"
+                   th:value="${order.address.city}" readonly>
         </div>
         <div class="form-group">
-            <label for="delivery_street">배달 거리</label><br>
+            <label for="street">배달 거리</label><br>
             <input type="text"
-                   class="form-control" id="delivery_street" name="delivery_street"
-                   th:value="${order.delivery.address.street}" readonly>
+                   class="form-control" id="street" name="delivery_street"
+                   th:value="${order.address.street}" readonly>
         </div>
         <div class="form-group">
-            <label for="delivery_zipcode">배달 우편번호</label><br>
+            <label for="zipcode">배달 우편번호</label><br>
             <input type="text"
-                   class="form-control" id="delivery_zipcode" name="delivery_zipcode"
-                   th:value="${order.delivery.address.zipcode}" readonly>
+                   class="form-control" id="zipcode" name="delivery_zipcode"
+                   th:value="${order.address.zipcode}" readonly>
         </div>
         <hr>
         <div class="form-group">
             <label for="order_status">주문 상태</label><br>
             <input type="text"
                    class="form-control" id="order_status" name="order_status"
-                   th:value="${order.status}" readonly>
+                   th:value="${order.orderStatus}" readonly>
         </div>
         <div class="form-group">
             <label for="delivery_status">배달 상태</label><br>
             <input type="text"
                    class="form-control" id="delivery_status" name="delivery_status"
-                   th:value="${order.delivery.status}" readonly>
+                   th:value="${order.deliveryStatus}" readonly>
         </div>
 
         <div class="form-group">

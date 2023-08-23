@@ -134,14 +134,14 @@ public class OrderController {
             if (order.getOrderStatus().equals(WAIT)) {
                 return "order/editOrderUserForm";
             }
-            throw new DoNotEditByDeliveryStartedException("배송이 이미 시작되어서, 변경 하실 수 없습니다.");
+            throw new DoNotEditByDeliveryStartedException("배송이 이미 시작되었거나 배송이 완료되어서, 정보를 변경 하실 수 없습니다.");
         }
 
         return "order/editOrderUserForm";
     }
 
     @GetMapping("/{orderId}/edit/user")
-    public String editOrderCartForm(@PathVariable long orderId, Model model) {
+    public String editOrderUserForm(@PathVariable long orderId, Model model) {
         Order order = orderService.findById(orderId).orElseThrow();
         model.addAttribute("order", order);
         return "order/editOrderUserForm";
@@ -150,7 +150,6 @@ public class OrderController {
 
     @PostMapping("/{orderId}/edit")
     public String editOrder(@PathVariable Long orderId, OrderForm form) {
-        log.info("form = {}", form);
         orderService.updateOrder(orderId, form);
         return "redirect:/order/" + orderId;
     }

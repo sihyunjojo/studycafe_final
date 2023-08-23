@@ -49,7 +49,7 @@ public class MemberController {
             return "member/addMemberForm";
         }
 
-        Object userId = memberService.join(form);
+        Long userId = memberService.join(form);
         log.info("userId = {}", userId);
 
         return "redirect:/";
@@ -60,7 +60,10 @@ public class MemberController {
         if (loginMember.getProvider() != null) {
             OauthMemberForm oauthMemberForm = memberService.memberToOauthMemberForm(loginMember);
             model.addAttribute(LOGIN_MEMBER, oauthMemberForm);
-            return "member/editOauthMemberNicknameForm";
+            if (loginMember.getNickname() == null) {
+                return "member/editOauthMemberNicknameForm";
+            }
+            return "member/editOauthMemberForm";
         }
 
         CommonMemberForm commonMemberForm = memberService.memberToMemberForm(loginMember);

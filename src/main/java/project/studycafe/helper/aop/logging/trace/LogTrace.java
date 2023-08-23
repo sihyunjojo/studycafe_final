@@ -22,14 +22,6 @@ public class LogTrace {
         return createTraceStatus(traceId, startTimeMs, message);
     }
 
-    public TraceStatus begin() {
-        syncTraceId();
-        TraceId traceId = traceIdHolder.get();
-        Long startTimeMs = System.currentTimeMillis();
-        log.info("[{}] {}{}", traceId.getId(), addSpace(START_PREFIX, traceId.getLevel()), "message empty");
-        return createTraceStatus(traceId, startTimeMs);
-    }
-
     private void syncTraceId() {
         TraceId traceId = traceIdHolder.get();
         if (traceId == null) {

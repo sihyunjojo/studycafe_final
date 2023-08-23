@@ -28,9 +28,10 @@ import project.studycafe.app.repository.product.JpaProductRepository;
 
 import java.util.*;
 
+import static project.studycafe.app.domain.Address.createAddress;
+import static project.studycafe.app.domain.Delivery.createDelivery;
 import static project.studycafe.app.domain.Order.createOrder;
-import static project.studycafe.app.domain.enums.status.DeliveryStatus.COMP;
-import static project.studycafe.app.domain.enums.status.DeliveryStatus.READY;
+import static project.studycafe.app.domain.enums.status.DeliveryStatus.*;
 import static project.studycafe.app.domain.enums.status.OrderStatus.*;
 import static project.studycafe.app.domain.product.OrderItem.createOrderItem;
 
@@ -98,14 +99,16 @@ public class OrderService {
             }
         }
 
-        Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
-        Delivery updateDelivery = new Delivery(member, updateAddress, stringToDeliveryStatus(form.getDeliveryStatus()));
+        Address updateAddress = createAddress(form.getCity(), form.getStreet(), form.getZipcode());
+
+        Delivery updateDelivery = createDelivery(member, updateAddress);
         if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
             log.info("add Delivery");
             deliveryRepository.save(updateDelivery);
         }
 
-        order.updateOrder(updateOrderTotalPrice, updateDelivery, stringToOrderStatus(form.getOrderStatus()));
+        order.updateOrder(updateOrderTotalPrice, updateAddress, stringToOrderStatus(form.getOrderStatus()), stringToDeliveryStatus(form.getDeliveryStatus()));
+
     }
 
     public void updateUserOrder(Long orderId, OrderUserForm form) {
@@ -121,14 +124,15 @@ public class OrderService {
             }
         }
 
-        Address updateAddress = new Address(form.getCity(), form.getStreet(), form.getZipcode());
-        Delivery updateDelivery = new Delivery(member, updateAddress, READY);
+        Address updateAddress = createAddress(form.getCity(), form.getStreet(), form.getZipcode());
+
+        Delivery updateDelivery = createDelivery(member, updateAddress);
         if (!deliveryRepository.existsDistinctByAddressAndMember(updateAddress, member)) {
             log.info("add Delivery");
             deliveryRepository.save(updateDelivery);
         }
 
-        order.updateOrder(updateOrderTotalPrice, updateDelivery);
+        order.updateOrder(updateOrderTotalPrice, updateAddress);
 
     }
 
@@ -174,7 +178,7 @@ public class OrderService {
             case "DELIVERING":
                 return OrderStatus.DELIVERING;
             case "COMPLETE":
-                return COMPLETE;
+                return OrderStatus.COMPLETE;
             case "CANCEL":
                 return CANCEL;
             default:
@@ -189,8 +193,8 @@ public class OrderService {
                 return READY;
             case "DELIVERING":
                 return DeliveryStatus.DELIVERING;
-            case "COMP":
-                return COMP;
+            case "COMPLETE":
+                return DeliveryStatus.COMPLETE;
             default:
                 return null;
         }

@@ -10,6 +10,8 @@ import project.studycafe.app.domain.member.Member;
 import project.studycafe.helper.resolver.argumentresolver.Login;
 import project.studycafe.app.service.cart.CartService;
 
+import java.util.Optional;
+
 
 @Slf4j
 @Controller
@@ -21,7 +23,10 @@ public class CartController {
     // 장바구니 보여주기
     @GetMapping
     public String cart(@Login Member loginmember, Model model) {
-        Cart cart = cartService.findByMemberId(loginmember.getId());
+        Optional<Cart> cart = cartService.findByMemberId(loginmember.getId());
+        if (cart.isEmpty()) {
+            cart = cartService.addCart(loginmember);
+        }
         log.info("cart ={}", cart);
         model.addAttribute("cart", cart);
 

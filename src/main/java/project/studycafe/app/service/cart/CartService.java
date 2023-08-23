@@ -39,11 +39,16 @@ public class CartService {
     }
 
     public void addCartProduct(Member member, long itemId) {
+        Cart cart;
         Optional<Cart> findCart = cartRepository.findFirstByMemberId(member.getId());
 
         if (findCart.isEmpty()) {
+            log.info("create cart");
             Optional<Cart> newCart = addCart(member);
-            findCart = newCart;
+            cart = newCart.orElseThrow();
+            log.info("cart = {}", cart);
+        } else{
+            cart = findCart.orElseThrow();
         }
 
         Product findproduct = productRepository.findById(itemId).orElseThrow();
@@ -54,7 +59,7 @@ public class CartService {
         if (existingCartProduct.isEmpty()) {
             CartProduct cartProduct = new CartProduct();
 
-            cartProduct.setCart(findCart.orElseThrow());
+            cartProduct.setCart(cart);
             cartProduct.setProduct(findproduct);
             cartProduct.setCount(1); // 추후에 값을 받아와서 해야함.
             cartProduct.setTotalPrice(findproduct.getPrice());
@@ -116,8 +121,7 @@ public class CartService {
         return cartProductForms;
     }
 
-    public Cart findByMemberId(Long memberId) {
-        return cartRepository.findFirstByMemberId(memberId).orElseThrow();
-
+    public Optional<Cart> findByMemberId(Long memberId) {
+        return cartRepository.findFirstByMemberId(memberId);
     }
 }

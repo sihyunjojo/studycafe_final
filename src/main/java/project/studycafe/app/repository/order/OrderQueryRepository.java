@@ -54,9 +54,9 @@ public class OrderQueryRepository {
             } else if ("orderIdDown".equalsIgnoreCase(sort)) {
                 return order.id.desc();
             } else if ("orderStatusUp".equalsIgnoreCase(sort)) {
-                return order.status.asc();
+                return order.orderstatus.asc();
             } else if ("orderStatusDown".equalsIgnoreCase(sort)) {
-                return order.status.desc();
+                return order.orderstatus.desc();
             }
         }
         return order.id.desc();
@@ -87,20 +87,20 @@ public class OrderQueryRepository {
 
     private BooleanExpression eqOrderStatus(OrderStatus orderStatus) {
         if (orderStatus == WAIT) {
-            return order.status.eq(WAIT);
+            return order.orderstatus.eq(WAIT);
         } else if (orderStatus == DELIVERING) {
-            return order.status.eq(DELIVERING);
+            return order.orderstatus.eq(DELIVERING);
         } else if (orderStatus == CANCEL) {
-            return order.status.eq(CANCEL);
+            return order.orderstatus.eq(CANCEL);
         } else if (orderStatus == COMPLETE) {
-            return order.status.eq(COMPLETE);
+            return order.orderstatus.eq(COMPLETE);
         }
         return null;
     }
 
 
     private BooleanExpression leMaxCreatedTime(String maxCreatedTime) {
-        log.info(" max tiem = {}", maxCreatedTime);
+        log.info(" max Item = {}", maxCreatedTime);
         if (maxCreatedTime != null && !maxCreatedTime.isEmpty()) {
             // Parse maxCreatedTime string into LocalDateTime
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;

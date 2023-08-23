@@ -9,11 +9,15 @@ import project.studycafe.app.controller.form.member.CommonMemberForm;
 import project.studycafe.app.controller.form.member.MemberForm;
 import project.studycafe.app.controller.form.member.OauthMemberForm;
 import project.studycafe.app.domain.Address;
+import project.studycafe.app.domain.Cart;
 import project.studycafe.app.domain.member.Member;
 import project.studycafe.app.repository.member.JpaMemberRepository;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import static project.studycafe.app.domain.Address.createAddress;
+import static project.studycafe.app.domain.Cart.createCart;
 
 @Slf4j
 @Service
@@ -27,7 +31,7 @@ public class SpringDataJpaMemberService implements MemberService {
      */
     public Long join(CommonMemberForm form) {
         Member member = new Member();
-        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+        Address address = createAddress(form.getCity(), form.getStreet(), form.getZipcode());
 
         member.setUserLoginId(form.getUserLoginId());
         member.setUserPassword(form.getUserPassword());
@@ -38,6 +42,7 @@ public class SpringDataJpaMemberService implements MemberService {
         member.setGender(form.getGender());
         member.setBirth(form.getBirth());
         member.setAddress(address);
+        member.setCart(createCart(member));
 
         try {
             validateDuplicatedMember(member); // 중복회원 검증
@@ -59,7 +64,7 @@ public class SpringDataJpaMemberService implements MemberService {
 
         if (form instanceof CommonMemberForm) {
             CommonMemberForm commonForm = (CommonMemberForm) form;
-            Address address = new Address(commonForm.getCity(), commonForm.getStreet(), commonForm.getZipcode());
+            Address address = createAddress(commonForm.getCity(), commonForm.getStreet(), commonForm.getZipcode());
 
             findMember.setUserPassword(commonForm.getUserPassword());
             findMember.setName(commonForm.getName());
@@ -71,7 +76,7 @@ public class SpringDataJpaMemberService implements MemberService {
             findMember.setAddress(address);
         } else if (form instanceof OauthMemberForm) {
             OauthMemberForm oauthForm = (OauthMemberForm) form;
-            Address address = new Address(oauthForm.getCity(), oauthForm.getStreet(), oauthForm.getZipcode());
+            Address address = createAddress(oauthForm.getCity(), oauthForm.getStreet(), oauthForm.getZipcode());
 
             log.info("form = {}", form);
 

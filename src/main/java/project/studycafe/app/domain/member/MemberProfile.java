@@ -17,6 +17,7 @@ public class MemberProfile {
                 .name(name)
                 .email(email)
                 .provider(provider)
+                .nickname(nickname)
                 .build();
     }
 

@@ -1,11 +1,9 @@
 package project.studycafe.helper.aop.logging.trace;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import project.studycafe.helper.aop.logging.trace.object.TraceStatus;
-import project.studycafe.helper.aop.logging.trace.LogTrace;
 
 // 빈으로 등록해줘야함.
 @Slf4j

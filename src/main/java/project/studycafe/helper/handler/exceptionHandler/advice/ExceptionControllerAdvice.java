@@ -40,7 +40,6 @@ public class ExceptionControllerAdvice {
         String postUrl = (String) request.getAttribute("postUrl");
         log.info("postUrl = {}", postUrl);
 
-        // 이게 안됨.
         String[] urlParts = postUrl.split("/");
         log.info("urlparts = {},{},{},{}", urlParts[0],urlParts[1],urlParts[2],urlParts[3]);
 

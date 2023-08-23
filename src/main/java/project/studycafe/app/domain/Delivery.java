@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import project.studycafe.app.domain.base.BaseTimeEntity;
-import project.studycafe.app.domain.enums.status.DeliveryStatus;
 import project.studycafe.app.domain.member.Member;
 
 import javax.persistence.*;
+
+import static project.studycafe.app.domain.Address.createAddress;
 
 @Entity
 @Getter @Setter
@@ -22,38 +23,33 @@ public class Delivery extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
-    private Order order;
+//    @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
+//    private Order order;
 
     @Embedded
     private Address address = new Address();
 
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus status;
-
-
-    public Delivery(Member member, Address address, DeliveryStatus deliveryStatus) {
-        this.member = member;
-        this.address = address;
-        this.status = deliveryStatus;
-    }
-
     @PrePersist
-    void setting() {
-        if (this.status == null) {
-            this.status = DeliveryStatus.READY;
+    public void setting(){
+        if (address == null) {
+            address = createAddress("", "", "");
         }
     }
 
+    public static Delivery createDelivery(Member member, Address address) {
+        Delivery delivery = new Delivery();
+        delivery.member = member;
+        delivery.address = address;
+
+        return delivery;
+    }
 
     @Override
     public String toString() {
         return "Delivery{" +
                 "id=" + id +
                 ", member=" + member.getId() +
-                ", order=" + order.getId() +
                 ", address=" + address.toString() +
-                ", status=" + status +
                 '}';
     }
 }

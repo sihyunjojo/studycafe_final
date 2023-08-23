@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static project.studycafe.app.domain.Address.createAddress;
 import static project.studycafe.app.domain.Cart.createCart;
-
 
 @Entity
 //@Table(uniqueConstraints = {
@@ -27,6 +27,8 @@ import static project.studycafe.app.domain.Cart.createCart;
 //})
 @Getter @Setter
 @NoArgsConstructor
+@NamedEntityGraph(name = "Member.withCart", attributeNodes = {
+        @NamedAttributeNode("cart")})
 public class Member extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -78,7 +80,10 @@ public class Member extends BaseTimeEntity {
             this.memberLevel = MemberLevel.USER;
         }
         if (this.address == null) {
-            this.address = new Address(null,null,null);
+            this.address = createAddress("", "", "");
+        }
+        if (this.cart == null) {
+            cart = createCart(this);
         }
     }
 
@@ -105,6 +110,7 @@ public class Member extends BaseTimeEntity {
         this.email = email;
         this.provider = provider;
         this.nickname = nickname;
+        this.cart = createCart(this);
     }
 
     //==연관관계 메서드==//

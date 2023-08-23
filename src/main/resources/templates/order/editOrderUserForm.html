@@ -60,19 +60,19 @@
                 <label for="delivery_city">배달 도시</label><br>
                 <input type="text"
                        class="form-control" id="delivery_city" name="city"
-                       th:value="${order.delivery.address.city}">
+                       th:value="${order.address.city}">
             </div>
             <div class="form-group">
                 <label for="delivery_street">배달 거리</label><br>
                 <input type="text"
                        class="form-control" id="delivery_street" name="street"
-                       th:value="${order.delivery.address.street}">
+                       th:value="${order.address.street}">
             </div>
             <div class="form-group">
                 <label for="delivery_zipcode">배달 우편번호</label><br>
                 <input type="text"
                        class="form-control" id="delivery_zipcode" name="zipcode"
-                       th:value="${order.delivery.address.zipcode}">
+                       th:value="${order.address.zipcode}">
             </div>
         </div>
         <br>

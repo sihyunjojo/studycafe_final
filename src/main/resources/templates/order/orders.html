@@ -155,10 +155,10 @@
         <th><a href="order.html" th:href="@{|/order/${order.id}|}"th:text="${order.orderItems.isEmpty() ? '' : order.orderItems[0].product.name}"></a></th>
         <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.orderItems.isEmpty() ? '' : order.orderItems[0].count}"></a></th>
         <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.totalPrice}"></a></th>
-        <th th:text="${order.status}"></th>
+        <th th:text="${order.orderStatus}"></th>
         <th th:text="${{order.updatedTime}}"></th>
         <th>
-          <a th:if="${order.status.name() == 'WAIT'}" href="#" th:href="'javascript:cancel('+${order.id}+')'"
+          <a th:if="${order.orderStatus == 'WAIT'}" href="#" th:href="'javascript:cancel('+${order.id}+')'"
              class="btn btn-danger">CANCEL</a>
         </th>
       </tr>
@@ -201,7 +201,6 @@
           <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${orderSearch}" method="get">
             <input type="hidden" name="page" th:value="${pageMaker.endPage + 1}" />
             <input type="hidden" th:name="memberNickname" th:field="*{memberNickname}"/>
-            <input type="hidden" th:name="memberName" th:field="*{memberName}"/>
             <input type="hidden" th:name="productName" th:field="*{productName}"/>
             <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
             <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>

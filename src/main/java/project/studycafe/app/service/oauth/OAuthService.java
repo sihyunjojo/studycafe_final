@@ -19,6 +19,7 @@ import project.studycafe.app.repository.member.JpaMemberRepository;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /*
     OAuth2 로그인 성공시 DB에 저장하는 작업
@@ -30,6 +31,7 @@ import java.util.Map;
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final JpaMemberRepository memberRepository;
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -51,9 +53,10 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
 
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, attributes); // registrationId에 따라 유저 정보를 통해 공통된 UserProfile 객체로 만들어 줌
-        log.info("memberProfile ={}", memberProfile);
         memberProfile.setProvider(registrationId);
+        log.info("memberProfile ={}", memberProfile);
         Member member = saveOrUpdate(memberProfile);
+        log.info("member = {}", member);
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, memberProfile, registrationId);
 
@@ -87,7 +90,18 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     private Member update(Member member, String name, String email) {
         member.setName(name);
         member.setEmail(email);
+        if (member.getNickname() == null) { // 이전 닉네임과 새 닉네임이 다를 경우에만 업데이트
+            member.setNickname(generateRandomNickname());
+        }
+
         return member;
+    }
+
+    public String generateRandomNickname() {
+        UUID uuid = UUID.randomUUID();
+        String nickname = uuid.toString().replace("-", "");
+
+        return nickname.substring(0, 10); // 예시로 10자리까지 잘라서 사용
     }
 
 
