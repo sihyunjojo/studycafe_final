@@ -42,7 +42,7 @@
                 <tbody>
                 <tr th:each="cartProduct : ${cart.cartProductList}">
                     <input type="hidden"
-                           th:name="|cartProductList[__${#strings.toString(cartProductStat.index)}__].productId|"
+                           th:name="|cartProductList[__${#strings.toString(cartProductStat.index)}__].id|"
                            th:value="${cartProduct.product.id}"/>
                     <td>
                         <input type="checkbox"

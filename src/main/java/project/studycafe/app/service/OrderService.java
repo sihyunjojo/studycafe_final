@@ -10,6 +10,7 @@ import project.studycafe.app.controller.form.OrderItemForm;
 import project.studycafe.app.domain.Address;
 import project.studycafe.app.domain.Delivery;
 import project.studycafe.app.domain.Order;
+import project.studycafe.app.domain.product.Product;
 import project.studycafe.app.repository.DeliveryRepository;
 import project.studycafe.app.repository.OrderItemRepository;
 import project.studycafe.app.domain.enums.status.DeliveryStatus;
@@ -68,9 +69,14 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
 
         List<CartProductForm> cartProductForms = form.getCartProductList();
+        log.info("s = {}", cartProductForms);
+
         for (CartProductForm cartProductForm : cartProductForms) {
             if (cartProductForm.isPurchasedCheck()) {
-                OrderItem orderItem = createOrderItem(productRepository.findById(cartProductForm.getProductId()).orElseThrow(), cartProductForm.getCount());
+                log.info("cartProductForm = {}", cartProductForm);
+                Product product = productRepository.findById(cartProductForm.getId()).orElseThrow();
+
+                OrderItem orderItem = createOrderItem(product, cartProductForm.getCount());
                 orderItems.add(orderItem);
                 orderItemRepository.save(orderItem);
             }

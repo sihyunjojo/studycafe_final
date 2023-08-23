@@ -12,8 +12,10 @@ import org.springframework.format.annotation.NumberFormat;
 @AllArgsConstructor
 public class CartProductForm {
 
-    private Long productId;
+    private Long id;
     private boolean purchasedCheck;
+    private String image;
+    private String name;
     private Integer count;
 
     private Integer totalPrice;

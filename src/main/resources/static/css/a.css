@@ -16,6 +16,19 @@ input.text {
     margin: auto;
 
 }
+
+input[type=checkbox] {
+    width: 30px;
+    height: 30px;
+
+    /* 체크박스를 정중앙으로 위치시키기 위한 설정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+
+}
+
 table {
     width: 100%;
     margin-bottom: 1rem;

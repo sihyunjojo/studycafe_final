@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static project.studycafe.app.domain.Cart.createCart;
+import static project.studycafe.app.domain.product.CartProduct.createCartProduct;
 
 @Slf4j
 @Service
@@ -29,7 +30,6 @@ public class CartService {
     private final JpaCartRepository cartRepository;
     private final JpaCartProductRepository cartProductRepository;
     private final JpaProductRepository productRepository;
-    private final JpaMemberRepository memberRepository;
 
     public Optional<Cart> addCart(Member member) {
         Cart cart = createCart(member);
@@ -40,12 +40,11 @@ public class CartService {
 
     public void addCartProduct(Member member, long itemId) {
         Cart cart;
-        Optional<Cart> findCart = cartRepository.findFirstByMemberId(member.getId());
+        Optional<Cart> findCart = cartRepository.findFirstByMember(member);
 
         if (findCart.isEmpty()) {
             log.info("create cart");
-            Optional<Cart> newCart = addCart(member);
-            cart = newCart.orElseThrow();
+            cart = addCart(member).orElseThrow();
             log.info("cart = {}", cart);
         } else{
             cart = findCart.orElseThrow();
@@ -54,36 +53,30 @@ public class CartService {
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
         // 카트안에 제품이 있는지
-        Optional<CartProduct> existingCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findCart.orElseThrow().getId(), findproduct.getId());
+        Optional<CartProduct> existingCartProduct = cartProductRepository.findFirstByCartIdAndProductId(cart, findproduct);
 
         if (existingCartProduct.isEmpty()) {
-            CartProduct cartProduct = new CartProduct();
-
-            cartProduct.setCart(cart);
-            cartProduct.setProduct(findproduct);
-            cartProduct.setCount(1); // 추후에 값을 받아와서 해야함.
-            cartProduct.setTotalPrice(findproduct.getPrice());
+            CartProduct cartProduct = createCartProduct(cart, findproduct);
             cartProductRepository.save(cartProduct);
         }
     }
 
     public void editUpQuantityCartProduct(Member member, long itemId) {
-        Long memberId = memberRepository.findFirstByUserLoginId(member.getUserLoginId()).orElseThrow().getId();
-
-        Cart findcart = cartRepository.findFirstByMemberId(memberId).orElseThrow();
+        Cart findcart = cartRepository.findFirstByMember(member).orElseThrow();
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
-        CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId()).orElseThrow();
+        //
+
+
+        CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart, findproduct).orElseThrow();
         findCartProduct.setCount(findCartProduct.getCount() + 1);
     }
 
     public void editDownQuantityCartProduct(Member member, long itemId) {
-        Long memberId = memberRepository.findFirstByUserLoginId(member.getUserLoginId()).orElseThrow().getId();
-
-        Cart findcart = cartRepository.findFirstByMemberId(memberId).orElseThrow();
+        Cart findcart = cartRepository.findFirstByMember(member).orElseThrow();
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
-        CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId()).orElseThrow();
+        CartProduct findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart, findproduct).orElseThrow();
         if (findCartProduct.getCount() > 0) {
             findCartProduct.setCount(findCartProduct.getCount() - 1);
         }
@@ -93,12 +86,10 @@ public class CartService {
 
 
     public void deleteCartProduct(Member member, long itemId) {
-        Long memberId = memberRepository.findFirstByUserLoginId(member.getUserLoginId()).orElseThrow().getId();
-
-        Cart findcart = cartRepository.findFirstByMemberId(memberId).orElseThrow();
+        Cart findcart = cartRepository.findFirstByMember(member).orElseThrow();
         Product findproduct = productRepository.findById(itemId).orElseThrow();
 
-        Optional<CartProduct> findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart.getId(), findproduct.getId());
+        Optional<CartProduct> findCartProduct = cartProductRepository.findFirstByCartIdAndProductId(findcart, findproduct);
         cartProductRepository.delete(findCartProduct.orElseThrow());
 
     }
@@ -112,7 +103,7 @@ public class CartService {
 
             log.info("findproduct ={}", findProduct);
 //            cartProductForm.setCheck(false);
-            cartProductForm.setProductId(findProduct.getId());
+            cartProductForm.setId(findProduct.getId());
             cartProductForm.setCount(cartProduct.getCount());
             cartProductForm.setTotalPrice(cartProduct.getTotalPrice());
             cartProductForms.add(cartProductForm);
@@ -121,7 +112,7 @@ public class CartService {
         return cartProductForms;
     }
 
-    public Optional<Cart> findByMemberId(Long memberId) {
-        return cartRepository.findFirstByMemberId(memberId);
+    public Optional<Cart> findByMember(Member member) {
+        return cartRepository.findFirstByMember(member);
     }
 }

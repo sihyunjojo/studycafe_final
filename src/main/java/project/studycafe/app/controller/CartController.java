@@ -23,10 +23,15 @@ public class CartController {
     // 장바구니 보여주기
     @GetMapping
     public String cart(@Login Member loginmember, Model model) {
-        Optional<Cart> cart = cartService.findByMemberId(loginmember.getId());
-        if (cart.isEmpty()) {
-            cart = cartService.addCart(loginmember);
+        Cart cart;
+        Optional<Cart> findcart = cartService.findByMember(loginmember);
+
+        if (findcart.isEmpty()) {
+            cart = cartService.addCart(loginmember).orElseThrow();
+        }else {
+            cart = findcart.orElseThrow();
         }
+
         log.info("cart ={}", cart);
         model.addAttribute("cart", cart);
 

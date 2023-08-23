@@ -36,10 +36,23 @@ public class CartProduct extends BaseTimeEntity {
         }
     }
 
-    public void setCart(Cart cart) {
+    public static CartProduct createCartProduct(Cart cart, Product product) {
+        CartProduct cartProduct = new CartProduct();
+        cartProduct.setCart(cart);
+        cartProduct.setProduct(product);
+        cartProduct.setCount(1);
+        cartProduct.setTotalPrice(product.getPrice());
+
+        return cartProduct;
+    }
+
+    private void setCart(Cart cart) {
         this.cart = cart;
         cart.getCartProductList().add(this);
+    }
 
+    private void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override

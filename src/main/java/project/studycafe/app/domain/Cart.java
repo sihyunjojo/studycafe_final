@@ -37,18 +37,20 @@ public class Cart extends BaseTimeEntity {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Cart{");
-        sb.append("id=").append(id);
-        sb.append("member = ").append(member);
-        sb.append(", cartProductList=[");
+        sb.append("id= ").append(id);
+        sb.append("member = ").append(member.getId());
 
+        if (cartProductList != null) {
+            sb.append(", cartProductList=[");
 
-        for (int i = 0; i < cartProductList.size(); i++) {
-            if (i > 0) {
-                sb.append(", ");
+            for (int i = 0; i < cartProductList.size(); i++) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
+                sb.append(cartProductList.get(i).toString());
             }
-            sb.append(cartProductList.get(i).toString());
+            sb.append("]}");
         }
-        sb.append("]}");
         return sb.toString();
     }
 }
