@@ -14,6 +14,8 @@ import java.util.List;
 @Entity
 @Getter @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedEntityGraph(name = "Cart.withMember", attributeNodes = {
+        @NamedAttributeNode("member")})
 public class Cart extends BaseTimeEntity {
 
     @Id

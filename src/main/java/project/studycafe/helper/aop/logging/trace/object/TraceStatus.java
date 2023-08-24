@@ -15,15 +15,6 @@ public class TraceStatus{
         return traceStatus;
     }
 
-    public static TraceStatus createTraceStatus(TraceId traceId, Long startTimeMs) {
-        TraceStatus traceStatus = new TraceStatus();
-        traceStatus.traceId = traceId;
-        traceStatus.startTimeMs = startTimeMs;
-        traceStatus.message = "message";
-
-        return traceStatus;
-    }
-
     public TraceId getTraceId() {
         return traceId;
     }

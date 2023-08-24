@@ -16,6 +16,7 @@ public class LogTrace {
 
     public TraceStatus begin(String message) {
         syncTraceId();
+
         TraceId traceId = traceIdHolder.get();
         Long startTimeMs = System.currentTimeMillis();
         log.info("[{}] {}{}", traceId.getId(), addSpace(START_PREFIX, traceId.getLevel()), message);
@@ -57,7 +58,7 @@ public class LogTrace {
         if (traceId.isFirstLevel()) {
             traceIdHolder.remove(); //destroy
         } else {
-            traceIdHolder.set(traceId.createPreviousId());
+            traceIdHolder.set(traceId.createPreviousId()); // 이전 단계 만들기.
         }
     }
 

@@ -27,7 +27,7 @@ public class JpaQueryBoardRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-
+    @EntityGraph(attributePaths = "member", type = EntityGraph.EntityGraphType.LOAD, value = "Board.withMember")
     public Board findByIdWithMemberByQuery(long boardId) {
         Board result = query
                 .selectFrom(board)
@@ -35,14 +35,6 @@ public class JpaQueryBoardRepository {
 //                .join(member.cart).fetchJoin() // member의 cart필드까지 한번에 가져와야해서, 이렇게 안하면 sql2번 되더라.
                 .where(board.id.eq(boardId))
                 .fetchOne();
-//        if (result == null) {
-//            return query
-//                    .selectFrom(board)
-//                    .join(board.member, member).fetchJoin()
-//                    .join(member.cart).fetchJoin() // member의 cart필드까지 한번에 가져와야해서, 이렇게 안하면 sql2번 되더라.
-//                    .where(board.id.eq(boardId))
-//                    .fetchOne();
-//        }
         return result;
     }
     //JPA에서 Fetch Join의 조건은 다음과 같다.
@@ -50,6 +42,7 @@ public class JpaQueryBoardRepository {
 
 
     // 기본이 최신순임.
+    @EntityGraph(attributePaths = "member", type = EntityGraph.EntityGraphType.LOAD, value = "Board.withMember")
     public List<Board> findSearchedAndSortedBoards(BoardSearchCond cond) {
         return query.selectFrom(board)
                 .where(

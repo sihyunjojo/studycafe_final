@@ -64,11 +64,18 @@
                            placeholder="글작성자"/>
                 </div>
                 <div class="col">
-                    <select class="form-select" id="sort" th:field="*{sort}">
-                        <option th:value>최신순</option>
-                        <option th:value="boardReadCountDown">조회수순</option>
-                        <option th:value="boardLikeCountDown">좋아요순</option>
+                    <select class="form-select" id="sort" name="sort">
+                        <option th:selected="${boardSearch.sort == null}" th:value>최신순</option>
+                        <option th:selected="${boardSearch.sort == 'boardReadCountDown' or boardSearch.sort == 'boardReadCountUp'}" th:value="boardReadCountDown">조회수순</option>
+                        <option th:selected="${boardSearch.sort == 'boardLikeCountDown' or boardSearch.sort == 'boardLikeCountUp'}" th:value="boardLikeCountDown">좋아요순</option>
                     </select>
+
+
+<!--                    <select class="form-select" id="sort" th:field="*{sort}">-->
+<!--                        <option th:value>최신순</option>-->
+<!--                        <option th:value="boardReadCountDown">조회수순</option>-->
+<!--                        <option th:value="boardLikeCountDown">좋아요순</option>-->
+<!--                    </select>-->
                 </div>
                 <div class="col">
                     <select class="form-select" id="perPageNum" th:field="*{perPageNum}">

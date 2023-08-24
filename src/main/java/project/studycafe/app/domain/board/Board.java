@@ -2,6 +2,7 @@ package project.studycafe.app.domain.board;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import project.studycafe.app.domain.base.BaseTimeEntity;
 import project.studycafe.app.domain.base.Statistics;
 import project.studycafe.app.domain.board.Info.BoardAddInfo;
@@ -15,6 +16,7 @@ import static project.studycafe.app.domain.base.Statistics.createStatistics;
 
 @Slf4j
 @Entity
+@Component //aop적용을 위한.ㄱ
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @NamedEntityGraph(name = "Board.withMember", attributeNodes = {

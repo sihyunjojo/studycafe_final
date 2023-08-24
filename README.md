@@ -242,31 +242,34 @@ Error 발생시 , error 컨트롤(기본 error 화면이 아니라, 사용자 �
 interceptor와 spring error controll로 만듬.  
 
 # 8/23
-oauth member 
+oauth member naver login 로그인할떄마다 다른 로그인으로됨(해결)  
+code error 여서 code refactoring 해결
+
+# 8/24
+핵심 domain에 로직 확인을 위한 aop적용  
+2개이상의 fetchjoin 을 사용하려면, @NamedEntityGraph는 하나밖에 적용이 안되서 효율적이지 않다.  
+(직접 createQuery 를 사용하는게 좋다)  
 
 ### 해야할 것들
-`naver login 로그인할떄마다 다른 로그인으로됨. 분명 같은 id인데
-`board와 member에서 named~ 확인 
-aop domain은 적용 안됨.
-
-AOP(관점지향 프로그래밍) -  로그추적기, 김영한님
+board와 member에서 named~ 확인
+중복 쿼리 제거 (성능향상)
+AOP(관점지향 프로그래밍) -  로그추적기, 김영한님  
 getter 쓰지 말라고 함. setter도 쓰지말라고 함.  
 // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.  
 master ,user 권한에 따라서 다르게 만들기.  
-
-주문내역에서 Cancel되면 며칠 후에 자동으로 entity 삭제해주기  
 
 알고리즘  
 소스트리 작동법 배워서(api키 가리기)  
 
 결제 코드 만들기  
 
+
 카카오 지도 api도 사용해보고 싶다.  
 유닛테스트(SpringBootTest) (유지보수 기간의 생산성을 높여주고 새로 프로젝트에 투입될 사람에게도 이득을 주는 테스트   
 프로젝트 오픈 일정 직전까지의 코드 변경과 버그 발견에 도움을 주는 테스트  
 오늘 당장 프로그램을 목표한 곳까지 작성하는 일을 더 빨리 마치게 해주는 테스트)    단위 테스트: JUnit + Mockito 활용  
 Cache 적용(Global/Local cache 적용범위, 라이프 싸이클, 솔루션 선택)  
-중복 쿼리 제거  
+
 
 컨테이너 - 도커  
 쿠버네티스 -  
@@ -289,6 +292,9 @@ CD -  (지속배포)
 개발도구의 공식 레퍼런스를 보고 사용법을 스스로 익힐 수 있음  
 자신이 경험한 사용법을 문서화해서 팀 내에 전파할 수 있음  
  
+### 할까?
+주문내역에서 Cancel되면 며칠 후에 자동으로 entity 삭제해주기 (cancelDate 설정해서 처음 home화면 들어갈 때 체크해주면.)
+
 
 # 환경 
 spring boot 2.7.8      

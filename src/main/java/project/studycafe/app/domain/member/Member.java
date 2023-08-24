@@ -1,6 +1,7 @@
 package project.studycafe.app.domain.member;
 
 import lombok.*;
+import org.springframework.stereotype.Component;
 import project.studycafe.app.domain.Address;
 import project.studycafe.app.domain.Cart;
 import project.studycafe.app.domain.Delivery;
@@ -21,6 +22,7 @@ import java.util.Map;
 import static project.studycafe.app.domain.Address.createAddress;
 import static project.studycafe.app.domain.Cart.createCart;
 
+@Component //aop적용을 위한.
 @Entity
 //@Table(uniqueConstraints = {
 //		@UniqueConstraint(name = "order_history_id_unique", columnNames = {"order_history_id"})

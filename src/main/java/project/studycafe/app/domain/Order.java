@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import project.studycafe.app.domain.enums.status.DeliveryStatus;
 import project.studycafe.app.domain.base.BaseTimeEntity;
 import project.studycafe.app.domain.enums.status.OrderStatus;
@@ -19,6 +20,7 @@ import static project.studycafe.app.domain.enums.status.DeliveryStatus.READY;
 import static project.studycafe.app.domain.enums.status.OrderStatus.WAIT;
 
 
+@Component //aop적용을 위한.
 @Slf4j
 @Entity
 // 타임리프에 객체 통째로 보내서 getter public 으로 해야함..
