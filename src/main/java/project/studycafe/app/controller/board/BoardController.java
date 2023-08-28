@@ -148,6 +148,7 @@ public class BoardController {
 
         log.info("file = {}", boardForm.getAttachmentFiles().toString());
         model.addAttribute("board", boardForm);
+        log.info("boardForm = {}", boardForm);
         return "board/editBoardForm";
     }
 

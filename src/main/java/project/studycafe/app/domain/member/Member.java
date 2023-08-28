@@ -22,10 +22,9 @@ import java.util.Map;
 import static project.studycafe.app.domain.Address.createAddress;
 import static project.studycafe.app.domain.Cart.createCart;
 
-@Component //aop적용을 위한.
 @Entity
 //@Table(uniqueConstraints = {
-//		@UniqueConstraint(name = "order_history_id_unique", columnNames = {"order_history_id"})
+//		@UniqueConstraint(name = "member_id_unique", columnNames = {"nickname"})
 //})
 @Getter @Setter
 @NoArgsConstructor

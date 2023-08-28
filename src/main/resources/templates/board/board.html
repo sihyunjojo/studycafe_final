@@ -7,6 +7,42 @@
     <head th:insert="~{template/styleCss :: css_copy}"></head>
     <!--<link rel="stylesheet", href="board/join.css">-->
 </head>
+<script>
+    function deleteComment(id, boardId) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/comment/" + id + "/delete");
+
+        var hiddenInput = document.createElement("input");
+        hiddenInput.setAttribute("type", "hidden");
+        hiddenInput.setAttribute("name", "boardId");
+        hiddenInput.setAttribute("value", boardId);
+
+        form.appendChild(hiddenInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function deleteReply(id, boardId) {
+        var form = document.createElement("form");
+        form.setAttribute("boardId", boardId);
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/reply/" + id + "/delete");
+
+        var hiddenInput = document.createElement("input");
+        hiddenInput.setAttribute("type", "hidden");
+        hiddenInput.setAttribute("name", "boardId");
+        hiddenInput.setAttribute("value", boardId);
+        form.appendChild(hiddenInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+
+</script>
+
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
 <div class="container">
@@ -93,9 +129,17 @@
             </form>
         </div>
         <div th:each="comment : ${board.comments}">
-            <p th:text="|${comment.memberName} : ${comment.memberName}|"></p>
+            <span th:text="|${comment.memberName} : ${comment.content}|"></span>
+            <th>
+                <a href="#" th:href="'javascript:deleteComment('+${comment.id}+','+${board.id}+')'"
+                   class="btn btn-secondary btn-sm mb-2">X</a>
+            </th>
             <div th:each="reply : ${comment.replies}">
-                <p th:text="| ㄴ ${reply.memberName} : ${reply.content}|"></p>
+                <span th:text="| ㄴ ${reply.memberName} : ${reply.content}|"></span>
+                <th>
+                    <a href="#" th:href="'javascript:deleteReply('+${reply.id}+','+${board.id}+')'"
+                       class="btn btn-secondary btn-sm mb-2">X</a>
+                </th>
             </div>
             <th:block th:if="${comment != null}" style="display: flex; align-items: center;">
                 <form th:action="@{/reply}" method="post">

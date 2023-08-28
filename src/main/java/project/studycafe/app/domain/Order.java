@@ -20,7 +20,6 @@ import static project.studycafe.app.domain.enums.status.DeliveryStatus.READY;
 import static project.studycafe.app.domain.enums.status.OrderStatus.WAIT;
 
 
-@Component //aop적용을 위한.
 @Slf4j
 @Entity
 // 타임리프에 객체 통째로 보내서 getter public 으로 해야함..

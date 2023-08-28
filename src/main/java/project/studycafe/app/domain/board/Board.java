@@ -3,6 +3,7 @@ package project.studycafe.app.domain.board;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import project.studycafe.app.domain.base.BaseTimeEntity;
 import project.studycafe.app.domain.base.Statistics;
 import project.studycafe.app.domain.board.Info.BoardAddInfo;
@@ -16,7 +17,6 @@ import static project.studycafe.app.domain.base.Statistics.createStatistics;
 
 @Slf4j
 @Entity
-@Component //aop적용을 위한.ㄱ
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @NamedEntityGraph(name = "Board.withMember", attributeNodes = {
@@ -84,8 +84,7 @@ public class Board extends BaseTimeEntity {
         boardMap.put("readCount", statistics.toMap().get("readCount"));
         boardMap.put("likeCount", statistics.toMap().get("likeCount"));
         boardMap.put("attachmentFiles", (List<AttachmentFile>) boardAddInfo.toMap().get("attachmentFiles"));
-        // 삼항연산자로 comment 가 없으면 reply 쿼리를 안 불러와도 됨.
-        boardMap.put("comments", comments.isEmpty() ? null : comments);
+        boardMap.put("comments", (List<Comment>) comments);
         return boardMap;
     }
 
@@ -136,10 +135,9 @@ public class Board extends BaseTimeEntity {
         return sb.toString();
     }
 
-    // 진짜 조회만 하는 getId()
+    // 진짜 조회만 하는 getId(), Long 은 불변
     public Long getId() {
-        Long newId = id;
-        return newId;
+        return id;
     }
 
     public List<AttachmentFile> getAttachmentFiles() {

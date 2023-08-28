@@ -1,6 +1,7 @@
 package project.studycafe.app.domain.board;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import project.studycafe.app.domain.base.BaseTimeEntity;
 import project.studycafe.app.domain.member.Member;
 
@@ -39,7 +40,6 @@ public class Comment extends BaseTimeEntity {
         newComment.setMember(member);
         newComment.setBoard(board);
         newComment.setContent(content);
-
         return newComment;
     }
 

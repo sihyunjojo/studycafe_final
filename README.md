@@ -250,12 +250,16 @@ code error 여서 code refactoring 해결
 2개이상의 fetchjoin 을 사용하려면, @NamedEntityGraph는 하나밖에 적용이 안되서 효율적이지 않다.  
 (직접 createQuery 를 사용하는게 좋다)  
 
+# 8/25
+home controller home() 성능향상 174ms -> 112ms  
+불필요한 board의 attachment를 불러오는 쿼리 삭제  
+
 ### 해야할 것들
-board와 member에서 named~ 확인
+interceptor로 자기꺼아니면 수정삭제조회 안되게하기.
 중복 쿼리 제거 (성능향상)
-AOP(관점지향 프로그래밍) -  로그추적기, 김영한님  
-getter 쓰지 말라고 함. setter도 쓰지말라고 함.  
-// 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.  
+AOP(관점지향 프로그래밍) -  로그추적기, 김영한님
+getter 쓰지 말라고 함. setter도 쓰지말라고 함.
+
 master ,user 권한에 따라서 다르게 만들기.  
 
 알고리즘  

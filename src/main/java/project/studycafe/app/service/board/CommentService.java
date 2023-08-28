@@ -2,7 +2,6 @@ package project.studycafe.app.service.board;
 
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.studycafe.app.domain.board.Board;
@@ -15,7 +14,6 @@ import project.studycafe.app.repository.member.JpaMemberRepository;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -31,7 +29,6 @@ public class CommentService {
 
 
     public void addComment(CommentForm form) {
-        log.info("form = {}", form);
         Board board = boardRepository.findById(form.getBoardId()).orElseThrow();
         Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
         Comment comment = Comment.createComment(member, board, form.getContent());

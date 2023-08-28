@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import project.studycafe.app.domain.board.Reply;
 import project.studycafe.app.controller.form.board.ReplyForm;
 import project.studycafe.app.domain.member.Member;
@@ -52,15 +49,15 @@ public class ReplyController {
 
     // 댓글 수정
     @PostMapping("/{replyId}/edit")
-    public String edit(ReplyForm reply, @PathVariable Long replyId) {
+    public String edit(ReplyForm reply, @PathVariable Long replyId, @RequestParam Long boardId) {
         replyService.editReply(replyId, reply);
-        return "redirect:/board/" + reply.getCommentId();
+        return "redirect:/board/" + boardId;
     }
 
     // 댓글 삭제
-    @GetMapping("/{replyId}/delete")
-    public String delete(@PathVariable long replyId) {
+    @PostMapping("/{replyId}/delete")
+    public String delete(@PathVariable long replyId, @RequestParam Long boardId) {
         replyService.deleteReply(replyId);
-        return "redirect:/board"; // 삭제 후 목록 페이지로 리다이렉트
+        return "redirect:/board/" + boardId; // 삭제 후 목록 페이지로 리다이렉트
     }
 }

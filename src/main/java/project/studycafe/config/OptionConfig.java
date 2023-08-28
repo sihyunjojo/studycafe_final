@@ -1,11 +1,14 @@
 package project.studycafe.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import project.studycafe.helper.aop.logging.trace.LogTrace;
+import project.studycafe.helper.aop.logging.trace.LogTraceAspect;
 import project.studycafe.helper.formatter.LocalDateTimeFormatter;
 import project.studycafe.helper.interceptor.LoginCheckInterceptor;
 import project.studycafe.helper.interceptor.PreAddressInterceptor;
@@ -59,4 +62,14 @@ public class OptionConfig implements WebMvcConfigurer {
                         );
     }
 
+
+    @Bean
+    public LogTrace logTrace() {
+        return new LogTrace();
+    }
+
+    @Bean
+    public LogTraceAspect logTraceAspect(LogTrace logTrace) {
+        return new LogTraceAspect(logTrace);
+    }
 }

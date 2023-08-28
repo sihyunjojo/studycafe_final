@@ -37,20 +37,22 @@
             <input type="text" class="form-control" id="content" th:field="*{content}" required/>
         </div>
         <div class="form-group">
-            <label for="newAttachmentFiles">추가 할 첨부파일</label>
-            <input type="file" multiple="multiple"
-                   class="form-control" name = "newAttachmentFiles" id="newAttachmentFiles" placeholder="첨부파일">
-        </div>
-        <div class="form-group">
             <label for="attachmentFiles">기존 첨부파일</label><br>
             <div id="attachmentFiles">
                 <th:block th:each="attachFile : ${board.attachmentFiles}">
+                    <br>
                     <a th:href="|/download/${board.id}/${attachFile.attachmentFileName}|" th:text="${attachFile.attachmentFileName}"/>
-                    <a class="btn btn-outline-secondary" style="margin: 1em"
+<!--                    order의 cancel방식으로 하면 되지 않을까?-->
+                    <a class="btn" style="margin: 1em; width: 15px; height: 15px"
                        th:href="|/delete/${board.id}/${attachFile.attachmentFileName}|" th:text="X" />
                 </th:block>
 <!--               추후 ajax로 해야할꺼 같은데(실시간으로 하려면) 실시간으로 안하니 위에꺼 다 초기화되서 다시 해야함.-->
             </div>
+        </div>
+        <div class="form-group">
+            <label for="newAttachmentFiles">추가 할 첨부파일</label>
+            <input type="file" multiple="multiple"
+                   class="form-control" name = "newAttachmentFiles" id="newAttachmentFiles" th:field="*{attachmentFiles}" placeholder="첨부파일">
         </div>
         <button type="submit">완료</button>
         <button th:onclick="|location.href='@{/board}'|" type="button">메인 게시판</button>

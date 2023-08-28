@@ -14,7 +14,6 @@ import project.studycafe.app.service.board.CommentService;
 
 import java.util.List;
 
-@Slf4j
 @Controller
 @RequestMapping("/comment")
 @RequiredArgsConstructor
@@ -32,29 +31,26 @@ public class CommentController {
     // 댓글 생성
     @PostMapping()
     public String add(@Login Member loginMember, CommentForm form) {
-        log.info("loginMember = {}", loginMember);
-        log.info("commentForm = {}", form);
         if (loginMember == null) {
             return "redirect:/login?redirectURL=/board/" + form.getBoardId();
         }
 
         commentService.addComment(form);
-        log.info("success");
         return "redirect:/board/" + form.getBoardId();
     }
 
     // 댓글 수정
     @PostMapping("/{commentId}/edit")
-    public String edit(CommentForm comment, @PathVariable Long commentId) {
+    public String edit(CommentForm comment, @PathVariable Long commentId, @RequestParam Long boardId) {
         commentService.editComment(commentId, comment);
-        return "redirect:/board/" + comment.getBoardId();
+        return "redirect:/board/" + boardId;
     }
 
 
     // 댓글 삭제
-    @GetMapping("/{commentId}/delete")
-    public String delete(@PathVariable long commentId) {
+    @PostMapping("/{commentId}/delete")
+    public String delete(@PathVariable long commentId, @RequestParam Long boardId) {
         commentService.deleteComment(commentId);
-        return "redirect:/board"; // 삭제 후 목록 페이지로 리다이렉트
+        return "redirect:/board/" + boardId; // 삭제 후 목록 페이지로 리다이렉트
     }
 }

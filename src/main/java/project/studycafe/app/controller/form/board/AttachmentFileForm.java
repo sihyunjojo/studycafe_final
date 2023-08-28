@@ -23,9 +23,7 @@ public class AttachmentFileForm {
     public static List<AttachmentFileForm> createAttachmentFileForms(List<AttachmentFile> attachmentFiles) {
         List<AttachmentFileForm> attachmentFileForms = new ArrayList<>();
         log.info("attachmentFiles={}", attachmentFiles); // 여기서 sql 처음 attachmentfiles 부를때 sql 발생.
-        log.info("0");
         for (AttachmentFile attachmentFile : attachmentFiles) {
-            log.info("0.5");
             Map<String, Object> attachmentFileMap = attachmentFile.toMap();
             AttachmentFileForm attachmentFileForm = new AttachmentFileForm();
 
