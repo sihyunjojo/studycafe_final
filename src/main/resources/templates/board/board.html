@@ -8,6 +8,17 @@
     <!--<link rel="stylesheet", href="board/join.css">-->
 </head>
 <script>
+    var commentEditMode = false;
+    function toggleEditMode() {
+        commentEditMode = !commentEditMode;
+    }
+
+    function toggleEditMode(commentId) {
+        var comment = document.getElementById("comment-" + commentId);
+
+        toggleEditMode()
+    }
+
     function deleteComment(id, boardId) {
         var form = document.createElement("form");
         form.setAttribute("method", "post");
@@ -130,28 +141,34 @@
         </div>
         <div th:each="comment : ${board.comments}">
             <span th:text="|${comment.memberName} : ${comment.content}|"></span>
+            <form th:action="@{/reply/edit/${comment.id}}">
+                <input type="hidden" th:name="boardId" th:value="${board.id}"/>
+<!--                <textarea name="content" placeholder="댓글을 수정하세요"></textarea>-->
+                <button type="submit">수정</button>
+            </form>
             <th>
                 <a href="#" th:href="'javascript:deleteComment('+${comment.id}+','+${board.id}+')'"
                    class="btn btn-secondary btn-sm mb-2">X</a>
             </th>
-            <div th:each="reply : ${comment.replies}">
-                <span th:text="| ㄴ ${reply.memberName} : ${reply.content}|"></span>
-                <th>
-                    <a href="#" th:href="'javascript:deleteReply('+${reply.id}+','+${board.id}+')'"
-                       class="btn btn-secondary btn-sm mb-2">X</a>
-                </th>
             </div>
-            <th:block th:if="${comment != null}" style="display: flex; align-items: center;">
-                <form th:action="@{/reply}" method="post">
-                    <input type="hidden" th:name="boardId" th:value="${board.id}"/>
-                    <input type="hidden" th:name="commentId" th:value="${comment.id}"/>
-                    <input type="hidden" th:name="memberId" th:value="${loginMember != null ? loginMember.id : ''}"/>
-                    <textarea name="content" placeholder="답변을 입력하세요"></textarea>
-                    <button type="submit">답변 작성</button>
-                </form>
-            </th:block>
+                <div th:each="reply : ${comment.replies}">
+                    <span th:text="| ㄴ ${reply.memberName} : ${reply.content}|"></span>
+                    <th>
+                        <a href="#" th:href="'javascript:deleteReply('+${reply.id}+','+${board.id}+')'"
+                           class="btn btn-secondary btn-sm mb-2">X</a>
+                    </th>
+                </div>
+                <th:block th:if="${comment != null}" style="display: flex; align-items: center;">
+                    <form th:action="@{/reply}" method="post">
+                        <input type="hidden" th:name="boardId" th:value="${board.id}"/>
+                        <input type="hidden" th:name="commentId" th:value="${comment.id}"/>
+                        <input type="hidden" th:name="memberId" th:value="${loginMember != null ? loginMember.id : ''}"/>
+                        <textarea name="content" placeholder="답변을 입력하세요"></textarea>
+                        <button type="submit">답변 작성</button>
+                    </form>
+                </th:block>
+            </div>
         </div>
-    </div>
     <hr class="my-4">
     <div class="row">
         <div class="col">

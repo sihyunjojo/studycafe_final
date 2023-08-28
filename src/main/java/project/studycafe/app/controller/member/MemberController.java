@@ -34,7 +34,7 @@ public class MemberController {
     }
 
     @PostMapping("/new")
-    public String Join(@Validated @ModelAttribute("member") CommonMemberForm form, BindingResult bindingResult, Model model) {
+    public String Join(@Validated @ModelAttribute("member") CommonMemberForm form, BindingResult bindingResult) {
         if (memberService.validateDuplicatedMemberLoginId(form.getUserLoginId())) {
 //            bindingResult.reject("usedUserLoginId", "이미 사용중인 아이디 입니다."); //글로벌에러
             bindingResult.rejectValue("userLoginId","unique.userLoginId","이미사용중인아이디입니다.");
@@ -98,6 +98,14 @@ public class MemberController {
     public String editOauthMember(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
         if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
+        }
+        if (memberService.validateDuplicatedMemberLoginId(form.getLoginId(), loginMember.getId())) {
+            bindingResult.rejectValue("loginId","unique.id","이미 사용중인 아이디입니다.");
+        }
+        log.info("form = {}", form);
+        if ((form.getLoginId().isEmpty() && form.getLoginPassword() != null) ||
+                (form.getLoginPassword().isEmpty() && form.getLoginId() != null)) {
+            bindingResult.reject ("loginBasicInfo", "아이디와 비밀번호는 함께 입력되어야 합니다.");
         }
 
         if (bindingResult.hasErrors()) {

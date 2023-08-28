@@ -48,7 +48,7 @@ public class OrderController {
         List<Order> orderList = orderService.getOrderList(page, BASIC_PER_PAGE_NUM, orders);
         PageMaker pageMaker = new PageMaker(orders.size(), page, BASIC_PER_PAGE_NUM);
 
-        //클라이언트 처리
+
         model.addAttribute("orders", orderList);
         model.addAttribute("pageMaker", pageMaker);
 
@@ -57,7 +57,6 @@ public class OrderController {
 
     @GetMapping("/search")
     public String searchOrders(@ModelAttribute("orderSearch") OrderSearchCond orderSearch, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
-        log.info("orderSearch = {}", orderSearch);
         List<Order> findOrders = orderService.findSearchedAndSortedOrder(orderSearch);
 
         List<Order> findOrderList = orderService.getOrderList(page, orderSearch.getPerPageNum(), findOrders);
@@ -77,12 +76,11 @@ public class OrderController {
         }
 
         if (orderSearch.getMinCreatedTime() != null) {
-            log.info("searchtype = {}", orderSearch.getMinCreatedTime().getClass());
+            log.info("search type = {}", orderSearch.getMinCreatedTime().getClass());
         }
 
         model.addAttribute("pageMaker", pageMaker);
         model.addAttribute("orders", findOrderList);
-        log.info("orderSearch = {}", orderSearch);
         model.addAttribute("orderSearch", orderSearch);
 
         return "order/orders";

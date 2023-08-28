@@ -254,6 +254,11 @@ code error 여서 code refactoring 해결
 home controller home() 성능향상 174ms -> 112ms  
 불필요한 board의 attachment를 불러오는 쿼리 삭제  
 
+comment,reply 삭제 front에 적용.  
+oauthMember도 기본회원처럼 아이디비밀번호로 로그인 가능  
+
+
+
 ### 해야할 것들
 interceptor로 자기꺼아니면 수정삭제조회 안되게하기.
 중복 쿼리 제거 (성능향상)

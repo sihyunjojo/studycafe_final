@@ -20,8 +20,9 @@ public interface MemberService {
     public CommonMemberForm memberToMemberForm(Member member);
     OauthMemberForm memberToOauthMemberForm(Member member);
     boolean validateDuplicatedMemberLoginId(String memberLoginId);
+    boolean validateDuplicatedMemberLoginId(String memberLoginId, long memberId);
     boolean validateDuplicatedMemberNickname(CommonMemberForm form);
-    boolean validateDuplicatedMemberNickname(CommonMemberForm form,long memberId);
-    boolean validateDuplicatedMemberNickname(OauthMemberForm form,long memberId);
+    boolean validateDuplicatedMemberNickname(CommonMemberForm form, long memberId);
+    boolean validateDuplicatedMemberNickname(OauthMemberForm form, long memberId);
 }
 

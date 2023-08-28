@@ -80,9 +80,10 @@ public class SpringDataJpaMemberService implements MemberService {
 
             log.info("form = {}", form);
 
-
             findMember.setName(oauthForm.getName());
             findMember.setNickname(oauthForm.getNickname());
+            findMember.setUserLoginId(oauthForm.getLoginId());
+            findMember.setUserPassword(oauthForm.getLoginPassword());
             findMember.setGender(oauthForm.getGender());
             findMember.setPhone(oauthForm.getPhone());
             findMember.setEmail(oauthForm.getEmail());
@@ -147,8 +148,29 @@ public class SpringDataJpaMemberService implements MemberService {
 
     @Override
     public boolean validateDuplicatedMemberLoginId(String memberLoginId) {
-        log.info("userId = {}", memberLoginId);
         return memberRepository.findFirstByUserLoginId(memberLoginId).isPresent();// member 과 같은 이름이 있는지 찾앗을때
+    }
+    @Override
+    public boolean validateDuplicatedMemberLoginId(String memberLoginId, long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+
+        if (optionalMember.isPresent()) {
+            Member existingMember = optionalMember.get();
+            String newLoginId = memberLoginId;
+
+            // 아이디가 변경된 경우에만 중복 검사를 수행합니다.
+            if (!Objects.equals(existingMember.getUserLoginId(), newLoginId)) {
+                Optional<Member> duplicateMember = memberRepository.findFirstByUserLoginId(newLoginId);
+                // 닉네임이 중복되는 멤버가 존재 하고 중복되는 멤버와 현재 멤버가 같지 않으면 true가 나와야함.
+                return duplicateMember.isPresent() && !duplicateMember.get().getId().equals(existingMember.getId());
+            }
+            return false;
+        }
+
+        else{
+            log.info("기존 멤버가 존재하지 않습니다. 멤버가 사리지지 않았나 확인해보세요.");
+            throw new RuntimeException("기존 멤버가 존재하지 않습니다. 멤버가 사리지지 않았나 확인해보세요.");
+        }
     }
 
     @Override
@@ -169,7 +191,7 @@ public class SpringDataJpaMemberService implements MemberService {
             if (!Objects.equals(existingMember.getNickname(), newNickname)) {
                 // 새로운 닉네임이 이미 사용 중인지 확인합니다. (자기자신 아님)
                 Optional<Member> duplicateMember = memberRepository.findByNickname(newNickname);
-                // 닉네임이 중복되는 멤버가 존재 하고 중복되는 멤버와 현재 멤버가 같지 않으면 true가 나와야함.
+                // 닉네임이 중복되는 멤버가 존재 하고 중복되는 멤버와 현재 멤버가 같지 않으면 true 가 나와야함.
                 return duplicateMember.isPresent() && !duplicateMember.get().getId().equals(existingMember.getId());
             }
             return false; // 닉네임이 바뀌지 않았으니, 검증 안해도됨.
@@ -188,8 +210,6 @@ public class SpringDataJpaMemberService implements MemberService {
         if (optionalMember.isPresent()) {
             Member existingMember = optionalMember.get();
             String newNickname = form.getNickname();
-            log.info("form ={}", form);
-            log.info("member = {}", existingMember);
 
             // 닉네임이 변경된 경우에만 중복 검사를 수행합니다.
             if (!Objects.equals(existingMember.getNickname(), newNickname)) {
@@ -220,7 +240,8 @@ public class SpringDataJpaMemberService implements MemberService {
     @Override
     public OauthMemberForm memberToOauthMemberForm(Member member) {
         return new OauthMemberForm(member.getEmail(), member.getProvider(),
-                member.getName(), member.getNickname(), member.getGender(), member.getPhone(),
+                member.getUserLoginId(), member.getUserPassword(),
+                member.getName(), member.getNickname(),member.getGender(), member.getPhone(),
                 member.getAddress().getCity(), member.getAddress().getStreet(), member.getAddress().getZipcode(),
                 member.getBirth());
     }

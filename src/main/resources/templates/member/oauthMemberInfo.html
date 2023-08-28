@@ -15,7 +15,7 @@
     <div> 추후 메시지 국제화 코드도 포함시켜보자. </div>
     <div>
         <label for="email">제공자</label>
-        <input type="text" id="email" name="email" class="form-control" value="10" th:value="${loginMember.provider}" readonly>
+        <input type="text" id="provider" name="provider" class="form-control" value="10" th:value="${loginMember.provider}" readonly>
     </div>
     <div>
         <label for="name">이름</label>
@@ -23,7 +23,11 @@
     </div>
     <div>
         <label for="email">닉네임</label>
-        <input type="text" id="email" name="email" class="form-control" value="10" th:value="${loginMember.nickname}" readonly>
+        <input type="text" id="nickname" name="nickname" class="form-control" value="10" th:value="${loginMember.nickname}" readonly>
+    </div>
+    <div>
+        <label for="email">아이디</label>
+        <input type="text" id="loginId" name="loginId" class="form-control" th:value="${loginMember.loginId}" readonly>
     </div>
     <div>
         <label for="gender">성별</label>
