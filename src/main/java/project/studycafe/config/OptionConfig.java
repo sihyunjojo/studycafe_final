@@ -7,10 +7,16 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import project.studycafe.app.service.OrderService;
+import project.studycafe.app.service.board.BoardService;
+import project.studycafe.app.service.board.CommentService;
+import project.studycafe.app.service.board.ReplyService;
+import project.studycafe.app.service.cart.CartService;
 import project.studycafe.helper.aop.logging.trace.LogTrace;
 import project.studycafe.helper.aop.logging.trace.LogTraceAspect;
 import project.studycafe.helper.formatter.LocalDateTimeFormatter;
 import project.studycafe.helper.interceptor.LoginCheckInterceptor;
+import project.studycafe.helper.interceptor.PersonalAccessControlInterceptor;
 import project.studycafe.helper.interceptor.PreAddressInterceptor;
 import project.studycafe.helper.interceptor.SessionInterceptor;
 import project.studycafe.helper.resolver.argumentresolver.LoginMemberArgumentResolver;
@@ -49,12 +55,19 @@ public class OptionConfig implements WebMvcConfigurer {
         registry.addInterceptor(new SessionInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns
-                        (
-                                "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**"
-                        );
-        registry.addInterceptor(new PreAddressInterceptor())
+                .excludePathPatterns(
+                        "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**"
+                );
+        registry.addInterceptor(new PersonalAccessControlInterceptor())
                 .order(3)
+                .addPathPatterns(
+                        "**/edit", "**/delete"
+                )
+                .excludePathPatterns(
+                        "product/**/delete"
+                );
+        registry.addInterceptor(new PreAddressInterceptor())
+                .order(4)
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (

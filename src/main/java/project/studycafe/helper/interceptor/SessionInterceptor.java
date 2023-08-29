@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static project.studycafe.app.SessionConst.LOGIN_MEMBER;
+import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
 @Slf4j
 public class SessionInterceptor implements HandlerInterceptor {

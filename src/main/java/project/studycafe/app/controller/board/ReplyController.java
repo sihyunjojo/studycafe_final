@@ -15,6 +15,7 @@ import project.studycafe.app.service.board.CommentService;
 import project.studycafe.app.service.board.ReplyService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -56,7 +57,7 @@ public class ReplyController {
 
     // 댓글 삭제
     @PostMapping("/{replyId}/delete")
-    public String delete(@PathVariable long replyId, @RequestParam Long boardId) {
+    public String delete(@PathVariable long replyId, @RequestParam Long boardId, Model model) {
         replyService.deleteReply(replyId);
         return "redirect:/board/" + boardId; // 삭제 후 목록 페이지로 리다이렉트
     }

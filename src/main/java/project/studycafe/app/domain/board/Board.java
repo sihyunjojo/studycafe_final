@@ -74,6 +74,7 @@ public class Board extends BaseTimeEntity {
     public Map<String, Object> toMap() {
         Map<String, Object> boardMap = new HashMap<>();
         boardMap.put("id", id);
+        boardMap.put("memberId", member.toMap().get("id"));
         boardMap.put("memberName", member.toMap().get("name"));
         boardMap.put("memberNickname", member.toMap().get("nickname"));
         boardMap.put("title", boardBaseInfo.toMap().get("title"));
@@ -138,6 +139,10 @@ public class Board extends BaseTimeEntity {
     // 진짜 조회만 하는 getId(), Long 은 불변
     public Long getId() {
         return id;
+    }
+
+    public Long getMemberId(){
+        return member.getId();
     }
 
     public List<AttachmentFile> getAttachmentFiles() {

@@ -115,4 +115,9 @@ public class CartService {
     public Optional<Cart> findByMember(Member member) {
         return cartRepository.findFirstByMember(member);
     }
+
+    public Optional<Cart> findById(Long cartId) {
+        return cartRepository.findById(cartId);
+    }
+
 }

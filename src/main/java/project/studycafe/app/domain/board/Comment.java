@@ -67,6 +67,9 @@ public class Comment extends BaseTimeEntity {
         return newId;
     }
 
+    public Long getMemberId(){
+        return member.getId();
+    }
     public void setId(Long id) {
         this.id = id;
     }

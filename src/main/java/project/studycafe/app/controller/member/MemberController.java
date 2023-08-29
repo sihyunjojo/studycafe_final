@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-import static project.studycafe.app.SessionConst.LOGIN_MEMBER;
+import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
 @Slf4j
 @Controller

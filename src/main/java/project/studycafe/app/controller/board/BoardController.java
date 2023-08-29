@@ -2,8 +2,6 @@ package project.studycafe.app.controller.board;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +19,12 @@ import project.studycafe.app.service.board.BoardService;
 import project.studycafe.app.service.board.CommentService;
 import project.studycafe.app.service.board.ReplyService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import static project.studycafe.app.SessionConst.LOGIN_MEMBER;
+import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
 @Slf4j
 @Controller
@@ -141,14 +140,14 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}/edit")
-    public String editForm(@PathVariable Long boardId, Model model) {
+    public String editForm(@PathVariable Long boardId, Model model, HttpServletResponse response) {
         Board board = boardService.findById(boardId).orElseThrow();
         // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.
+
         BoardForm boardForm = boardService.boardToBoardForm(board);
 
         log.info("file = {}", boardForm.getAttachmentFiles().toString());
         model.addAttribute("board", boardForm);
-        log.info("boardForm = {}", boardForm);
         return "board/editBoardForm";
     }
 

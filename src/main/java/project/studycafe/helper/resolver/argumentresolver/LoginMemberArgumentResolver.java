@@ -6,7 +6,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import project.studycafe.app.SessionConst;
+import project.studycafe.SessionConst;
 import project.studycafe.app.domain.member.Member;
 
 import javax.servlet.http.HttpServletRequest;

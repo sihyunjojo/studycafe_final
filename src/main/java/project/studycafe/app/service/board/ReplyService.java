@@ -14,6 +14,7 @@ import project.studycafe.app.repository.board.reply.JpaReplyRepository;
 import project.studycafe.app.repository.member.JpaMemberRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -50,5 +51,9 @@ public class ReplyService {
 
     public List<Reply> getRepliesByCommentId(Long commentId) {
         return replyRepository.getRepliesByCommentId(commentId);
+    }
+
+    public Optional<Reply> findById(long replyId) {
+        return replyRepository.findById(replyId);
     }
 }

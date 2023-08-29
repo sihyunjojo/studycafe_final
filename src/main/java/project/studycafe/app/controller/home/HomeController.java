@@ -19,7 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static project.studycafe.app.SessionConst.LOGIN_MEMBER;
+import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
 @Slf4j
 @Controller

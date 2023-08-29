@@ -13,6 +13,7 @@ import project.studycafe.app.repository.board.comment.JpaCommentRepository;
 import project.studycafe.app.repository.member.JpaMemberRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,5 +44,9 @@ public class CommentService {
 
     public void deleteComment(long commentId) {
         commentRepository.deleteById(commentId);
+    }
+
+    public Optional<Comment> findById(long commentId) {
+        return commentRepository.findById(commentId);
     }
 }

@@ -61,8 +61,11 @@ public class Reply extends BaseTimeEntity {
     }
 
     public Long getId() {
-        Long newId = this.id;
-        return newId;
+        return id;
+    }
+
+    public Long getMemberId(){
+        return member.getId();
     }
 
     private void setMember(Member member) {

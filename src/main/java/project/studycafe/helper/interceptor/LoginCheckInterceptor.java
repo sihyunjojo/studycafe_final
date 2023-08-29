@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static project.studycafe.app.SessionConst.LOGIN_MEMBER;
+import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
 // 웹 애플리케이션의 요청과 응답 사이에 위치하며 요청을 가로채고 처리하는 역할을한다.
 // 주로 애플리케이션의 보안,로깅,트랜잭션 관리 등과 같은 횡단 관심사를 처리하는데 사용

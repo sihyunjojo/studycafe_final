@@ -11,6 +11,7 @@ import java.util.List;
 public class BoardForm {
 
     private Long id;
+    private Long memberId;
     private String memberNickname;
     private String memberName;
     private String title;

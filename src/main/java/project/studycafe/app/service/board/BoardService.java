@@ -124,6 +124,7 @@ public class BoardService {
         Map<String, Object> boardMap = board.toMap();
         return new BoardForm(
                 (Long) boardMap.get("id"),
+                (Long) boardMap.get("memberId"),
                 (String) boardMap.get("memberName"),
                 (String) boardMap.get("memberNickname"),
                 (String) boardMap.get("title"),
@@ -142,6 +143,7 @@ public class BoardService {
                 .map(Board::toMap)
                 .map(boardMap -> new BoardForm(
                         (Long) boardMap.get("id"),
+                        (Long) boardMap.get("memberId"),
                         (String) boardMap.get("memberName"),
                         (String) boardMap.get("memberNickname"),
                         (String) boardMap.get("title"),

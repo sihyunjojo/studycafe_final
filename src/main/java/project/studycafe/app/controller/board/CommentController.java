@@ -13,6 +13,7 @@ import project.studycafe.app.service.board.BoardService;
 import project.studycafe.app.service.board.CommentService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/comment")
@@ -49,7 +50,10 @@ public class CommentController {
 
     // 댓글 삭제
     @PostMapping("/{commentId}/delete")
-    public String delete(@PathVariable long commentId, @RequestParam Long boardId) {
+    public String delete(@PathVariable long commentId, @RequestParam Long boardId, Model model) {
+        Optional<Comment> comment = commentService.findById(commentId);
+        model.addAttribute("comment", comment.orElseThrow());
+
         commentService.deleteComment(commentId);
         return "redirect:/board/" + boardId; // 삭제 후 목록 페이지로 리다이렉트
     }

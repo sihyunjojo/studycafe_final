@@ -90,10 +90,12 @@ public class Member extends BaseTimeEntity {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
         map.put("name", name);
         map.put("nickname", nickname);
         return map;
     }
+
     public void addBoard(Board board) {
         this.boards.add(board);
     }
@@ -118,6 +120,9 @@ public class Member extends BaseTimeEntity {
 
 
 
+    public Long getId(){
+        return id;
+    }
     @Override
     public String toString() {
         return "Member{" +
