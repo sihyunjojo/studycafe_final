@@ -10,6 +10,7 @@ public interface JpaMemberRepository extends JpaRepository<Member, Long> {
     @EntityGraph(attributePaths = "cart", type = EntityGraph.EntityGraphType.LOAD, value = "Member.withCart")
     Optional<Member> findById(Long Id);
 
+    @EntityGraph(attributePaths = "cart", type = EntityGraph.EntityGraphType.LOAD, value = "Member.withCart")
     Optional<Member> findFirstByUserLoginId(String UserLoginId);
     Optional<Member> findByNickname(String nickname);
     Optional<Member> findFirstByNameAndPhone(String name, String phone);

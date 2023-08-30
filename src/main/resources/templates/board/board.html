@@ -171,11 +171,8 @@
             </button>
         </div>
         <div class="col">
-            <form>
-                <input type="hidden" name="memberId" th:value="board.memberId">
-                <button class="w-100 btn btn-primary btn-lg" th:onclick="|location.href='/board/${boardId}/delete'|">삭제하기
-                </button>
-            </form>
+            <button class="w-100 btn btn-primary btn-lg" th:onclick="|location.href='/board/${boardId}/delete'|">삭제하기
+            </button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/board}'|">메인 게시판</button>

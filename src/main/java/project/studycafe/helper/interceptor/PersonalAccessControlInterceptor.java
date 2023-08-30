@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
@@ -48,40 +50,46 @@ public class PersonalAccessControlInterceptor implements HandlerInterceptor {
 
         String requestURI = request.getRequestURI();
         String[] splitURI = requestURI.split("/");
-        String firstSplitURI = splitURI[0];
-        log.info("{} => {}/{}", requestURI, splitURI[0], splitURI[1]);
 
         // validationObject
         Long memberIdByObject = null;
-        switch (firstSplitURI) {
+        String redirectURI = Arrays.stream(splitURI).collect(Collectors.toList()).subList(0,3).toString();
+
+        switch (splitURI[1]) {
             case "board":
-                Long boardId = Long.valueOf(request.getAttribute("boardId").toString());
+                Long boardId = Long.valueOf(splitURI[2]);
                 Optional<Board> board = boardService.findById(boardId);
                 memberIdByObject = board.orElseThrow().getMemberId();
                 break;
             case "order":
-                Long orderId = Long.valueOf(request.getAttribute("orderId").toString());
+                Long orderId = Long.valueOf(splitURI[2]);
                 Optional<Order> order = orderService.findById(orderId);
                 memberIdByObject = order.orElseThrow().getMember().getId();
                 break;
             case "cart":
-                Long cartId = Long.valueOf(request.getAttribute("cartId").toString());
+                Long cartId = Long.valueOf(splitURI[2]);
                 Optional<Cart> cart = cartService.findById(cartId);
                 memberIdByObject = cart.orElseThrow().getMember().getId();
+                redirectURI = "/product";
                 break;
             case "comment":
-                Long commentId = Long.valueOf(request.getAttribute("commentId").toString());
+                Long commentId = Long.valueOf(splitURI[2]);
                 Optional<Comment> comment = commentService.findById(commentId);
                 memberIdByObject = comment.orElseThrow().getMemberId();
+                boardId = comment.orElseThrow().getBoardId();
+
+                redirectURI = "/board/" + boardId;
                 break;
             case "reply":
-                Long replyId = Long.valueOf(request.getAttribute("replyId").toString());
+                Long replyId = Long.valueOf(splitURI[2]);
                 Optional<Reply> reply = replyService.findById(replyId);
                 memberIdByObject = reply.orElseThrow().getMemberId();
+                boardId = commentService.findCommentByRepliesContaining(reply.orElseThrow()).orElseThrow().getBoardId();
+
+                redirectURI = "/board/" + splitURI[2];
                 break;
             default:
                 throw new RuntimeException("로직상 문제가 있는거 같습니다.");
-
         }
 
         // 작성자가 자신인지 확인
@@ -92,7 +100,7 @@ public class PersonalAccessControlInterceptor implements HandlerInterceptor {
         } else {
             log.info("작성자와 로그인한 사람이 다른 사람 입니다.");
             // 자신이 아닌 경우 처리 (예: 권한 부족 페이지로 리다이렉션)
-            response.sendRedirect("/access-denied");
+            response.sendRedirect(redirectURI);
             return false;
         }
     }

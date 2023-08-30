@@ -11,7 +11,6 @@ import project.studycafe.app.domain.product.CartProduct;
 import project.studycafe.app.domain.product.Product;
 import project.studycafe.app.repository.cart.JpaCartProductRepository;
 import project.studycafe.app.repository.cart.JpaCartRepository;
-import project.studycafe.app.repository.member.JpaMemberRepository;
 import project.studycafe.app.repository.product.JpaProductRepository;
 
 import java.util.ArrayList;

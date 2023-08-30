@@ -16,10 +16,8 @@ import project.studycafe.helper.resolver.argumentresolver.Login;
 import project.studycafe.app.service.dto.searchDto.BoardSearchCond;
 import project.studycafe.app.service.FileService;
 import project.studycafe.app.service.board.BoardService;
-import project.studycafe.app.service.board.CommentService;
-import project.studycafe.app.service.board.ReplyService;
 
-import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -33,8 +31,6 @@ import static project.studycafe.SessionConst.LOGIN_MEMBER;
 public class BoardController {
 
     private final BoardService boardService;
-    private final CommentService commentService;
-    private final ReplyService replyService;
     private final FileService fileService;
 //    @Autowired private ApplicationContext applicationContext;
 
@@ -140,7 +136,7 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}/edit")
-    public String editForm(@PathVariable Long boardId, Model model, HttpServletResponse response) {
+    public String editForm(@PathVariable Long boardId, Model model) {
         Board board = boardService.findById(boardId).orElseThrow();
         // 여기서 form을 조금 더 잘 만져서 보내면 수정할때, 파일의 형태로 보내서 수정할때, 기존꺼 엎는 느낌으로 갈 수 있을듯.
 

@@ -9,7 +9,6 @@ import project.studycafe.app.controller.form.member.CommonMemberForm;
 import project.studycafe.app.controller.form.member.MemberForm;
 import project.studycafe.app.controller.form.member.OauthMemberForm;
 import project.studycafe.app.domain.Address;
-import project.studycafe.app.domain.Cart;
 import project.studycafe.app.domain.member.Member;
 import project.studycafe.app.repository.member.JpaMemberRepository;
 

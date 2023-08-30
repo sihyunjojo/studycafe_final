@@ -32,7 +32,6 @@ public class BoardService {
 
     private final JpaBoardRepository boardRepository;
     private final JpaQueryBoardRepository boardQueryRepository;
-    private final JpaCommentRepository jpaCommentRepository;
     private final JpaMemberRepository memberRepository;
 
 

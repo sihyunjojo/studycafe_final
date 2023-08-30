@@ -55,10 +55,17 @@
                         <a th:href="@{/login}" th:method="get" class="nav-link"> 로그인 </a>
                     </th:block>
                     <th:block th:unless="${loginMember == null}">
-                        <a th:href="@{/member/info}" th:text="|${loginMember.name}의 정보|" class="nav-link"> member
-                            정보 </a>
+                        <a th:href="@{/member/info}" th:text="|${loginMember.name}의 정보|" class="nav-link"/>
                     </th:block>
                 </li>
+                <th:block th:unless="${loginMember == null}">
+                    <li class="nav-item">
+                        <button th:onclick="|location.href='@{/logout}'|" class="nav-link"
+                                type="submit">로그아웃
+                        </button>
+                    </li>
+                </th:block>
+
             </ul>
         </header>
     </div>
