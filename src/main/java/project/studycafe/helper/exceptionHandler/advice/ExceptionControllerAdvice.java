@@ -1,22 +1,15 @@
-package project.studycafe.helper.handler.exceptionHandler.advice;
+package project.studycafe.helper.exceptionHandler.advice;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import project.studycafe.helper.exception.BadRequestException;
-import project.studycafe.helper.exception.order.DoNotEditByDeliveryStartedException;
-import project.studycafe.helper.exception.order.NotFindOrderItemException;
 import project.studycafe.helper.exception.UserException;
-import project.studycafe.helper.handler.exceptionHandler.ErrorResult;
+import project.studycafe.helper.exceptionHandler.ErrorResult;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 
 // 핸들러는 요청을 처리하는 객체 또는 메서드를 가리키며, 해당 요청을 처리하는 로직을 포함한다.
 @Slf4j

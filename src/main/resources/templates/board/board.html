@@ -8,17 +8,38 @@
     <!--<link rel="stylesheet", href="board/join.css">-->
 </head>
 <script>
-    var commentEditMode = false;
 
-    function toggleEditMode() {
-        commentEditMode = !commentEditMode;
-    }
 
-    function toggleEditMode(commentId) {
-        var comment = document.getElementById("comment-" + commentId);
 
-        toggleEditMode()
-    }
+    // // 예시로 받은 JSON 응답을 가정합니다
+    // var xhr = new XMLHttpRequest();
+    // // xhr.open('GET', '/your-endpoint', true); // 마지막 매개변수 true는 비동기적인 요청을 수행
+    // // xhr.setRequestHeader('Accept', 'application/json');
+    // xhr.onreadystatechange = function () {
+    //     if (xhr.readyState === 4 && xhr.status === 401) {
+    //         // 서버에서 전송한 JSON 응답을 파싱하여 JavaScript 객체로 변환
+    //         var responseObject = JSON.parse(xhr.responseText);
+    //
+    //         // 결과를 HTML에 표시
+    //         var resultElement = document.getElementById('result');
+    //         resultElement.textContent = responseObject.message;
+    //     }
+    // };
+
+
+
+    // 요 코드는 음... 수정코드인데 조금 더 고민을 해보도록하자 어떠니?
+    // var commentEditMode = false;
+    //
+    // function toggleEditMode() {
+    //     commentEditMode = !commentEditMode;
+    // }
+    //
+    // function toggleEditMode(commentId) {
+    //     var comment = document.getElementById("comment-" + commentId);
+    //
+    //     toggleEditMode()
+    // }
 
     function deleteComment(id, boardId) {
         var form = document.createElement("form");
@@ -58,6 +79,7 @@
 <body>
 <header th:insert="~{template/header :: header_copy}"></header>
 <div class="container">
+    <div id="result"></div>
     <h1>게시판</h1>
     <!--        <th:block th:if="${error == '이미 사용 중인 아이디입니다.'}">-->
     <!--            <h2 th:text="${error}"></h2>-->

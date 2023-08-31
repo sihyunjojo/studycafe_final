@@ -272,8 +272,18 @@ interceptor 로 자신이 작성한게 아니면 수정 삭제가 안되게하�
 - 헤더를 하려하면 client에서 헤더를 설정하는 코드를 만들어야했는데, 그거 보다 편하고 좋은 방식인거 같다.
 
 
+# 8/30
+interceptor로 자기꺼아니면 수정삭제조회 안되게하기(댓글,덧글 삭제 / 게시판 수정)
+
+# 8/31
+interceptor에 팝업을 발생시키려고 했는데, preHandle()을 false로 반환을 시키면 그 뒤에 view를 원하는대로 controll할 수 가 없다.  
+그렇다고 true로 반환시키면 뒤에 controller와 redirect가 섞여서 에러를 발생하는것 같은데 어떻게 해야할까?  
+prehandle()에서 response를 통해서 problem이나 popup객체를 만들어서 json으로 client로 보내보자
+
 ### 해야할 것들
 interceptor로 자기꺼아니면 수정삭제조회 안되게하기.
+페이지 되돌려줄때, 뭐때문에 되돌려졌는지를 알수가 없음. (popup을 설정해야할듯?)
+
 중복 쿼리 제거 (성능향상)
 AOP(관점지향 프로그래밍) -  로그추적기, 김영한님
 getter 쓰지 말라고 함. setter도 쓰지말라고 함.

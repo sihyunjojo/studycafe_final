@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:vertical-align="http://www.w3.org/1999/xhtml">
 <head>
     <link href="../css/bootstrap.min.css"
           th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
@@ -25,9 +25,11 @@
 
 <body>
 <div th:fragment="header_copy">
+
+
     <div style="text-align: center">
         <a href="/" style="text-decoration: none; font-size:40px; margin:auto;">
-            <img src="/img/logo.jpg" class="logo_image" width="50" height="50" margin="auto">
+            <img src="/img/logo.jpg" class="logo_image" width="50" height="50" margin="auto" vertical-align: middle;>
             <b>베이직 스터디 카페</b>
         </a>
     </div>
@@ -65,7 +67,6 @@
                         </button>
                     </li>
                 </th:block>
-
             </ul>
         </header>
     </div>

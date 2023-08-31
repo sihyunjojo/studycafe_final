@@ -1,5 +1,6 @@
 package project.studycafe.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +53,7 @@ public class OptionConfig implements WebMvcConfigurer {
     private final JpaCartProductRepository cartProductRepository;
     private final JpaCommentRepository commentRepository;
     private final JpaReplyRepository replyRepository;
-
+    private final ObjectMapper objectMapper;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -66,7 +67,7 @@ public class OptionConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor(new CommentService(commentRepository,memberRepository,boardRepository),new ReplyService(replyRepository,memberRepository,commentRepository)))
+        registry.addInterceptor(new LoginCheckInterceptor(objectMapper, new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns
@@ -95,6 +96,7 @@ public class OptionConfig implements WebMvcConfigurer {
         registry.addInterceptor(new PersonalAccessControlInterceptor(new BoardService(boardRepository, boardQueryRepository, memberRepository), new OrderService(orderRepository, orderQueryRepository, memberRepository, productRepository, deliveryRepository, orderItemRepository), new CartService(cartRepository, cartProductRepository, productRepository), new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
                 .order(4)
                 .addPathPatterns(
+                        // 멤버 수정, 삭제는 애초에 세션에 있는 정보를 가지고 수정해주는 거여서 로그인된 회원말고 접근이 안됨.
                         "/board/*/edit", "/**/delete"
                 )
                 .excludePathPatterns(
