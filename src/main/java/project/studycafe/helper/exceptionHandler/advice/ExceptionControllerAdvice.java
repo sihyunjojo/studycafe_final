@@ -12,6 +12,12 @@ import project.studycafe.helper.exceptionHandler.ErrorResult;
 import javax.servlet.http.HttpServletRequest;
 
 // 핸들러는 요청을 처리하는 객체 또는 메서드를 가리키며, 해당 요청을 처리하는 로직을 포함한다.
+//@ControllerAdvice는 스프링 프레임워크에서 제공하는 어노테이션으로, 전역적인 예외 처리와 바인딩 설정을 위한 클래스를 정의할 때 사용됩니다
+//전역적인 예외 처리:@ControllerAdvice 클래스 내부에@ExceptionHandler 어노테이션을 사용하여 예외를 처리하는 메서드를 정의할 수 있습니다.이렇게 정의한 메서드는 여러 컨트롤러에서 발생하는 예외를 효과적으로 처리할 수 있습니다.
+//전역적인 모델 설정:@ModelAttribute 어노테이션을 사용하여 모델 속성을 전역적으로 설정할 수 있습니다.이렇게 하면 각각의 컨트롤러 메서드에서 동일한 모델 속성을 설정하지 않아도 됩니다.
+//전역적인 데이터 바인딩 설정:@InitBinder 어노테이션을 사용하여 데이터 바인딩 설정을 전역적으로 정의할 수 있습니다.이렇게 하면 여러 컨트롤러에서 동일한 데이터 바인딩 설정을 공유할 수 있습니다.
+//전역적인 뷰 설정:@ModelAttribute 어노테이션을 사용하여 모든 뷰에서 사용되는 공통 데이터를 설정할 수 있습니다.
+
 @Slf4j
 @ControllerAdvice
 @RestControllerAdvice
@@ -34,7 +40,7 @@ public class ExceptionControllerAdvice {
         log.info("postUrl = {}", postUrl);
 
         String[] urlParts = postUrl.split("/");
-        log.info("urlparts = {},{},{},{}", urlParts[0],urlParts[1],urlParts[2],urlParts[3]);
+        log.info("urlparts = {},{},{},{}", urlParts[0], urlParts[1], urlParts[2], urlParts[3]);
 
         String previousUrl;
         // previousUrl 결정

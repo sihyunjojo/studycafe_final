@@ -1,16 +1,13 @@
 package project.studycafe.helper.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import project.studycafe.app.domain.board.Comment;
 import project.studycafe.app.domain.board.Reply;
 import project.studycafe.app.service.board.CommentService;
 import project.studycafe.app.service.board.ReplyService;
-import project.studycafe.helper.interceptor.Object.ProblemResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +23,6 @@ import static project.studycafe.SessionConst.LOGIN_MEMBER;
 @RequiredArgsConstructor
 public class LoginCheckInterceptor implements HandlerInterceptor {
 
-    private final ObjectMapper objectMapper;
     private final CommentService commentService;
     private final ReplyService replyService;
 
@@ -56,19 +52,10 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
                 redirectURL = "/login?redirectURL=/board/" + boardId;
             }
+
 //            else if (requestURI.contains("delete")) {
 //                response.sendRedirect("login?redirectURL=" + requestURI.replace("/delete", ""));
 //            }
-
-            // objectMapper를 통해서 html로 값 전달
-            ProblemResponse problemResponse = new ProblemResponse("헤당 작업을 하려면 로그인이 필요합니다.");
-
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            String jsonString = objectMapper.writeValueAsString(problemResponse);
-            response.getWriter().write(jsonString);
-
-
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
             // 상대경로 절대경로 잘 구분해야한다.
             response.sendRedirect(redirectURL);

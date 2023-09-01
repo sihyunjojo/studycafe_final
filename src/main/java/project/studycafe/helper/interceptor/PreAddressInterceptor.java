@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 public class PreAddressInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String currentPostUrl = request.getRequestURI();
-        request.setAttribute("postUrl", currentPostUrl);
-        log.info("currentPostUrl = {}", currentPostUrl);
+        String currentUrl = request.getRequestURI();
+        request.setAttribute("postUrl", currentUrl);
+        log.info("currentUrl = {}", currentUrl);
         return true;
     }
 

@@ -6,46 +6,26 @@
     <head th:insert="~{template/styleCss :: css_copy}"></head>
 </head>
 <script>
-    var xhr = new XMLHttpRequest();
+    window.onload = function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/handler/please/login', true); // 마지막 매개변수 true는 비동기적인 요청을 수행
+        xhr.setRequestHeader('Accept', 'application/json'); // 받아올 타입을 정해줌.
+        var resultElement = document.getElementById('result');
 
-    // 서버에서 받은 JSON 문자열
-    var jsonString = '{"message": "헤당 작업을 하려면 로그인이 필요합니다."}';
+        // 이 이벤트 핸들러는 XMLHttpRequest 객체의 readyState 속성의 변화를 감지합니다.
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 401) {
+                // 서버에서 전송한 JSON 응답을 파싱하여 JavaScript 객체로 변환
+                var responseObject = JSON.parse(xhr.responseText);
 
-    // JSON 문자열을 JavaScript 객체로 변환
-    // var responseObject = JSON.parse(xhr.responseText);
-    var responseObject = JSON.parse(jsonString);
-
-    // HTML에 JSON 객체의 message 필드를 표시
-    document.addEventListener("DOMContentLoaded", function () {
-
-            var resultElement = document.getElementById('result');
-            // resultElement.textContent = responseObject.message;
-            resultElement.textContent = responseObject.message;
-        }
-    );
+                // 결과를 HTML에 표시
+                resultElement.textContent = responseObject.message;
+            }
+        };
+        xhr.send();
+    };
 
 
-    // var xhr = new XMLHttpRequest();
-    // // xhr.open('GET', '/your-endpoint', true); // 마지막 매개변수 true는 비동기적인 요청을 수행
-    // // xhr.setRequestHeader('Accept', 'application/json'); // 받아올 타입을 정해줌.
-    // var resultElement = document.getElementById('result');
-    //
-    // // 이 이벤트 핸들러는 XMLHttpRequest 객체의 readyState 속성의 변화를 감지합니다.
-    // // xhr.onreadystatechange = function () {
-    // resultElement.textContent = 'responseObject.message';
-    // resultElement.innerText = 'qwe';
-    //
-    // if (xhr.readyState === 4 && xhr.status === 401) {
-    //     // 서버에서 전송한 JSON 응답을 파싱하여 JavaScript 객체로 변환
-    //     var responseObject = JSON.parse(xhr.responseText);
-    //
-    //     // 결과를 HTML에 표시
-    //     resultElement.textContent = responseObject.message;
-    //     resultElement.textContent = 'responseObject.message';
-    // }
-    // }
-    // ;
-    // xhr.send();
 </script>
 <body>
 <div class="container">

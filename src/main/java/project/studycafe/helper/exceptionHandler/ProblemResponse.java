@@ -1,4 +1,4 @@
-package project.studycafe.helper.interceptor.Object;
+package project.studycafe.helper.exceptionHandler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class ProblemResponse {
     private String message;
+
 }

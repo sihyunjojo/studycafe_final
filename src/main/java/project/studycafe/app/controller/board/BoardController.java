@@ -112,20 +112,13 @@ public class BoardController {
 
     @GetMapping("/add")
     public String addForm(@Login Member loginMember, Model model) {
-        if (loginMember == null) {
-            return "redirect:/login?redirectURL=/board/add";
-        }
         model.addAttribute("board", new BoardCreateForm());
-        model.addAttribute(LOGIN_MEMBER, loginMember);
+        model.addAttribute("loginMember", loginMember);
         return "board/addBoardForm";
     }
 
     @PostMapping("/add")
-    public String add(@Login Member loginMember, BoardCreateForm form) throws IOException, NoSuchAlgorithmException {
-        if (loginMember == null) {
-            return "redirect:/login?redirectURL=/board/add";
-        }
-
+    public String add(BoardCreateForm form) throws IOException, NoSuchAlgorithmException {
         Long boardId = boardService.addBoard(form);
 
         if (form.getAttachmentFiles() != null) {

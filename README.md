@@ -280,7 +280,14 @@ interceptor에 팝업을 발생시키려고 했는데, preHandle()을 false로 �
 그렇다고 true로 반환시키면 뒤에 controller와 redirect가 섞여서 에러를 발생하는것 같은데 어떻게 해야할까?  
 prehandle()에서 response를 통해서 problem이나 popup객체를 만들어서 json으로 client로 보내보자
 
+# 9/1
+아니? interceptor에서는 redirect로 주소를 정해주기떄문에, redirect를 하면 기존 response에 담았던 모든 정보가 사라지고 다시 주소로 할당해주는거여서,
+interceptor에서는 할 수 없어.
+그래서 loginform에서 redirect로 응답을 받았을때, ajax를 통해서 비동기처리를 해주면 될거 같은 느낌이 들어.
+
 ### 해야할 것들
+home에서만 로그아웃 뜨고 나머지에선 haeder에 로그아웃 안뜸.
+
 interceptor로 자기꺼아니면 수정삭제조회 안되게하기.
 페이지 되돌려줄때, 뭐때문에 되돌려졌는지를 알수가 없음. (popup을 설정해야할듯?)
 

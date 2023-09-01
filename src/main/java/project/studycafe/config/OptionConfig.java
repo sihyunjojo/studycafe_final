@@ -53,7 +53,6 @@ public class OptionConfig implements WebMvcConfigurer {
     private final JpaCartProductRepository cartProductRepository;
     private final JpaCommentRepository commentRepository;
     private final JpaReplyRepository replyRepository;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -67,24 +66,26 @@ public class OptionConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor(objectMapper, new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
+        registry.addInterceptor(new LoginCheckInterceptor(new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
                                 "/", "/login", "/logout", "/oauth/**", "/download/**",
-                                "/board", "/board/{boardId}", "board/add",
-                                "/product", "/product/{productId}", "product/add",
+                                "/board", "/board/{boardId}",
+                                "/product", "/product/{productId}",
 //                                "/comment/**", "/reply/**",
                                 "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**",
-                                "/member/new", "/member/find/**"
+                                "/member/new", "/member/find/**",
+                                "/handler/**"
                         );
         registry.addInterceptor(new SessionInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
-                                "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**"
+                                "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**",
+                                "/handler/**"
                         );
         registry.addInterceptor(new PreAddressInterceptor())
                 .order(3)
