@@ -72,9 +72,8 @@ public class OptionConfig implements WebMvcConfigurer {
                 .excludePathPatterns
                         (
                                 "/", "/login", "/logout", "/oauth/**", "/download/**",
-                                "/board", "/board/{boardId}",
-                                "/product", "/product/{productId}",
-//                                "/comment/**", "/reply/**",
+                                "/board", "/board/?",
+                                "/product", "/product/?",
                                 "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**",
                                 "/member/new", "/member/find/**",
                                 "/handler/**"
