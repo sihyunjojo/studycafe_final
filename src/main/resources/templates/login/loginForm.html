@@ -6,24 +6,45 @@
     <head th:insert="~{template/styleCss :: css_copy}"></head>
 </head>
 <script>
-    window.onload = function () {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/handler/please/login', true); // 마지막 매개변수 true는 비동기적인 요청을 수행
-        xhr.setRequestHeader('Accept', 'application/json'); // 받아올 타입을 정해줌.
-        var resultElement = document.getElementById('result');
+    var currentURL = window.location.href;
 
-        // 이 이벤트 핸들러는 XMLHttpRequest 객체의 readyState 속성의 변화를 감지합니다.
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 401) {
-                // 서버에서 전송한 JSON 응답을 파싱하여 JavaScript 객체로 변환
-                var responseObject = JSON.parse(xhr.responseText);
+    if (currentURL.indexOf('?') !== -1) {
+        // The URL contains parameters
+        console.log('URL has parameters');
 
-                // 결과를 HTML에 표시
-                resultElement.textContent = responseObject.message;
-            }
+        window.onload = function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/handler/please/login', true); // 마지막 매개변수 true는 비동기적인 요청을 수행
+            xhr.setRequestHeader('Accept', 'application/json'); // 받아올 타입을 정해줌.
+            var resultElement = document.getElementById('result');
+
+            // 이 이벤트 핸들러는 XMLHttpRequest 객체의 readyState 속성의 변화를 감지합니다.
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 401) {
+                    // 서버에서 전송한 JSON 응답을 파싱하여 JavaScript 객체로 변환
+                    var responseObject = JSON.parse(xhr.responseText);
+
+                    var errorPopup = window.open("/popup.html?message=" + responseObject.message, "errorPopup",
+                        "left=300, top=150," +
+                        "width=500, height=120," +
+                        "status=no, scrollbars=no ,toolbar=no ,location=no ,menubar=no," +
+                        "relative=yes");
+
+
+                    // var easyPopup = window.open("/popup/easyPopup?message=" + responseObject.message, "easyPopUp",
+                    //     "left=300, top=150," +
+                    //     "width=500, height=170, " +
+                    //     "status=no, scrollbars=no, toolbar=no, location=no, menubar=no"+
+                    //     "relative=yes");
+
+                }
+            };
+            xhr.send();
         };
-        xhr.send();
-    };
+    } else {
+        // The URL does not contain parameters
+        console.log('URL does not have parameters');
+    }
 
 
 </script>
@@ -38,9 +59,6 @@
             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
                th:text="${err}">전체 오류 메시지</p>
         </div>
-
-        <div id="result"></div>
-
 
         <div>
             <label for="userLoginId">아이디</label>

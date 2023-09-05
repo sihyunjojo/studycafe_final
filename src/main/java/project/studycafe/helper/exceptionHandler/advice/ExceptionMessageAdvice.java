@@ -13,6 +13,7 @@ import project.studycafe.helper.exceptionHandler.ProblemResponse;
 @Slf4j
 @ControllerAdvice
 @RestControllerAdvice
+@RequestMapping("/handler")
 @RequiredArgsConstructor
 public class ExceptionMessageAdvice {
 
@@ -20,7 +21,7 @@ public class ExceptionMessageAdvice {
 
 //    json 방식: api 로 통신시 사용?
 //    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @GetMapping("/handler/please/login")
+    @GetMapping("/please/login")
     public ResponseEntity<ProblemResponse> pleaseLoginHandler() {
         ProblemResponse problemResponse = new ProblemResponse("헤당 작업을 하려면 로그인이 필요합니다.");
 

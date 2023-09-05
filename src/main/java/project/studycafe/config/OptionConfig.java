@@ -74,7 +74,7 @@ public class OptionConfig implements WebMvcConfigurer {
                                 "/", "/login", "/logout", "/oauth/**", "/download/**",
                                 "/board", "/board/?",
                                 "/product", "/product/?",
-                                "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**",
+                                "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
                                 "/member/new", "/member/find/**",
                                 "/handler/**"
                         );
@@ -83,7 +83,7 @@ public class OptionConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
-                                "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**",
+                                "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
                                 "/handler/**"
                         );
         registry.addInterceptor(new PreAddressInterceptor())
@@ -91,7 +91,7 @@ public class OptionConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
-                                "/popup/**", "/css/**", "/*.ico", "/error", "/img/**", "/template/template/**"
+                                "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html"
                         );
         registry.addInterceptor(new PersonalAccessControlInterceptor(new BoardService(boardRepository, boardQueryRepository, memberRepository), new OrderService(orderRepository, orderQueryRepository, memberRepository, productRepository, deliveryRepository, orderItemRepository), new CartService(cartRepository, cartProductRepository, productRepository), new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
                 .order(4)

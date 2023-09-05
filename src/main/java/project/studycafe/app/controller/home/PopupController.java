@@ -36,6 +36,12 @@ public class PopupController {
         return "/popup/hello";
     }
 
+    @GetMapping("/easyPopup")
+    public String showEasyPopup(Model model, @RequestParam(name = "message") String message) {
+        model.addAttribute("message", message);
+        return "popup/easyPopup"; // 뷰 템플릿의 경로와 이름
+    }
+
     @PostMapping("/closePopup")
     public String closePopup(HttpServletResponse response, @RequestParam(name = "option", defaultValue = "false") boolean option) {
         // 쿠키 설정
