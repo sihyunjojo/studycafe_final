@@ -23,17 +23,25 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400 클라이언트측 에러를 발생시켜줘라
-    @ExceptionHandler(RuntimeException.class) // 런타임에러가 발생시 발생한다. 2개이상 가능
-    public ModelAndView badRequestHandler(BadRequestException e) {
-        log.error("[badRequestHandler] ex", e);
-        return new ModelAndView("error/500");
-    }
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500 클라이언트측 에러를 발생시켜줘라
+//    @ExceptionHandler(RuntimeException.class) // 런타임에러.
+//    public ModelAndView RunTimeExceptionHandler(RuntimeException e) {
+//        log.error("[RunTimeExceptionHandler] ex", e);
+//        return new ModelAndView("error/500");
+//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400 클라이언트측 에러를 발생시켜줘라
-    @ExceptionHandler({UserException.class}) // 런타임에러가 발생시 발생한다. 2개이상 가능
-    public ModelAndView userExceptionHandler(UserException e, HttpServletRequest request, Model model) {
+    @ExceptionHandler(BadRequestException.class) // 의도하지 않은 요청이 받아들여졌을시 에러가 발생한다. 2개이상 가능
+    public ModelAndView badRequestHandler(BadRequestException e) {
         log.error("[badRequestHandler] ex", e);
+        return new ModelAndView("error/4xx");
+    }
+
+    // 유저에러 발생시, 이전 페이지나 기존 기능을 할 수 있는 페이지로 돌아가게 해주는 코드.
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({UserException.class})
+    public ModelAndView userExceptionHandler(UserException e, HttpServletRequest request, Model model) {
+        log.error("[userExceptionHandler] ex", e);
         model.addAttribute("errorMessage", e.getMessage());
 
         String postUrl = (String) request.getAttribute("postUrl");
@@ -75,13 +83,13 @@ public class ExceptionControllerAdvice {
         return new ErrorResult("EX", "내부 오류입니다. 어떤 오류인지 알려주세요.");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class) // 2개이상 가능
-    public ErrorResult illegalExHandler(IllegalArgumentException e) {
-        log.error("[exceptionHandler] ex", e);
-        // code,message
-        return new ErrorResult("BAD", e.getMessage());
-    }
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(IllegalArgumentException.class) // 2개이상 가능
+//    public ErrorResult illegalExHandler(IllegalArgumentException e) {
+//        log.error("[illegalExHandler] ex", e);
+//        // code,message
+//        return new ErrorResult("BAD", e.getMessage());
+//    }
 
     // json방식 api로 통신시.
 //    @ExceptionHandler() //생략시 메서드 파라메터의 값이 지정된다.

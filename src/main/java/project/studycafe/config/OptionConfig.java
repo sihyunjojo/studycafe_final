@@ -97,18 +97,17 @@ public class OptionConfig implements WebMvcConfigurer {
                 .order(4)
                 .addPathPatterns(
                         // 멤버 수정, 삭제는 애초에 세션에 있는 정보를 가지고 수정해주는 거여서 로그인된 회원말고 접근이 안됨.
-                        "/board/*/edit", "/**/delete"
+                        "/board/?/edit", "/order/?/edit", "/**/delete"
                 )
                 .excludePathPatterns(
-                        "/product/**/delete"
                 );
-        registry.addInterceptor(new AccessControlByLevelInterceptor())
+        registry.addInterceptor(new AccessControlByLevelInterceptor(new ObjectMapper()))
                 .order(5)
                 .addPathPatterns(
-                        "/product/**/edit/**", "/product/**/delete"
+                        "/product/add", "/product/?/edit", "/product/?/delete",
+                        "/order/?/delete"
                 )
                 .excludePathPatterns(
-
                 );
 
     }

@@ -17,6 +17,8 @@ public class PreAddressInterceptor implements HandlerInterceptor {
         String currentUrl = request.getRequestURI();
         request.setAttribute("postUrl", currentUrl);
         log.info("currentUrl = {}", currentUrl);
+        log.info("response.getStatus() = {}", response.getStatus());
+
         return true;
     }
 

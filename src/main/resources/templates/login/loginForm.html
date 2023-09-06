@@ -5,7 +5,9 @@
     <title>로그인</title>
     <head th:insert="~{template/styleCss :: css_copy}"></head>
 </head>
+<script src="/js/createPopup.js"></script>
 <script>
+
     var currentURL = window.location.href;
 
     if (currentURL.indexOf('?') !== -1) {
@@ -23,20 +25,7 @@
                 if (xhr.readyState === 4 && xhr.status === 401) {
                     // 서버에서 전송한 JSON 응답을 파싱하여 JavaScript 객체로 변환
                     var responseObject = JSON.parse(xhr.responseText);
-
-                    var errorPopup = window.open("/popup.html?message=" + responseObject.message, "errorPopup",
-                        "left=300, top=150," +
-                        "width=500, height=120," +
-                        "status=no, scrollbars=no ,toolbar=no ,location=no ,menubar=no," +
-                        "relative=yes");
-
-
-                    // var easyPopup = window.open("/popup/easyPopup?message=" + responseObject.message, "easyPopUp",
-                    //     "left=300, top=150," +
-                    //     "width=500, height=170, " +
-                    //     "status=no, scrollbars=no, toolbar=no, location=no, menubar=no"+
-                    //     "relative=yes");
-
+                    createPopupByJsonMessage(responseObject.message)
                 }
             };
             xhr.send();
@@ -45,8 +34,6 @@
         // The URL does not contain parameters
         console.log('URL does not have parameters');
     }
-
-
 </script>
 <body>
 <div class="container">

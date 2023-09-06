@@ -37,6 +37,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             log.info("미인증 사용자 요청");
 
             //로그인페이지로 redirect
+            String[] splitURL = requestURI.split("/");
             String redirectURL = "/login?redirectURL=" + requestURI;
 
             if (requestURI.contains("reply")) {
@@ -52,6 +53,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
                 redirectURL = "/login?redirectURL=/board/" + boardId;
             }
+//            else if (requestURI.contains("add")) {
+//                redirectURL = "/login?redirectURL=/" + splitURL[1];
+//            }
 
 //            else if (requestURI.contains("delete")) {
 //                response.sendRedirect("login?redirectURL=" + requestURI.replace("/delete", ""));

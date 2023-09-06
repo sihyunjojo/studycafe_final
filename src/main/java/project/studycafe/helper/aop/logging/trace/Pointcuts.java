@@ -7,50 +7,45 @@ public class Pointcuts {
 
     //project.studycafe.app 패키지와 하위 패키지
     @Pointcut("execution(* project.studycafe.app..*(..))")
-    public void allAppProject() {
-    } //pointcut signature
+    public void allAppProject() {} //pointcut signature
 
     @Pointcut("execution(* project.studycafe.helper..*(..))")
-    public void allHelperProject() {
-    }
+    public void allHelperProject() {}
 
-    // project.studycafe.controller 패키지와 하위 패키지
+    @Pointcut("execution(* project.studycafe.helper.handler..*(..))")
+    public void allHandlerProject() {}
+
+    @Pointcut("execution(* project.studycafe.helper.interceptor..*(..))")
+    public void allInterceptorProject() {}
+
     @Pointcut("execution(* project.studycafe.app.controller..*(..))")
-    public void allController() {
+    public void allController() {}
 
-    } //pointcut signature
-
-    // project.studycafe.service 패키지와 하위 패키지
     @Pointcut("execution(* project.studycafe.app.service..*(..))")
-    public void allService() {
-    } //pointcut signature
+    public void allService() {}
 
-    // project.studycafe.repository 패키지와 하위 패키지
     @Pointcut("execution(* project.studycafe.app.repository..*(..))")
-    public void allRepository() {
-    } //pointcut signature
+    public void allRepository() {}
 
-    //클래스 이름 패턴이 *Repository
     @Pointcut("execution(* *..*Repository.*(..))")
-    public void nameRepository() {
-    }
+    public void nameRepository() {}
 
-    //클래스 이름 패턴이 *Service
     @Pointcut("execution(* *..*Service.*(..))")
-    public void nameService() {
-    }
+    public void nameService() {}
 
     //    클래스 이름 패턴이 *Controller
     @Pointcut("execution(* *..*Controller.*(..))")
-    public void nameController() {
-    }
+    public void nameController() {}
 
-
-    //allOrder && allService
     @Pointcut("allController() && allService() && allRepository()")
-    public void ControllerAndServiceAndRepository() {
-    }
+    public void ControllerAndServiceAndRepository() {}
 
     @Pointcut("allHelperProject() && allAppProject()")
     public void allAppAndHelperProject() {}
+
+    @Pointcut("allHandlerProject() && allAppProject()")
+    public void allAppAndHandlerProject() {}
+
+    @Pointcut("allInterceptorProject()Project() && allAppProject()")
+    public void allAppAndInterceptorProject() {}
 }

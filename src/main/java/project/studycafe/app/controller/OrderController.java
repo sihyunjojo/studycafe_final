@@ -171,6 +171,7 @@ public class OrderController {
         orderService.deleteOrder(orderId);
         return "redirect:/order";
     }
+
     @PostMapping("/{orderId}/cancel")
     public String cancel(@PathVariable long orderId) {
         orderService.cancelOrder(orderId);

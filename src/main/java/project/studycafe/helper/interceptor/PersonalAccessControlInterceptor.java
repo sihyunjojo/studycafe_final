@@ -14,6 +14,7 @@ import project.studycafe.app.service.board.BoardService;
 import project.studycafe.app.service.board.CommentService;
 import project.studycafe.app.service.board.ReplyService;
 import project.studycafe.app.service.cart.CartService;
+import project.studycafe.helper.exception.UserException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +46,7 @@ public class PersonalAccessControlInterceptor implements HandlerInterceptor {
         if (loginMember != null) {
             loginMemberId = loginMember.getId();
         } else {
-            loginMemberId = null;
+            throw new UserException("로그인한 멤버가 존재하지 않습니다. 로그인을 해주세요");
         }
 
         String requestURI = request.getRequestURI();
@@ -53,7 +54,7 @@ public class PersonalAccessControlInterceptor implements HandlerInterceptor {
 
         // validationObject
         Long memberIdByObject = null;
-        String redirectURI = Arrays.stream(splitURI).collect(Collectors.toList()).subList(0,3).toString();
+        String redirectURI = Arrays.stream(splitURI, 0, 3).collect(Collectors.joining("/"));
 
         switch (splitURI[1]) {
             case "board":
@@ -93,13 +94,14 @@ public class PersonalAccessControlInterceptor implements HandlerInterceptor {
         }
 
         // 작성자가 자신인지 확인
-        if (loginMember != null && loginMemberId.equals(memberIdByObject)) {
+        if (loginMemberId.equals(memberIdByObject)) {
             // 작성자가 로그인한 사람입니다.
             log.info("작성자가 로그인한 사람입니다");
             return true;
         } else {
             log.info("작성자와 로그인한 사람이 다른 사람 입니다.");
             // 자신이 아닌 경우 처리 (예: 권한 부족 페이지로 리다이렉션)
+            log.info("redirect = {}", redirectURI);
             response.sendRedirect(redirectURI);
             return false;
         }
