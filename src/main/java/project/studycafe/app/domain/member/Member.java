@@ -123,7 +123,7 @@ public class Member extends BaseTimeEntity {
     public Long getId(){
         return id;
     }
-    @Override
+
     public String toString() {
         return "Member{" +
                 "id=" + id +

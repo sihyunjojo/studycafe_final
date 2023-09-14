@@ -159,4 +159,8 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
+
+    public void clear(){
+        boardRepository.deleteAll();
+    }
 }

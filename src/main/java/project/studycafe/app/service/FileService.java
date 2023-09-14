@@ -13,7 +13,6 @@ import project.studycafe.app.repository.file.JpaFileRepository;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class FileService {
     }
 
     // 이미지 여러개 날라올때
-    public List<AttachmentFile> storeFiles(List<MultipartFile> multipartFiles, Long boardId) throws IOException, NoSuchAlgorithmException {
+    public List<AttachmentFile> storeFiles(List<MultipartFile> multipartFiles, Long boardId){
         List<AttachmentFile> storeFileResult = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
@@ -49,7 +48,7 @@ public class FileService {
     }
 
     // 이미지 하나 날라올때
-    public AttachmentFile storeFile(MultipartFile multipartFile, Long boardId) throws IOException, NoSuchAlgorithmException {
+    public AttachmentFile storeFile(MultipartFile multipartFile, Long boardId){
         log.info("store file start");
         if (multipartFile.isEmpty()) {
             return null;
@@ -75,7 +74,11 @@ public class FileService {
 //        fileRepository.save(attachmentFile);
 
         //파일 저장장치에 저장
-        multipartFile.transferTo(new File(getFullPath(storeFileName))); //transferTo() 업로드된 파일을 지정된 경로로 전송(이동)하는 기능을 제공한다.
+        try {
+            multipartFile.transferTo(new File(getFullPath(storeFileName))); //transferTo() 업로드된 파일을 지정된 경로로 전송(이동)하는 기능을 제공한다.
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
         return attachmentFile;

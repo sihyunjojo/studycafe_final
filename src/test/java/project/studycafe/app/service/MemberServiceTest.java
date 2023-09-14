@@ -1,4 +1,4 @@
-package project.studycafe.service;
+package project.studycafe.app.service;
 
 
 import org.junit.Test;
