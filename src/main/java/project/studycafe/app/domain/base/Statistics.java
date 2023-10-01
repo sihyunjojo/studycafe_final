@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
@@ -40,8 +39,8 @@ public class Statistics {
         return statistics;
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
+    public Map<String, Integer> toMap() {
+        Map<String, Integer> map = new HashMap<>();
         map.put("readCount", readCount);
         map.put("likeCount", likeCount);
         return map;

@@ -1,55 +1,68 @@
 package project.studycafe.app.service.board;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import project.studycafe.app.controller.form.board.BoardCreateForm;
 import project.studycafe.app.controller.form.board.BoardForm;
 import project.studycafe.app.controller.form.board.BoardUpdateForm;
+import project.studycafe.app.controller.form.member.CommonMemberForm;
 import project.studycafe.app.domain.board.AttachmentFile;
 import project.studycafe.app.domain.board.Board;
-import project.studycafe.app.domain.board.Info.BoardBaseInfo;
 import project.studycafe.app.domain.member.Member;
 import project.studycafe.app.service.FileService;
+import project.studycafe.app.service.member.MemberService;
 
-import java.io.IOException;
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.assertNotNull;
 import static project.studycafe.app.controller.form.board.AttachmentFileForm.createAttachmentFileForms;
-import static project.studycafe.app.domain.board.Board.createBoard;
-import static project.studycafe.app.domain.board.Info.BoardBaseInfo.createBoardInfo;
 
 @Slf4j
 //어떤 효과인지 찾아보기
 @Transactional
 @SpringBootTest
-@RequiredArgsConstructor
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//@ActiveProfiles("test") //프로파일을 지정할 때 사용됩니다. application-{profile}.properties
+//@SpringBootTest(properties = {"spring.config.location=classpath:application-test.properties"})
 class BoardServiceTest {
-
-    private final BoardService boardService;
-    private final FileService fileService;
-
+    @Autowired MemberService memberService;
+    @Autowired BoardService boardService;
+    @Autowired FileService fileService;
 
     Member member;
+    Long memberId;
+
+    Long boardId;
     Board board;
 
     // 우선 테스트 DB를 따로 만들어야함.
-//    일관된 상태 유지: 테스트가 실행될 때 데이터베이스 상태가 일관된 상태로 유지됩니다.
-//    이는 데이터베이스 작업이 트랜잭션 내에서 모두 처리되기 때문에 발생합니다.
     @BeforeEach
     void beforeEach() {
-        //when
-        member = new Member(100L, "a", "a@google.com", "google", "hello");
+        // 기본으로 member을 만들어서 제공헤주고
+        CommonMemberForm commonMemberForm = new CommonMemberForm("1", "1", "1", "1", "01085524018");
+        memberId = memberService.join(commonMemberForm);
 
-        BoardBaseInfo boardInfo = createBoardInfo("공지사항", "공지사항", "공지사항");
-        board = createBoard(member, boardInfo);
+        Optional<Member> findMember = memberService.findById(memberId);
+        member = findMember.orElseThrow();
+
+        // 기본으로 board 를 만들어서 제공해줌.
+        BoardCreateForm boardCreateForm= new BoardCreateForm(memberId, "공지사항", "공지사항", "공지사항");
+
+        //when
+        boardId = boardService.addBoard(boardCreateForm);
+        board = boardService.findById(boardId).orElseThrow();
+
+        log.info("beforeEach 끝");
     }
 
     // 우선 테스트 DB를 따로 만들어야함.
@@ -60,19 +73,22 @@ class BoardServiceTest {
 //        boardService.clear();
 //    }
 
+    @Test
+    @DisplayName("초기화")
+    @Order(1)
+    void hm() {
+    }
 
     @Test
     @DisplayName("게시판 생성 테스트")
     void addBoard() {
 
         //given
-        BoardCreateForm boardCreateForm = new BoardCreateForm(member.getId(), "공지사항", "공지사항", "공지사항");
-        Long boardId = boardService.addBoard(boardCreateForm);
+        //when
+        //Before Each에서 모든 것 제공
 
         //then
-        Optional<Board> findBoard = boardService.findById(boardId);
-        assertThat(findBoard.orElseThrow()).isEqualTo(board);
-
+        assertThat(board.getId()).isEqualTo(boardId);
     }
 
     @Test
@@ -81,6 +97,7 @@ class BoardServiceTest {
         //given
         BoardUpdateForm boardUpdateForm = new BoardUpdateForm("공지사항1", "공지사항", "공지사항1");
 
+        //when
         boardService.updateBoard(board.getId(), boardUpdateForm);
 
         //then
@@ -94,9 +111,7 @@ class BoardServiceTest {
     @Test
     @DisplayName("게시판 삭제 테스트")
     void deleteBoard() {
-        //given
-        Long boardId = board.getId();
-
+        //when
         boardService.deleteBoard(boardId);
 
         //then
@@ -107,13 +122,69 @@ class BoardServiceTest {
     @DisplayName("게시판 조회수 증가 테스트")
     void increaseReadCount() {
         //given
-        boardService.increaseReadCount(board);
+        Integer readCount = board.getReadCount();
+
+        //when
+        boardService.increaseReadCount(boardId);
+        Integer updateReadCount = board.getReadCount();
 
         //then
-        assertThat((Long) board.toMap().get("readCount")).isEqualTo(1L);
+        assertThat(readCount + 1).isEqualTo(updateReadCount);
     }
 
-    // 우선 테스트 DB를 따로 만들어야함.
+    @Test
+    @DisplayName("게시판 좋아요 증가 테스트")
+    void increaseLikeCount() {
+        //given
+        Integer readCount = board.getReadCount();
+        Integer likeCount = board.getLikeCount();
+
+        //when
+        boardService.upLikeCountBoard(boardId);
+        Integer updateReadCount = board.getReadCount();
+        Integer updateLikeCount = board.getLikeCount();
+
+        //then
+        assertThat(readCount + 1).isEqualTo(updateReadCount);
+        assertThat(likeCount + 1).isEqualTo(updateLikeCount);
+    }
+
+    @Test
+    @DisplayName("게시판 좋아요 2일시, 좋아요 감소 테스트")
+    void decreaseLikeCountWhen2Like() {
+        //given
+        Integer readCount = board.getReadCount();
+        Integer likeCount = board.getLikeCount();
+        boardService.upLikeCountBoard(boardId);
+        boardService.upLikeCountBoard(boardId);
+
+
+        //when
+        boardService.downLikeCountBoard(boardId);
+        Integer updateReadCount = board.getReadCount();
+        Integer updateLikeCount = board.getLikeCount();
+
+        //then
+        assertThat(readCount + 3).isEqualTo(updateReadCount);
+        assertThat(likeCount + 2 - 1).isEqualTo(updateLikeCount);
+    }
+
+    @Test
+    @DisplayName("게시판 좋아요 0일시, 좋아요 감소 테스트")
+    void decreaseLikeCountWhen0Like() {
+        //given
+        Integer readCount = board.getReadCount();
+
+        //when
+        boardService.downLikeCountBoard(boardId);
+        Integer updateReadCount = board.getReadCount();
+        Integer updateLikeCount = board.getLikeCount();
+
+        //then
+        assertThat(readCount + 1).isEqualTo(updateReadCount);
+        assertThat(0).isEqualTo(updateLikeCount);
+    }
+
     @Test
     @DisplayName("받아온 게시판 엔티티 form 형태로 변경 테스트")
     void boardToBoardForm() {

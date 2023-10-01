@@ -15,6 +15,7 @@ import project.studycafe.app.domain.member.Member;
 import project.studycafe.app.repository.board.board.JpaQueryBoardRepository;
 import project.studycafe.app.repository.board.board.JpaBoardRepository;
 import project.studycafe.app.repository.member.JpaMemberRepository;
+import project.studycafe.helper.exception.member.NotFoundMemberException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,11 +60,16 @@ public class BoardService {
     }
 
     public Long addBoard(BoardCreateForm form) {
-        Member member = memberRepository.findById(form.getMemberId()).orElseThrow();
+        Optional<Member> findMember = memberRepository.findById(form.getMemberId());
+        Member member = findMember.orElseThrow(() -> {
+                    log.error("찾는 회원 아이디 = " + form.getMemberId());
+                    return new NotFoundMemberException("회원을 찾을 수 없습니다.");
+                }
+            );
+
         BoardBaseInfo boardBaseInfo = BoardBaseInfo.createBoardInfo(form.getTitle(), form.getCategory(), form.getContent());
 
         Board board = Board.createBoard(member, boardBaseInfo);
-
 
         boardRepository.save(board);
 
@@ -96,20 +102,21 @@ public class BoardService {
         return boardRepository.findAllByBoardBaseInfo_CategoryOrderByCreatedTimeDesc(category);
     }
 
-    public void increaseReadCount(Board board) {
-        board.upReadCount();
+    public void increaseReadCount(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId).orElseThrow();
+        findBoard.upReadCount();
     }
 
     public void upLikeCountBoard(Long boardId) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow();
         findBoard.upLikeCount();
-        findBoard.downReadCount();
+        findBoard.upReadCount();
     }
 
     public void downLikeCountBoard(Long boardId) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow();
         findBoard.downLikeCount();
-        findBoard.downReadCount();
+        findBoard.upReadCount();
     }
 
     public Board getBoardWithMemberCommentReplyAttachmentFile(long boardId){

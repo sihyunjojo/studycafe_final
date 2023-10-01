@@ -145,6 +145,14 @@ public class Board extends BaseTimeEntity {
         return member.getId();
     }
 
+    public Integer getReadCount() {
+        return statistics.toMap().get("readCount");
+    }
+
+    public Integer getLikeCount() {
+        return statistics.toMap().get("likeCount");
+    }
+
     public List<AttachmentFile> getAttachmentFiles() {
         return boardAddInfo.getAttachmentFiles();
     }

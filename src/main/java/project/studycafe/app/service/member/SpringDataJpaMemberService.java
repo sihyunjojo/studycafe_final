@@ -118,21 +118,20 @@ public class SpringDataJpaMemberService implements MemberService {
 //    }
 
     @Override
-    public Optional<Member> findById(Member member) {
-        log.info("member={}", member);
-        return memberRepository.findById(member.getId());
+    public Optional<Member> findById(long memberId) {
+        return memberRepository.findById(memberId);
     }
 
-    public Optional<Member> findByUserId(Member member){
-        return memberRepository.findFirstByUserLoginId(member.getUserLoginId());
+    public Optional<Member> findByUserId(String memberLoginId){
+        return memberRepository.findFirstByUserLoginId(memberLoginId);
     }
 
-    public Optional<Member> findMemberByNameAndPhone(Member member){
-        return memberRepository.findFirstByNameAndPhone(member.getName(), member.getPhone());
+    public Optional<Member> findMemberByNameAndPhone(String memberName, String memberPhone){
+        return memberRepository.findFirstByNameAndPhone(memberName, memberPhone);
     }
 
     public Optional<Member> findByEmailAndProvider(String email, String provider) {
-        return memberRepository.findByEmailAndProvider(email,provider);
+        return memberRepository.findByEmailAndProvider(email, provider);
     }
 
     // member 의 이름과 같은걸 찾아서

@@ -22,7 +22,6 @@ import java.util.List;
 @Slf4j
 @Transactional
 @SpringBootTest
-@ActiveProfiles("test") //프로파일을 지정할 때 사용됩니다. application-{profile}.properties
 public class OrderServiceTest {
 
     OrderItem item1;

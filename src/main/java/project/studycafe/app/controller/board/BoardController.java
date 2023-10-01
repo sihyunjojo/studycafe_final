@@ -103,7 +103,7 @@ public class BoardController {
 //        Board board = boardService.findById(boardId).orElseThrow();
         Board board = boardService.getBoardWithMemberCommentReplyAttachmentFile(boardId);
 
-        boardService.increaseReadCount(board);
+        boardService.increaseReadCount(boardId);
         BoardForm boardForm = boardService.boardToBoardForm(board);
 
         model.addAttribute("board", boardForm);

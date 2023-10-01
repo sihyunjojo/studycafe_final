@@ -161,7 +161,7 @@ public class MemberController {
 
     @PostMapping("/find/id")
     public String findUserId(Member member, Model model) {
-        Optional<Member> result = memberService.findMemberByNameAndPhone(member);
+        Optional<Member> result = memberService.findMemberByNameAndPhone(member.getName(),member.getPhone());
         model.addAttribute("member", result);
 
         return "member/findIdResult";
@@ -174,7 +174,7 @@ public class MemberController {
 
     @PostMapping("/find/pw")
     public String findPassword(Member member, Model model) {
-        Optional<Member> result = memberService.findByUserId(member);
+        Optional<Member> result = memberService.findByUserId(member.getUserLoginId());
         model.addAttribute("member", result);
 
         return "member/findPasswordResult";

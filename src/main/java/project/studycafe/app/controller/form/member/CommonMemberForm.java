@@ -3,6 +3,7 @@ package project.studycafe.app.controller.form.member;
 import lombok.*;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -11,18 +12,18 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class CommonMemberForm implements MemberForm {
 
-    @NotNull
+    @NotBlank
     private String userLoginId;
-    @NotNull
+    @NotBlank
     private String userPassword;
 
-    @NotEmpty(message = "회원 이름은 필수 입니다")
+    @NotBlank(message = "회원 이름은 필수 입니다")
     private String name;
-    @NotEmpty(message = "회원 닉네임은 필수 입니다")
+    @NotBlank(message = "회원 닉네임은 필수 입니다")
     private String nickname;
     private String gender;
 
-    @NotNull
+    @NotBlank
     private String phone;
 
     private String city;
@@ -33,4 +34,11 @@ public class CommonMemberForm implements MemberForm {
     private String email;
     private String birth;
 
+    public CommonMemberForm(String userLoginId, String userPassword, String name, String nickname, String phone) {
+        this.userLoginId = userLoginId;
+        this.userPassword = userPassword;
+        this.name = name;
+        this.nickname = nickname;
+        this.phone = phone;
+    }
 }
