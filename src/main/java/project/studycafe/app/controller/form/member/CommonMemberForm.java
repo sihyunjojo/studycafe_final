@@ -7,8 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Data
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 public class CommonMemberForm implements MemberForm {
 
@@ -40,5 +39,41 @@ public class CommonMemberForm implements MemberForm {
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
+    }
+
+    public CommonMemberForm(String userLoginId, String userPassword, String name, String nickname, String gender, String phone, String city, String street, String zipcode, String email, String birth) {
+        this.userLoginId = userLoginId;
+        this.userPassword = userPassword;
+        this.name = name;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.phone = phone;
+        this.city = city;
+        this.street = street;
+        this.zipcode = zipcode;
+        this.email = email;
+        this.birth = birth;
+    }
+
+    @Override
+    public String toString() {
+        return "CommonMemberForm{" +
+                "userLoginId='" + userLoginId + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", phone='" + phone + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", email='" + email + '\'' +
+                ", birth='" + birth + '\'' +
+                '}';
+    }
+
+    @Override
+    public String getNickname() {
+        return new String(nickname);
     }
 }

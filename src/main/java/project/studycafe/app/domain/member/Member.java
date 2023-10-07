@@ -118,8 +118,6 @@ public class Member extends BaseTimeEntity {
 
     //==연관관계 메서드==//
 
-
-
     public Long getId(){
         return id;
     }

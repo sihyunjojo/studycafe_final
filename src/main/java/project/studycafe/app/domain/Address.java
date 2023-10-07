@@ -12,7 +12,6 @@ public class Address {
     private String street = "";
     private String zipcode = "";
 
-
     protected Address() {
         this.city = "";
         this.street = "";

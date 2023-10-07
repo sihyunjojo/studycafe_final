@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.studycafe.app.controller.form.member.CommonMemberForm;
+import project.studycafe.app.controller.form.member.MemberForm;
 import project.studycafe.app.controller.form.member.OauthMemberForm;
 import project.studycafe.app.domain.member.Member;
 import project.studycafe.helper.resolver.argumentresolver.Login;
@@ -66,7 +67,7 @@ public class MemberController {
             return "member/editOauthMemberForm";
         }
 
-        CommonMemberForm commonMemberForm = memberService.memberToMemberForm(loginMember);
+        CommonMemberForm commonMemberForm = memberService.memberToCommonMemberForm(loginMember);
         model.addAttribute(LOGIN_MEMBER, commonMemberForm);
 
         return "member/editMemberForm";
@@ -75,7 +76,8 @@ public class MemberController {
 
     //updateform의 필드들이 어자피 login
     @PostMapping("/edit")
-    public String edit(@Login Member loginMember, @Validated @ModelAttribute("loginMember") CommonMemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
+    public String edit(@Login Member loginMember, @Validated @ModelAttribute("loginMember") MemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
+        log.info("form ={}", form);
         if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
@@ -93,27 +95,34 @@ public class MemberController {
         return "redirect:/member/info";
     }
 
-    //updateform의 필드들이 어자피 login
+    //updateform 의 필드들이 어자피 login
     @PostMapping("/edit/oauth")
-    public String editOauthMember(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
+    public String editOauthMember(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request){
         if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
-        if (memberService.validateDuplicatedMemberLoginId(form.getLoginId(), loginMember.getId())) {
-            bindingResult.rejectValue("loginId","unique.id","이미 사용중인 아이디입니다.");
+
+        if (form.getUserLoginId() != null) {
+            if (memberService.validateDuplicatedMemberLoginId(form.getUserLoginId(), loginMember.getId())) {
+                bindingResult.rejectValue("loginId", "unique.id", "이미 사용중인 아이디입니다.");
+            }
+
+            if (form.getUserPassword() == null){
+                bindingResult.reject("loginBasicInfo", "아이디와 비밀번호는 함께 입력되어야 합니다.");
+            }
+
         }
-        log.info("form = {}", form);
-        if ((form.getLoginId().isEmpty() && form.getLoginPassword() != null) ||
-                (form.getLoginPassword().isEmpty() && form.getLoginId() != null)) {
-            bindingResult.reject ("loginBasicInfo", "아이디와 비밀번호는 함께 입력되어야 합니다.");
+
+        if ( form.getUserLoginId() == null && form.getUserPassword() != null) {
+            bindingResult.reject("loginBasicInfo", "아이디와 비밀번호는 함께 입력되어야 합니다.");
         }
 
         if (bindingResult.hasErrors()) {
-            log.info("수정 실패");
             log.info("binding result = {}", bindingResult);
             return "member/editOauthMemberForm";
         }
 
+        log.info("update매서드 들어가기 직전 form = {}", form);
         Member updatedMember = memberService.update(loginMember.getId(), form).orElseThrow();
 
         HttpSession session = request.getSession();
@@ -123,7 +132,7 @@ public class MemberController {
     }
 
     @PostMapping("/edit/oauth/nickname")
-    public String editOauthMemberNickname(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
+    public String editOauthMemberNickname(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request){
         if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
@@ -193,8 +202,8 @@ public class MemberController {
             return "member/oauthMemberInfo";
         }
 
-        log.info("member={}", loginMember);
-        CommonMemberForm commonMemberForm = memberService.memberToMemberForm(loginMember);
+        CommonMemberForm commonMemberForm = memberService.memberToCommonMemberForm(loginMember);
+        log.info("form = {}", commonMemberForm);
         model.addAttribute(LOGIN_MEMBER, commonMemberForm);
 
         return "member/memberInfo";

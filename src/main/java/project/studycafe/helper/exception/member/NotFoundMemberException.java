@@ -2,6 +2,7 @@ package project.studycafe.helper.exception.member;
 
 public class NotFoundMemberException extends RuntimeException {
     public NotFoundMemberException() {
+        super("멤버를 찾을 수 없습니다.");
     }
 
     public NotFoundMemberException(String message) {

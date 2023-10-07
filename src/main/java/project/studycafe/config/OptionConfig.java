@@ -100,6 +100,7 @@ public class OptionConfig implements WebMvcConfigurer {
                         "/board/?/edit", "/order/?/edit", "/**/delete"
                 )
                 .excludePathPatterns(
+                        "/member/delete"
                 );
         registry.addInterceptor(new AccessControlByLevelInterceptor(new ObjectMapper()))
                 .order(5)

@@ -36,7 +36,7 @@ public class OAuthMemberController {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        Optional<Member> loginMember = memberService.findByEmailAndProvider(attributes.get("email").toString(), attributes.get("provider").toString());
+        Optional<Member> loginMember = memberService.findMemberByEmailAndProvider(attributes.get("email").toString(), attributes.get("provider").toString());
 
         if (loginMember.isEmpty()) {
             // 찾을 수 없습니다.
