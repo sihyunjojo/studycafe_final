@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode
 public class CommonMemberForm implements MemberForm {
 
     @NotBlank

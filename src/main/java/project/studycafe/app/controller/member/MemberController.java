@@ -41,7 +41,7 @@ public class MemberController {
             bindingResult.rejectValue("userLoginId","unique.userLoginId","이미사용중인아이디입니다.");
         }
 
-        if (memberService.validateDuplicatedMemberNickname(form)) {
+        if (memberService.validateDuplicatedMemberNickname(form.getNickname())) {
             bindingResult.rejectValue("nickname","unique.nickname");
         }
 
@@ -74,11 +74,11 @@ public class MemberController {
     }
 
 
-    //updateform의 필드들이 어자피 login
+    //updateForm 의 필드들이 어자피 login
     @PostMapping("/edit")
     public String edit(@Login Member loginMember, @Validated @ModelAttribute("loginMember") MemberForm form, BindingResult bindingResult, HttpServletRequest request) throws NotFoundException {
         log.info("form ={}", form);
-        if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
+        if (memberService.validateDuplicatedMemberNickname(form.getNickname(), loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
 
@@ -95,10 +95,10 @@ public class MemberController {
         return "redirect:/member/info";
     }
 
-    //updateform 의 필드들이 어자피 login
+    //updateForm 의 필드들이 어자피 login
     @PostMapping("/edit/oauth")
     public String editOauthMember(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request){
-        if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
+        if (memberService.validateDuplicatedMemberNickname(form.getNickname(), loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
 
@@ -122,7 +122,6 @@ public class MemberController {
             return "member/editOauthMemberForm";
         }
 
-        log.info("update매서드 들어가기 직전 form = {}", form);
         Member updatedMember = memberService.update(loginMember.getId(), form).orElseThrow();
 
         HttpSession session = request.getSession();
@@ -133,7 +132,7 @@ public class MemberController {
 
     @PostMapping("/edit/oauth/nickname")
     public String editOauthMemberNickname(@Login Member loginMember, @Validated @ModelAttribute("loginMember") OauthMemberForm form, BindingResult bindingResult, HttpServletRequest request){
-        if (memberService.validateDuplicatedMemberNickname(form, loginMember.getId())) {
+        if (memberService.validateDuplicatedMemberNickname(form.getNickname(), loginMember.getId())) {
             bindingResult.rejectValue("nickname","unique.nickname","이미 사용중인 닉네임입니다.");
         }
 

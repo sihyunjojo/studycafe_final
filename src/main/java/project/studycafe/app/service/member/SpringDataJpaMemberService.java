@@ -1,6 +1,5 @@
 package project.studycafe.app.service.member;
 
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -119,9 +118,10 @@ public class SpringDataJpaMemberService implements MemberService {
 
             // 아이디가 변경된 경우에만 중복 검사를 수행합니다.
             if (!Objects.equals(existingMember.getUserLoginId(), newLoginId)) {
-                Optional<Member> duplicateMember = memberRepository.findFirstByUserLoginId(newLoginId);
-                // 닉네임이 중복되는 멤버가 존재 하고 중복되는 멤버와 현재 멤버가 같지 않으면 true가 나와야함.
-                return duplicateMember.isPresent() && !duplicateMember.get().getId().equals(existingMember.getId());
+                Optional<Member> validateMember = memberRepository.findFirstByUserLoginId(newLoginId);
+                // 닉네임이 중복되는 멤버가 존재 하고  중복되는 멤버와 현재 멤버가 같지 않으면 true 가 나와야함.
+                // 그럼 중복이 되는거임.
+                return validateMember.isPresent() && !validateMember.get().getId().equals(existingMember.getId());
             }
             return false;
         }
@@ -133,19 +133,17 @@ public class SpringDataJpaMemberService implements MemberService {
     }
 
     @Override
-    public boolean validateDuplicatedMemberNickname(MemberForm form) {
-        return memberRepository.findByNickname(form.getNickname()).isPresent();// member 과 같은 이름이 있는지 찾앗을때
+    public boolean validateDuplicatedMemberNickname(String nickname) {
+        return memberRepository.findByNickname(nickname).isPresent();// member 과 같은 이름이 있는지 찾앗을때
     }
 
     @Override
-    public boolean validateDuplicatedMemberNickname(MemberForm form, long memberId) {
-        log.info("form = {}", form);
+    public boolean validateDuplicatedMemberNickname(String newNickname, long memberId) {
         // 기존 멤버 정보를 조회합니다.
         Optional<Member> optionalMember = memberRepository.findById(memberId);
 
         if (optionalMember.isPresent()) {
             Member existingMember = optionalMember.get();
-            String newNickname = form.getNickname();
 
             // 닉네임이 변경된 경우에만 중복 검사를 수행합니다.
             if (!Objects.equals(existingMember.getNickname(), newNickname)) {

@@ -29,8 +29,8 @@ public interface MemberService {
     boolean validateDuplicatedMemberLoginId(String memberLoginId);
     boolean validateDuplicatedMemberLoginId(String memberLoginId, long memberId);
 
-    boolean validateDuplicatedMemberNickname(MemberForm form);
-    boolean validateDuplicatedMemberNickname(MemberForm form, long memberId);
+    boolean validateDuplicatedMemberNickname(String nickname);
+    boolean validateDuplicatedMemberNickname(String nickname, long memberId);
 
 }
 

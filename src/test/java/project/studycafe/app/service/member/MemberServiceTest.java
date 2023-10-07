@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 순서 지정
-@TestInstance(TestInstance.Lifecycle.PER_METHOD) // BeforeEach 위치에 따라서 그 뒤에 있는 것만 작용해줌.
 class MemberServiceTest {
     @Autowired
     MemberService memberService;
@@ -165,25 +164,67 @@ class MemberServiceTest {
 
     @Test
     void validateDuplicatedMemberLoginId() {
+        //given
+        boolean isId = memberService.validateDuplicatedMemberLoginId("id123");
+        boolean isNotId = memberService.validateDuplicatedMemberLoginId("aaa");
+
+        //then
+        assertThat(isId).isTrue();
+        assertThat(isNotId).isFalse();
     }
 
     @Test
     void testValidateDuplicatedMemberLoginId() {
+        //when
+        CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "qw123", "test회원", "test닉네임",
+                "남", "010-1234-5678", "서울", "강남로 1", "12345",
+                "google@google.com", "2000-01-01");
+        memberService.join(testCommonMemberForm);
+
+
+        //given
+        boolean isDuplicatedMemberLoginId = memberService.validateDuplicatedMemberLoginId("testId", commonMemberId);
+        boolean isNotDuplicatedMemberLoginId = memberService.validateDuplicatedMemberLoginId("newId", commonMemberId);
+
+        //then
+        assertThat(isDuplicatedMemberLoginId).isTrue();
+        assertThat(isNotDuplicatedMemberLoginId).isFalse();
+
     }
 
     @Test
     void validateDuplicatedMemberNickname() {
+        //given
+        boolean isNickname = memberService.validateDuplicatedMemberNickname(commonMemberForm.getNickname());
+        boolean isNotNickname = memberService.validateDuplicatedMemberNickname("000");
+
+        //then
+        assertThat(isNickname).isTrue();
+        assertThat(isNotNickname).isFalse();
     }
 
     @Test
     void testValidateDuplicatedMemberNickname() {
+        //when
+        CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "qw123", "test회원", "test닉네임",
+                "남", "010-1234-5678", "서울", "강남로 1", "12345",
+                "google@google.com", "2000-01-01");
+        Long testMemberId = memberService.join(testCommonMemberForm);
+
+
+        //given
+        boolean isDuplicatedMemberNickname = memberService.validateDuplicatedMemberNickname("test닉네임", commonMemberId); //닉네임
+        boolean isNotDuplicatedMemberNickname = memberService.validateDuplicatedMemberNickname("new닉네임", commonMemberId);
+
+        //then
+        log.info("testId = {}, {}", testMemberId, commonMemberId);
+        assertThat(isDuplicatedMemberNickname).isTrue();
+        assertThat(isNotDuplicatedMemberNickname).isFalse();
     }
 
-    @Test
-    void testValidateDuplicatedMemberNickname1() {
-    }
 
     @Test
+    @DisplayName("멤버 객체 폼 객체로 변환 테스트")
     void memberToCommonMemberForm() {
         CommonMemberForm makeCommonMemberForm = memberService.memberToCommonMemberForm(commonMember);
 
