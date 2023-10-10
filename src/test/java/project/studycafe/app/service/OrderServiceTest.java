@@ -28,10 +28,8 @@ public class OrderServiceTest {
     OrderItem item2;
     OrderItem item3;
 
-    @Autowired
-    OrderService orderService;
-    @Autowired
-    MemberService memberService;
+    @Autowired OrderService orderService;
+    @Autowired MemberService memberService;
 
     @BeforeEach
     public void setting() {

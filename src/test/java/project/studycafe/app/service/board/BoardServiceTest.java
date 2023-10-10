@@ -29,7 +29,6 @@ import static project.studycafe.app.controller.form.board.AttachmentFileForm.cre
 //어떤 효과인지 찾아보기
 @Transactional
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 순서 지정
 //@ActiveProfiles("test") //프로파일을 지정할 때 사용됩니다. application-{profile}.properties
 //@SpringBootTest(properties = {"spring.config.location=classpath:application-test.properties"})
 class BoardServiceTest {

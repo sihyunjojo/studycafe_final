@@ -12,14 +12,12 @@ import project.studycafe.app.repository.member.JpaMemberRepository;
 import project.studycafe.helper.exception.member.NotFoundMemberException;
 
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @Slf4j
 @Transactional
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 순서 지정
 class MemberServiceTest {
     @Autowired
     MemberService memberService;
@@ -31,7 +29,7 @@ class MemberServiceTest {
     Member commonMember;
     Member oauthMember;
     
-    CommonMemberForm commonMemberForm = new CommonMemberForm("id123", "qw123", "회원", "닉네임",
+    CommonMemberForm commonMemberForm = new CommonMemberForm("id123", "pw123", "회원", "닉네임",
             "남", "010-1234-5678", "서울", "강남로 1", "12345",
             "google@google.com", "2000-01-01");
 
@@ -65,7 +63,7 @@ class MemberServiceTest {
         //then
         assertThat(commonMemberId).isNotNull();
         assertThat(commonMember.getUserLoginId()).isEqualTo("id123");
-        assertThat(commonMember.getUserPassword()).isEqualTo("qw123");
+        assertThat(commonMember.getUserPassword()).isEqualTo("pw123");
         assertThat(commonMember.getName()).isEqualTo("회원");
         assertThat(commonMember.getNickname()).isEqualTo("닉네임");
         assertThat(commonMember.getGender()).isEqualTo("남");
@@ -123,7 +121,7 @@ class MemberServiceTest {
         //then
         assertThat(findMember).isNotNull();
         assertThat(findMember.getUserLoginId()).isEqualTo("id123");
-        assertThat(findMember.getUserPassword()).isEqualTo("qw123");
+        assertThat(findMember.getUserPassword()).isEqualTo("pw123");
         assertThat(findMember.getName()).isEqualTo("회원");
         assertThat(findMember.getNickname()).isEqualTo("닉네임");
         assertThat(findMember.getEmail()).isEqualTo("google@google.com");
@@ -163,6 +161,7 @@ class MemberServiceTest {
     }
 
     @Test
+
     void validateDuplicatedMemberLoginId() {
         //given
         boolean isId = memberService.validateDuplicatedMemberLoginId("id123");
@@ -176,7 +175,7 @@ class MemberServiceTest {
     @Test
     void testValidateDuplicatedMemberLoginId() {
         //when
-        CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "qw123", "test회원", "test닉네임",
+        CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "pw123", "test회원", "test닉네임",
                 "남", "010-1234-5678", "서울", "강남로 1", "12345",
                 "google@google.com", "2000-01-01");
         memberService.join(testCommonMemberForm);
@@ -206,7 +205,7 @@ class MemberServiceTest {
     @Test
     void testValidateDuplicatedMemberNickname() {
         //when
-        CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "qw123", "test회원", "test닉네임",
+        CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "pw123", "test회원", "test닉네임",
                 "남", "010-1234-5678", "서울", "강남로 1", "12345",
                 "google@google.com", "2000-01-01");
         Long testMemberId = memberService.join(testCommonMemberForm);
