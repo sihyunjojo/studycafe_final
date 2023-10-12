@@ -22,11 +22,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class LoginServiceTest {
 
-    @Autowired LoginService loginService;
-    @Autowired MemberService memberService;
+    @Autowired
+    LoginService loginService;
+    @Autowired
+    MemberService memberService;
 
     Member commonMember;
     Long commonMemberId;
+
     @BeforeEach
     public void setting() {
         CommonMemberForm commonMemberForm = new CommonMemberForm("id123", "pw123", "회원", "닉네임",
@@ -37,9 +40,10 @@ class LoginServiceTest {
             throw new NotFoundMemberException();
         });
     }
+
     @Test
     @DisplayName("일반 회원 로그인")
-    public void commonMemberLogin(){
+    public void commonMemberLogin() {
         //when
 
         //given
@@ -49,4 +53,39 @@ class LoginServiceTest {
         //then
         Assertions.assertThat(loginMember).isEqualTo(commonMember);
     }
+
+    @Test
+    @DisplayName("일반 회원 로그인 중 아이디가 달라서 실패")
+    public void commonMemberLogin_IdException() {
+        //given
+        Member loginMember = loginService.login("id1234", "pw123");
+        //then
+        Assertions.assertThat(loginMember).isNull();
+    }
+    @Test
+    @DisplayName("일반 회원 로그인 중 비밀번호가 달라서 실패")
+    public void commonMemberLogin_PwException() {
+        //given
+        Member loginMember = loginService.login("id123", "pw1234");
+        //then
+        Assertions.assertThat(loginMember).isNull();
+    }
+
+    @Test
+    @DisplayName("일반 회원 로그인 중 값이 입력되지 않아서 실패")
+    public void commonMemberLogin_EmptyException() {
+        //given
+        Member loginMember = loginService.login("", "");
+        //then
+        Assertions.assertThat(loginMember).isNull();
+    }
+
+
+    // 이것을 제외하고는 contorller 테스트나 oauthService 테스트에서 해야할거 같음.
+    @Test
+    @DisplayName("Oauth 회원 로그인")
+    public void oauthMemberLogin(){
+
+    }
+
 }
