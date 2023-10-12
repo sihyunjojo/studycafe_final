@@ -61,6 +61,7 @@
                class="form-control" id="readCount" name="readCount"
                th:value="${product.readCount}" readonly>
     </div>
+
     <label for="likeCount">좋아요 수</label><br>
     <div class="form-group" style="display: flex;">
         <button style="flex:1; margin-right: 1em"
@@ -76,13 +77,16 @@
                 type="button"> down
         </button>
     </div>
+
     <div class="form-group">
         <label for="updatedTime">등록/수정 날짜</label><br>
         <input type="text"
                class="form-control" id="updatedTime" name="updatedTime"
                th:value="${{product.updatedTime}}" readonly>
     </div>
+
     <hr>
+
     <form th:action="@{|/order/${productId}/add/now|}" method="post">
         <label for="productCount">구매 수량</label>
         <input type="text" id="productCount" name="productCount" th:value="${1}" required>
@@ -95,6 +99,8 @@
             <b>로그인을 하셔야 구매가능합니다.</b>
         </th:block>
     </form>
+
+
     <hr class="my-4">
     <div class="row">
         <div class="col">

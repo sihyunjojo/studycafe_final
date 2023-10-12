@@ -1,13 +1,10 @@
 package project.studycafe.app.controller.form.order;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Primary;
-import org.springframework.format.annotation.NumberFormat;
 
+
+import lombok.Data;
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class OrderNowForm {
 
@@ -20,4 +17,9 @@ public class OrderNowForm {
 
     private int orderTotalPrice;
 
+    public OrderNowForm(long memberId, long productId, int productCount) {
+        this.memberId = memberId;
+        this.productId = productId;
+        this.productCount = productCount;
+    }
 }

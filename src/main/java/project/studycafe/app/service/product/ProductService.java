@@ -30,8 +30,15 @@ public class ProductService {
     public void updateProduct(Long productId, Product updateproduct) {
         Product product = productRepository.findById(productId).orElseThrow();
 
-        product.setName(updateproduct.getName());
-        product.setCategory(updateproduct.getCategory());
+        // 이거 2개가 바뀔정도면 아예 새로 해야하는거 아냐??
+        // 예외 발생시켜서 해줘야하는거 아냐?
+        // 그래서 없애기로 함.
+        if (product.getName() != updateproduct.getName() || product.getCategory() != updateproduct.getCategory()) {
+            log.info("제품명과 카테고리를 바꿀 정도로 큰 사안은 제품을 새로 등록하세요");
+        }
+//        product.setName(updateproduct.getName());
+//        product.setCategory(updateproduct.getCategory());
+
         product.setDescription(updateproduct.getDescription());
         product.setQuantity(updateproduct.getQuantity());
         product.setPrice(updateproduct.getPrice());

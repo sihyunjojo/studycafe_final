@@ -63,10 +63,25 @@ public class Product extends BaseTimeEntity {
         this.quantity = restStock;
     }
 
-    public Product(Long id, String name, int price, int quantity) {
-        this.id = id;
+    public Product(String name, String category, int price, int quantity) {
         this.name = name;
+        this.category = category;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", image='" + image + '\'' +
+                ", readCount=" + readCount +
+                ", likeCount=" + likeCount +
+                '}';
     }
 }
