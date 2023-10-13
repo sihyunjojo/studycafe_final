@@ -2,7 +2,7 @@ HELP.md
 
 resource/templates/**/*.properties
 
-.gradle
+*.gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
