@@ -78,11 +78,11 @@ class MemberServiceTest {
     @Test
     @DisplayName("일반회원 수정 테스트")
     void update_commonMember() {
-        //when
+        //given
         CommonMemberForm updateMemberForm = new CommonMemberForm("id123", "pw111", "회원11", "닉네임11",
                 "여", "010-1111-1111", "서울", "강남로 1", "11111",
                 "google11@google.com", "2000-11-11");
-        //given
+        //when
         memberService.update(commonMemberId, updateMemberForm);
 
         //then
@@ -103,7 +103,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("멤버 삭제 테스트")
     void deleteMember() {
-        //given
+        //when
         memberService.deleteMember(commonMember);
 
         //then
@@ -113,7 +113,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원 고유 번호를 통한 멤버 찾기")
     void findById() {
-        //given
+        //when
         Member findMember = memberService.findById(commonMemberId).orElseThrow(()->{
             throw new NotFoundMemberException();
         });
@@ -163,7 +163,7 @@ class MemberServiceTest {
     @Test
 
     void validateDuplicatedMemberLoginId() {
-        //given
+        //when
         boolean isId = memberService.validateDuplicatedMemberLoginId("id123");
         boolean isNotId = memberService.validateDuplicatedMemberLoginId("aaa");
 
@@ -174,14 +174,14 @@ class MemberServiceTest {
 
     @Test
     void testValidateDuplicatedMemberLoginId() {
-        //when
+        //given
         CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "pw123", "test회원", "test닉네임",
                 "남", "010-1234-5678", "서울", "강남로 1", "12345",
                 "google@google.com", "2000-01-01");
         memberService.join(testCommonMemberForm);
 
 
-        //given
+        //when
         boolean isDuplicatedMemberLoginId = memberService.validateDuplicatedMemberLoginId("testId", commonMemberId);
         boolean isNotDuplicatedMemberLoginId = memberService.validateDuplicatedMemberLoginId("newId", commonMemberId);
 
@@ -193,7 +193,7 @@ class MemberServiceTest {
 
     @Test
     void validateDuplicatedMemberNickname() {
-        //given
+        //when
         boolean isNickname = memberService.validateDuplicatedMemberNickname(commonMemberForm.getNickname());
         boolean isNotNickname = memberService.validateDuplicatedMemberNickname("000");
 
@@ -204,14 +204,14 @@ class MemberServiceTest {
 
     @Test
     void testValidateDuplicatedMemberNickname() {
-        //when
+        //given
         CommonMemberForm testCommonMemberForm = new CommonMemberForm("testId", "pw123", "test회원", "test닉네임",
                 "남", "010-1234-5678", "서울", "강남로 1", "12345",
                 "google@google.com", "2000-01-01");
         Long testMemberId = memberService.join(testCommonMemberForm);
 
 
-        //given
+        //when
         boolean isDuplicatedMemberNickname = memberService.validateDuplicatedMemberNickname("test닉네임", commonMemberId); //닉네임
         boolean isNotDuplicatedMemberNickname = memberService.validateDuplicatedMemberNickname("new닉네임", commonMemberId);
 

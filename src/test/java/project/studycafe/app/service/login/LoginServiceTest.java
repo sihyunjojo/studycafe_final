@@ -44,9 +44,9 @@ class LoginServiceTest {
     @Test
     @DisplayName("일반 회원 로그인")
     public void commonMemberLogin() {
-        //when
-
         //given
+
+        //when
         Member loginMember = loginService.login("id123", "pw123");
         log.info("common ={}", commonMember);
         log.info("login = {}", loginMember);
@@ -57,7 +57,7 @@ class LoginServiceTest {
     @Test
     @DisplayName("일반 회원 로그인 중 아이디가 달라서 실패")
     public void commonMemberLogin_IdException() {
-        //given
+        //when
         Member loginMember = loginService.login("id1234", "pw123");
         //then
         Assertions.assertThat(loginMember).isNull();
@@ -65,7 +65,7 @@ class LoginServiceTest {
     @Test
     @DisplayName("일반 회원 로그인 중 비밀번호가 달라서 실패")
     public void commonMemberLogin_PwException() {
-        //given
+        //when
         Member loginMember = loginService.login("id123", "pw1234");
         //then
         Assertions.assertThat(loginMember).isNull();
@@ -74,7 +74,7 @@ class LoginServiceTest {
     @Test
     @DisplayName("일반 회원 로그인 중 값이 입력되지 않아서 실패")
     public void commonMemberLogin_EmptyException() {
-        //given
+        //when
         Member loginMember = loginService.login("", "");
         //then
         Assertions.assertThat(loginMember).isNull();

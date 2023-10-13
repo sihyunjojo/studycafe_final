@@ -27,7 +27,7 @@ import static project.studycafe.app.domain.Cart.createCart;
 //		@UniqueConstraint(name = "member_id_unique", columnNames = {"nickname"})
 //})
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @NamedEntityGraph(name = "Member.withCart", attributeNodes = {
         @NamedAttributeNode("cart")})
 public class Member extends BaseTimeEntity {
@@ -46,32 +46,27 @@ public class Member extends BaseTimeEntity {
     private String gender;
     private String birth;
 
+    private String provider;
+
     //Embedded type 은 사용자가 직접 정의한 값 타입이다.
     //여기서 Embedded type 을 사용하지 않으면,주소에 관한 정보를 전부 직접 정의해 줘야 되는데
     //그러면 객체지향적이지 않고 응집력을 떨어뜨리는 원인이 된다.
     @Embedded
     private Address address;
 
-    private String provider;
-
     @Enumerated(EnumType.STRING)
     private MemberLevel memberLevel;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
-
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
-
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Reply> replies = new ArrayList<>();
-
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Delivery> deliveries = new ArrayList<>();
-
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Cart cart;
 
@@ -96,16 +91,6 @@ public class Member extends BaseTimeEntity {
         return map;
     }
 
-    public void addBoard(Board board) {
-        this.boards.add(board);
-    }
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
-    public void addReply(Reply reply) {
-        this.replies.add(reply);
-    }
-
     @Builder //생성을 Builder 패턴으로 하기 위해서
     public Member(Long id, String name, String email, String provider, String nickname) {
         this.id = id;
@@ -116,10 +101,34 @@ public class Member extends BaseTimeEntity {
         this.cart = createCart(this);
     }
 
-    //==연관관계 메서드==//
+    @Builder(builderMethodName = "commonBuilder", buildMethodName = "buildCommonMember")
+    public Member(String userLoginId, String userPassword, String name, String nickname, String phone, String email, String gender, String birth, Address address) {
+        this.userLoginId = userLoginId;
+        this.userPassword = userPassword;
+        this.name = name;
+        this.nickname = nickname;
+        this.phone = phone;
+        this.email = email;
+        this.gender = gender;
+        this.birth = birth;
+        this.address = address;
+        this.cart = createCart(this);
+    }
 
+
+    //==연관관계 메서드==//
     public Long getId(){
         return id;
+    }
+
+    public void addBoard(Board board) {
+        this.boards.add(board);
+    }
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+    public void addReply(Reply reply) {
+        this.replies.add(reply);
     }
 
     public String toString() {

@@ -26,19 +26,18 @@ public class SpringDataJpaMemberService implements MemberService {
     private final JpaMemberRepository memberRepository;
 
     public Long join(CommonMemberForm form) {
-        Member member = new Member();
         Address address = createAddress(form.getCity(), form.getStreet(), form.getZipcode());
 
-        member.setUserLoginId(form.getUserLoginId());
-        member.setUserPassword(form.getUserPassword());
-        member.setName(form.getName());
-        member.setNickname(form.getNickname());
-        member.setPhone(form.getPhone());
-        member.setEmail(form.getEmail());
-        member.setGender(form.getGender());
-        member.setBirth(form.getBirth());
-        member.setAddress(address);
-        member.setCart(createCart(member));
+        Member member = Member.commonBuilder()
+                .userLoginId(form.getUserLoginId())
+                .userPassword(form.getUserPassword())
+                .name(form.getName())
+                .nickname(form.getNickname())
+                .phone(form.getPhone())
+                .email(form.getEmail())
+                .gender(form.getGender())
+                .birth(form.getBirth())
+                .address(address).buildCommonMember();
 
         try {
             validateDuplicatedMember(member); // 중복회원 검증

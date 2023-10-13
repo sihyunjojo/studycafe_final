@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
 public class CommonMemberForm implements MemberForm {
@@ -71,10 +71,5 @@ public class CommonMemberForm implements MemberForm {
                 ", email='" + email + '\'' +
                 ", birth='" + birth + '\'' +
                 '}';
-    }
-
-    @Override
-    public String getNickname() {
-        return new String(nickname);
     }
 }

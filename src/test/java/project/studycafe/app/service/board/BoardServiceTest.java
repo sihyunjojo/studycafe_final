@@ -46,6 +46,7 @@ class BoardServiceTest {
     @BeforeEach
     void beforeEach() {
         // 기본으로 member을 만들어서 제공헤주고
+        //given
         CommonMemberForm commonMemberForm = new CommonMemberForm("1", "1", "1", "1", "01085524018");
         memberId = memberService.join(commonMemberForm);
 

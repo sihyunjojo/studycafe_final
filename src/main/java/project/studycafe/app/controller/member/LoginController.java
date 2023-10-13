@@ -22,11 +22,12 @@ public class LoginController {
     private final LoginService loginService;
 
     @GetMapping("/login")
+    // th:object="${loginForm}" 때문에 ModelAttribute 필요.
     public String loginForm(@ModelAttribute LoginForm form){
         return "/login/loginForm";
     }
 
-    //@ModelAttribute 가 form에서 loginForm객체 내부의 필드와 이름이 같은 값을 가져와서 객체에 넣어줌
+    //@ModelAttribute 가 form에서 loginForm 객체 내부의 필드와 이름이 같은 값을 가져와서 객체에 넣어줌
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
                         @RequestParam(required = false, defaultValue = "/") String redirectURL,

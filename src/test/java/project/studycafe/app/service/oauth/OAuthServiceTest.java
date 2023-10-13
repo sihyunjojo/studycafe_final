@@ -1,9 +1,13 @@
 package project.studycafe.app.service.oauth;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import project.studycafe.app.controller.form.member.CommonMemberForm;
 import project.studycafe.app.controller.form.member.OauthMemberForm;
@@ -15,9 +19,10 @@ import project.studycafe.helper.exception.member.NotFoundMemberException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@Transactional
 @SpringBootTest
-// http상에서 정보를 받아와야하니, 다른 기법이 필요한거 같음.
+@Transactional
+@AutoConfigureMockMvc
+@RunWith(SpringRunner.class) // 테스트를 진행할 때 Junit에 내장된 샐행자 외에 다른 실행자를 실행(여기서는 SpringRunner) -> 부트 테스트와 Junit사이의 연결자 역할
 class OAuthServiceTest {
 
     @Autowired
@@ -33,7 +38,16 @@ class OAuthServiceTest {
             "경북", "구미", "00000", "1999-09-22");
 
     @BeforeEach
-    public void setting() {
+    void setting() {
+    }
+
+    @Test
+    void loadUser(){
+        //when
+
+        //given
+        //then
+
     }
 
 }

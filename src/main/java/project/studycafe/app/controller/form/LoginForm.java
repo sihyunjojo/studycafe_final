@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 public class LoginForm {
     @NotEmpty
     private String userLoginId;
-
     @NotEmpty
     private String userPassword;
 

@@ -51,7 +51,7 @@ public class MemberController {
         }
 
         Long userId = memberService.join(form);
-        log.info("userId = {}", userId);
+//        log.info("userId = {}", userId);
 
         return "redirect:/";
     }
