@@ -1,5 +1,6 @@
 HELP.md
-.properites
+
+resource/templates/**/*.properites
 
 .gradle
 build/
