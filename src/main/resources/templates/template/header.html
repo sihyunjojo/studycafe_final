@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:vertical-align="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="../css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <style>
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+
+<body>
+<div th:fragment="header_copy">
+
+    <div style="text-align: center">
+        <a href="/" style="text-decoration: none; font-size:40px; margin:auto;">
+            <img src="/img/logo.jpg" class="logo_image" width="50" height="50" margin="auto" vertical-align: middle;>
+            <b>베이직 스터디 카페</b>
+        </a>
+    </div>
+
+    <div class="container">
+        <header class="d-flex justify-content-center py-3">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a href="/StudyCafeManagement/seat/register?user_id=${sessionScope.user_id}" class="nav-link">좌석</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/product}" class="nav-link">상품</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/board}" class="nav-link">게시판</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/order}" class="nav-link">주문내역</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/chat}" class="nav-link">채팅</a>
+                </li>
+                <li class="nav-item">
+                    <th:block th:if="${loginMember == null}">
+                        <a th:href="@{/login}" th:method="get" class="nav-link"> 로그인 </a>
+                    </th:block>
+                    <th:block th:unless="${loginMember == null}">
+                        <a th:href="@{/member/info}" th:text="|${loginMember.name}의 정보|" class="nav-link"/>
+                    </th:block>
+                </li>
+                <th:block th:unless="${loginMember == null}">
+                    <li class="nav-item">
+                        <button th:onclick="|location.href='@{/logout}'|" class="nav-link"
+                                type="submit">로그아웃
+                        </button>
+                    </li>
+                </th:block>
+            </ul>
+        </header>
+    </div>
+
+
+</div>
+</body>
+</html>

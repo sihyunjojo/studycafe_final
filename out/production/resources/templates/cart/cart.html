@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>장바구니</title>
+    <head th:insert="~{template/styleCss :: css_copy}"></head>
+    <script>
+        function cancel(id) {
+            var form = document.createElement("form");
+            form.setAttribute("method", "post");
+            form.setAttribute("action", "/cart/" + id + "/delete");
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+<header th:insert="~{template/header :: header_copy}"></header>
+
+<div class="container">
+    <h3 th:text="|${cart.member.nickname}님 장바구니|"></h3>
+    <form th:action="@{order/add/cart}" method="post">
+        <input type="hidden" name="id" th:value="${cart.id}">
+        <input type="hidden" name="memberId" th:value="${cart.member.id}">
+        <button type="submit" style="float: right;" class="btn btn-primary">구매하기</button>
+        <hr>
+
+        <section>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="row">구매 체크</th>
+                    <th scope="row">상품 이미지</th>
+                    <th scope="row">상품명</th>
+                    <th scope="row">상품 수량</th>
+                    <th scope="row">총 가격</th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="cartProduct : ${cart.cartProductList}">
+                    <input type="hidden"
+                           th:name="|cartProductList[__${#strings.toString(cartProductStat.index)}__].id|"
+                           th:value="${cartProduct.product.id}"/>
+                    <td>
+                        <input type="checkbox"
+                               th:name="|cartProductList[__${#strings.toString(cartProductStat.index)}__].purchasedCheck|"
+                               th:checked="${cartProduct.purchasedCheck}"/>
+                    </td>
+                    <td>
+                        <a th:href="@{|/product/${cartProduct.id}|}">
+                            <img th:src="@{|/img/${cartProduct.product.image}|}" th:alt="${cartProduct.product.image}"
+                                 alt="이미지"></a>
+                    </td>
+                    <td>
+                        <a style="font-weight: bold" th:href="@{|/product/${cartProduct.product.id}|}"
+                           th:text="${cartProduct.product.name}"></a></td>
+                    <td>
+                        <button style="font-weight: bold"
+                                th:onclick="|location.href='/cart/${cartProduct.product.id}/edit/up'|"
+                                type="button"> up
+                        </button>
+                        <input type="number" class="text" style="font-weight: bold"
+                               th:name="|cartProductList[__${#strings.toString(cartProductStat.index)}__].count|"
+                               th:value="${ cartProduct.count }"/>
+                        <button style="font-weight: bold"
+                                th:onclick="|location.href='/cart/${cartProduct.product.id}/edit/down'|"
+                                type="button"> down
+                        </button>
+                    </td>
+                    <td>
+                        <input type="number" class="text" style="font-weight: bold"
+                               th:name="|cartProductList[__${#strings.toString(cartProductStat.index)}__].totalPrice|"
+                               th:value="${cartProduct.totalPrice}"/>
+                    </td>
+                    <th>
+                        <a href="#" th:href="'javascript:cancel('+${cartProduct.product.id}+')'"
+                           class="btn btn-danger">X</a>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+            <div style="float: right;">
+                <button th:onclick="|location.href='@{/product}'|" type="button" class="btn btn-secondary mb-2">전체 상품</button>
+                <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-secondary mb-2">메인 화면</button>
+            </div>
+        </section>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>메인 게시판</title>
+    <head th:insert="~{template/styleCss :: css_copy}"></head>
+
+    <script>
+        function toggleSorting(sort) {
+            let formString = "sortBoard" + sort
+            let inputIdString = "sortBy" + sort
+            let form = document.getElementById(formString);
+            let inputBySort = document.getElementById(inputIdString);
+
+            let currentValue = inputBySort.value;
+
+            if (currentValue == "board" + sort + "Up") {
+                inputBySort.value = "board" + sort + "Up"
+            } else {
+                inputBySort.value = "board" + sort + "Down"
+            }
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+<header th:insert="~{template/header :: header_copy}"></header>
+
+<div class="container">
+    <h3> 메인 게시판 </h3>
+
+    <span style="float: right;">
+        <button class="btn btn-primary" onclick="location.href='/board/add'"
+                type="button">글 작성</button>
+    </span>
+    <hr style="margin-bottom: 2em; margin-top: 2em;">
+
+
+    <!--        조회수 정렬-->
+    <form th:action="@{/board/search}" th:object="${boardSearch}" method="get" style="float:right">
+        <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
+        <input type="hidden" th:name="title" th:field="*{title}"/>
+        <input type="hidden" th:name="category" th:field="*{category}"/>
+        <input type="hidden" th:name="perPageNum" th:value="*{perPageNum}"/>
+        <input type="hidden" th:name="sort" th:value="readCount"/>
+        <button class="btn btn-outline-secondary mb-2" type="submit" th:text="조회수순"/>
+    </form>
+    <div>
+        <form th:action="@{/board/search}" th:object="${boardSearch}" method="get" class="form-inline" style="float: right">
+            <div class="row" style="float: right">
+                <div class="col">
+                    <select class="form-select" id="category" th:field="*{category}">
+                        <option th:value>카테고리</option>
+                        <option th:value="커뮤니티">커뮤니티</option>
+                        <option th:value="공지사항">공지사항</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="제목"/>
+                </div>
+                <div class="col">
+                    <input class="form-control" type="text" id="userNickname" th:field="*{userNickname}"
+                           placeholder="글작성자"/>
+                </div>
+                <div class="col">
+                    <select class="form-select" id="sort" name="sort">
+                        <option th:selected="${boardSearch.sort == null}" th:value>최신순</option>
+                        <option th:selected="${boardSearch.sort == 'boardReadCountDown' or boardSearch.sort == 'boardReadCountUp'}" th:value="boardReadCountDown">조회수순</option>
+                        <option th:selected="${boardSearch.sort == 'boardLikeCountDown' or boardSearch.sort == 'boardLikeCountUp'}" th:value="boardLikeCountDown">좋아요순</option>
+                    </select>
+
+
+<!--                    <select class="form-select" id="sort" th:field="*{sort}">-->
+<!--                        <option th:value>최신순</option>-->
+<!--                        <option th:value="boardReadCountDown">조회수순</option>-->
+<!--                        <option th:value="boardLikeCountDown">좋아요순</option>-->
+<!--                    </select>-->
+                </div>
+                <div class="col">
+                    <select class="form-select" id="perPageNum" th:field="*{perPageNum}">
+                        <option th:value="1">1개씩</option>
+                        <option th:value="10" th:selected="${perPageNum == null || perPageNum == 10}" selected>10개씩</option>
+                        <option th:value="25">25개씩</option>
+                        <option th:value="50">50개씩</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-secondary mb-2">검색</button>
+                </div>
+            </div>
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                   th:text="${err}">글로벌 에러</p>
+            </div>
+        </form>
+    </div>
+    <br>
+    <!--        게시판-->
+    <section>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="row">카테고리</th>
+                <th scope="row">제목</th>
+                <th scope="row">작성자</th>
+                <th scope="row">작성시간</th>
+                <th scope="row">
+                    <!--                        조회수 정렬-->
+                    <form class = "sortBoardReadCount" th:action="@{/board/search}" th:object="${boardSearch}" method="get">
+                        <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
+                        <input type="hidden" th:name="title" th:field="*{title}"/>
+                        <input type="hidden" th:name="category" th:field="*{category}"/>
+                        <input type="hidden" th:name="perPageNum" th:value="*{perPageNum}"/>
+                        <input type="hidden" id = "sortByReadCount" th:name="sort" th:field="*{sort}"/>
+                        <button type="submit" th:onclick="toggleSorting('ReadCount')"
+                                style=" border: none; outline: none; background-color: white; font-weight: bold;">조회수&#9660;
+                        </button>
+                    </form>
+                </th>
+                <th scope="row">
+                    <form class = "sortBoardLikeCount" th:action="@{/board/search}" th:object="${boardSearch}" method="get">
+                        <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
+                        <input type="hidden" th:name="title" th:field="*{title}"/>
+                        <input type="hidden" th:name="category" th:field="*{category}"/>
+                        <input type="hidden" th:name="perPageNum" th:value="*{perPageNum}"/>
+                        <input type="hidden" id = "sortByLikeCount" th:name="sort" th:field="*{sort}"/>
+                        <button type="submit" th:onclick="toggleSorting('LikeCount')"
+                                style=" border: none; outline: none; background-color: white; font-weight: bold;">좋아요&#9660;
+                        </button>
+                    </form>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board : ${boards}"
+                th:class="${board.category == '공지사항'} ? 'even' : ''">
+                <th th:text="${board.category}"> 카테고리</th>
+                <th><a href="board.html" th:href="@{|/board/${board.id}|}" th:text="${board.title}">제목</a></th>
+                <th th:text="${board.memberNickname != null ? board.memberNickname : board.memberName}"> 작성자</th>
+                <th th:text="${{board.createdTime}}">
+                </th>
+                <th th:text="${board.readCount}"> 1</th>
+                <th th:text="${board.likeCount}"> 1</th>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="PageMaker">
+            <ul>
+                <li class="row" th:if="${pageMaker.startPage > 1}">
+                    <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">
+                        <input type="hidden" name="page" th:value="${pageMaker.startPage -1}"/>
+                        <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
+                        <input type="hidden" th:name="title" th:field="*{title}"/>
+                        <input type="hidden" th:name="category" th:field="*{category}"/>
+                        <input type="hidden" th:name="sort" th:field="*{sort}"/>
+                        <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+                        <button type="submit">&lt;</button>
+                    </form>
+                </li>
+
+                <li class="row" th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                    <form th:action="@{${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">
+                        <input type="hidden" name="page" th:value="${page}"/>
+                        <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
+                        <input type="hidden" th:name="title" th:field="*{title}"/>
+                        <input type="hidden" th:name="category" th:field="*{category}"/>
+                        <input type="hidden" th:name="sort" th:field="*{sort}"/>
+                        <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+                        <button type="submit">[[${page}]]</button>
+                    </form>
+                </li>
+
+                <li class="row" th:if="${pageMaker.endPage < pageMaker.totalPages}">
+                    <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${boardSearch}" method="get">
+                        <input type="hidden" name="page" th:value="${pageMaker.endPage + 1}"/>
+                        <input type="hidden" th:name="userNickname" th:field="*{userNickname}"/>
+                        <input type="hidden" th:name="title" th:field="*{title}"/>
+                        <input type="hidden" th:name="category" th:field="*{category}"/>
+                        <input type="hidden" th:name="sort" th:field="*{sort}"/>
+                        <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+                        <button type="submit">&gt;</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <div style="float: right;">
+            <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-secondary mb-2">메인 화면</button>
+        </div>
+    </section>
+</div>
+</body>
+</html>

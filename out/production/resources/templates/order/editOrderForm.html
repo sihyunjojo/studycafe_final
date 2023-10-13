@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>주문 수정</title>
+    <head th:insert="~{template/styleCss :: css_copy}"></head>
+</head>
+<body>
+<header th:insert="~{template/header :: header_copy}"></header>
+
+<div class="container">
+    <h3 th:text="|${order.id}주문 수정|"> 주문 </h3>
+    <hr>
+    <form th:action="@{|/order/${orderId}/edit|}" method="post">
+        <input type="hidden" name="id" th:value="${order.id}">
+        <input type="hidden" name="memberId" th:value="${order.member.id}">
+
+        <div>
+            <div class="form-group">
+                <label for="memberNickname">주문자</label><br>
+                <input type="text"
+                       class="form-control" id="memberNickname"
+                       th:value="${order.member.nickname != null ? order.member.nickname : order.member.name}" readonly>
+            </div>
+            <div th:each="orderItem :${order.orderItems}">
+                <input type="hidden" id="id" th:name="|orderItems[__${#strings.toString(orderItemStat.index)}__].id|"
+                       th:value="${orderItem.product.id}"/>
+                <div class="form-group">
+                    <label for="itemName">상품 이름</label><br>
+                    <input type="text"
+                           class="form-control" id="itemName"
+                           th:value="${orderItem.product.name}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="itemCount">상품 수량</label><br>
+                    <input type="number"
+                           class="form-control count-input" id="itemCount" th:name="|orderItems[__${#strings.toString(orderItemStat.index)}__].count|"
+                           th:value="${orderItem.count}" readonly>
+<!--                           class="form-control" id="itemCount" name="orderItems[__${orderItemStat.index}__].count"-->
+                </div>
+<!--                바로바로 업데이트 되나?-->
+                <div class="form-group">
+                    <label for="itemAllPrice">상품 총가격</label><br>
+                    <input type="text"
+                           class="form-control all-price-input" id="itemAllPrice" th:name="|orderItems[__${#strings.toString(orderItemStat.index)}__].allPrice|"
+                           th:value="${{orderItem.count * orderItem.product.price}}" readonly>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <label for="totalPrice">주문 총가격</label><br>
+                <input type="text"
+                       class="form-control" id="totalPrice" name="orderTotalPrice"
+                       th:value="${{order.totalPrice}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="delivery_city">배달 도시</label><br>
+                <input type="text"
+                       class="form-control" id="delivery_city" name="city"
+                       th:value="${order.address.city}">
+            </div>
+            <div class="form-group">
+                <label for="delivery_street">배달 거리</label><br>
+                <input type="text"
+                       class="form-control" id="delivery_street" name="street"
+                       th:value="${order.address.street}">
+            </div>
+            <div class="form-group">
+                <label for="delivery_zipcode">배달 우편번호</label><br>
+                <input type="text"
+                       class="form-control" id="delivery_zipcode" name="zipcode"
+                       th:value="${order.address.zipcode}">
+            </div>
+            <div class="form-group">
+                <label for="orderStatus">주문 상태</label><br>
+                <select class="form-select" id="orderStatus" name="orderStatus" required>
+                    <option th:value="WAIT" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
+                    <option th:value="DELIVERING" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
+                    <option th:value="COMPLETE" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
+                    <option th:value="CANCEL" th:selected="${order.orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="deliveryStatus">배달 상태</label><br>
+                <select class="form-select" id = "deliveryStatus" name="deliveryStatus" required>
+                    <option th:value="READY" th:selected="${order.deliveryStatus == T(project.studycafe.app.domain.enums.status.DeliveryStatus).READY}">READY</option>
+                    <option th:value="DELIVERING" th:selected="${order.deliveryStatus == T(project.studycafe.app.domain.enums.status.DeliveryStatus).DELIVERING}">DELIVERING</option>
+                    <option th:value="COMPLETE" th:selected="${order.deliveryStatus == T(project.studycafe.app.domain.enums.status.DeliveryStatus).COMPLETE}">COMPLETE</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="createdTime">주문 생성 일시</label><br>
+                <input type="text"
+                       class="form-control" id="createdTime" name="createdTime"
+                       th:value="${{order.createdTime}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="updatedTime">주문 수정 일시</label><br>
+                <input type="text"
+                       class="form-control" id="updatedTime" name="updatedTime"
+                       th:value="${{order.updatedTime}}" readonly>
+            </div>
+        </div>
+        <button type="submit">완료</button>
+        <button th:onclick="|location.href='@{/order}'|" type="button">주문내역</button>
+    </form>
+    <hr>
+</div>
+</body>
+</html>

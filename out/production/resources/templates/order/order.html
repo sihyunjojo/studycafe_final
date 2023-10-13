@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>주문</title>
+    <head th:insert="~{template/styleCss :: css_copy}"></head>
+</head>
+<body>
+<header th:insert="~{template/header :: header_copy}"></header>
+
+<div class="container">
+    <h3 th:text="|${order.id}번 주문|"> 주문 </h3>
+    <hr>
+
+    <div>
+        <div class="form-group">
+            <label for="memberNickname">주문자</label><br>
+            <input type="text"
+                   class="form-control" id="memberNickname"
+                   th:value="${order.member.nickname != null ? order.member.nickname : order.member.name}" readonly>
+        </div>
+        <br>
+        <div th:each="orderItem :${order.orderItems}">
+            <div class="form-group">
+                <label for="itemName">상품 이름</label><br>
+                <input type="text"
+                       class="form-control" id="itemName"
+                       th:value="${orderItem.product.name}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="count">상품 수량</label><br>
+                <input type="text"
+                       class="form-control" id="count" name="count"
+                       th:value="${orderItem.count}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="allPrice">상품 총가격</label><br>
+                <input type="text"
+                       class="form-control" id="allPrice" name="allPrice"
+                       th:value="${{orderItem.allPrice}}" readonly>
+            </div>
+            <br>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label for="totalPrice">주문 총가격</label><br>
+            <input type="text"
+                   class="form-control" id="totalPrice" name="totalPrice"
+                   th:value="${{order.totalPrice}}" readonly>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label for="city">배달 도시</label><br>
+            <input type="text"
+                   class="form-control" id="city" name="delivery_city"
+                   th:value="${order.address.city}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="street">배달 거리</label><br>
+            <input type="text"
+                   class="form-control" id="street" name="delivery_street"
+                   th:value="${order.address.street}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="zipcode">배달 우편번호</label><br>
+            <input type="text"
+                   class="form-control" id="zipcode" name="delivery_zipcode"
+                   th:value="${order.address.zipcode}" readonly>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label for="order_status">주문 상태</label><br>
+            <input type="text"
+                   class="form-control" id="order_status" name="order_status"
+                   th:value="${order.orderStatus}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="delivery_status">배달 상태</label><br>
+            <input type="text"
+                   class="form-control" id="delivery_status" name="delivery_status"
+                   th:value="${order.deliveryStatus}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="createdTime">주문 생성 일시</label><br>
+            <input type="text"
+                   class="form-control" id="createdTime" name="createdTime"
+                   th:value="${{order.createdTime}}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="updatedTime">주문 수정 일시</label><br>
+            <input type="text"
+                   class="form-control" id="updatedTime" name="updatedTime"
+                   th:value="${{order.updatedTime}}" readonly>
+        </div>
+    </div>
+    <hr class="my-4">
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg" th:onclick="|location.href='/order/${orderId}/edit'|">수정하기
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg" th:onclick="|location.href='/order/${orderId}/delete'|"
+                    onclick="return confirm('정말로 삭제하겠습니까?')">삭제하기
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/order}'|">주문내역</button>
+        </div>
+
+    </div>
+</body>
+</html>

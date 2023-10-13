@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>주문내역</title>
+  <head th:insert="~{template/styleCss :: css_copy}"></head>
+  <script>
+    function cancel(id) {
+      var form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", "/order/" + id + "/cancel");
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+    function toggleSorting(sort) {
+      let formString = "sortOrder" + sort
+      let inputIdString = "sortBy" + sort
+      let arrowString = "arrow" + sort + "Icon"
+      let form = document.getElementById(formString);
+      let inputBySort = document.getElementById(inputIdString);
+      let arrowIcon = document.getElementById(arrowString);
+
+      let currentValue = inputBySort.value;
+
+      if (currentValue == "order" + sort + "Up") {
+        // arrowIcon.innerHTML = "&#9660"; //▼	&#9660;
+        inputBySort.value = "order" + sort + "Up"
+      } else {
+        // arrowIcon.innerHTML = "&#9650";
+        inputBySort.value = "order" + sort + "Down"
+      }
+      form.submit();
+    }
+  </script>
+
+
+</head>
+<body>
+<header th:insert="~{template/header :: header_copy}"></header>
+
+<div class="container">
+  <h3 th:text="|${memberLevel}의 주문목록|"></h3>
+  <hr style="margin-bottom: 2em; margin-top: 2em;">
+
+  <div>
+    <form th:action="@{/order/search}" th:object="${orderSearch}" method="get" class="form-inline" style="float: right">
+      <div class="row" style="float: right">
+        <div class="col">
+          <input class="form-control" type="text" id="memberNickname" th:field="*{memberNickname}" placeholder="주문자명"/>
+        </div>
+        <div class="col">
+          <input class="form-control" type="text" id="productName" th:field="*{productName}" placeholder="제품명"/>
+        </div>
+        <div class="col">
+          <select class="form-select" id="productCategory" th:field="*{productCategory}">
+            <option th:value>제품 카테고리</option>
+            <option th:value="과자" th:selected="과자">과자</option>
+            <option th:value="음료" th:selected="음료">음료</option>
+          </select>
+        </div>
+
+        <div class="col">
+          <input type="date" th:field="*{minCreatedTime}" class="form-control" style="margin-right: 0" placeholder="yyyy-MM-dd" />
+        </div>
+        <th style="margin: 0">~</th>
+        <div class="col">
+          <input type="date" th:field="*{maxCreatedTime}" class="form-control" style="margin-left: 0" placeholder="yyyy-MM-dd"/>
+        </div>
+        <div class="col">
+          <select class="form-select" id="orderStatus" th:field="*{orderStatus}" th:placeholder="주문상태">
+            <option th:value>주문상태</option>
+            <option th:value="WAIT" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).WAIT}">WAIT</option>
+            <option th:value="DELIVERING" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).DELIVERING}">DELIVERING</option>
+            <option th:value="COMPLETE" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).COMPLETE}">COMPLETE</option>
+            <option th:value="CANCEL" th:selected="${orderStatus == T(project.studycafe.app.domain.enums.status.OrderStatus).CANCEL}">CANCEL</option>
+          </select>
+        </div>
+        <div class="col">
+          <select class="form-select" id="perPageNum" th:field="*{perPageNum}">
+            <option th:value="1" th:selected="${perPageNum == 1}">1개씩</option>
+            <option th:value="10" th:selected="${perPageNum == null || perPageNum == 10}" selected>10개씩</option>
+            <option th:value="25" th:selected="${perPageNum == 25}">25개씩</option>
+            <option th:value="50" th:selected="${perPageNum == 50}">50개씩</option>
+          </select>
+        </div>
+
+<!--        <div class="col">-->
+<!--          <select class="form-select" id="sort" th:field="*{sort}">-->
+<!--            <option th:value>정렬순</option>-->
+<!--            <option th:value="readCount">주문번호순</option>-->
+<!--            <option th:value="likeCount">주문상태순</option>-->
+<!--          </select>-->
+<!--        </div>-->
+
+        <div class="col">
+          <button type="submit" class="btn btn-secondary mb-2">검색</button>
+        </div>
+      </div>
+      <div th:if="${#fields.hasGlobalErrors()}">
+        <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+           th:text="${err}">글로벌 에러</p>
+      </div>
+    </form>
+  </div>
+
+  <section>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="row">
+          <form class="sortOrderId" th:action="@{/order/search}" th:object="${orderSearch}" method="get">
+              <input type="hidden" th:name="memberNickname" th:field="*{memberNickname}"/>
+              <input type="hidden" th:name="productName" th:field="*{productName}"/>
+              <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
+              <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>
+              <input type="hidden" th:name="maxCreatedTime" th:field="*{maxCreatedTime}"/>
+              <input type="hidden" th:name="orderStatus" th:field="*{orderStatus}"/>
+              <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+              <input type="hidden" id="sortById" th:field="*{sort}"/>
+              <button type="submit" th:onclick="toggleSorting('Id')"
+                      style="border: none; outline: none; background-color: white; font-weight: bold;">
+                  주문 번호<span id="arrowIdIcon">&#9660;</span>
+              </button>
+          </form>
+        </th>
+        <th scope="row">주문자</th>
+        <th scope="row">대표상품 이름</th>
+        <th scope="row">대표상품 주문 수량</th>
+        <th scope="row">주문 총가격</th>
+        <th scope="row">
+          <form class="sortOrderStatus" th:action="@{/order/search}" th:object="${orderSearch}" method="get">
+            <input type="hidden" th:name="memberNickname" th:field="*{memberNickname}"/>
+            <input type="hidden" th:name="productName" th:field="*{productName}"/>
+            <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
+            <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>
+            <input type="hidden" th:name="maxCreatedTime" th:field="*{maxCreatedTime}"/>
+            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+            <input type="hidden" id="sortByStatus" th:field="*{sort}" th:value="${orderSearch.sort != '' ? orderSearch.sort : 'orderStatusDown' }"/>
+            <button type="submit" th:onclick="toggleSorting('Status')"
+                    style="border: none; outline: none; background-color: white; font-weight: bold;">
+              주문 번호<span id="arrowStatusIcon">&#9660;</span>
+            </button>
+          </form>
+        </th>
+        <th scope="row">주문 일시</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${orders}">
+        <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.id}">주문번호</a></th>
+        <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.member.nickname != null ? order.member.nickname : order.member.name}"> 작성자 </a></th>
+        <th><a href="order.html" th:href="@{|/order/${order.id}|}"th:text="${order.orderItems.isEmpty() ? '' : order.orderItems[0].product.name}"></a></th>
+        <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.orderItems.isEmpty() ? '' : order.orderItems[0].count}"></a></th>
+        <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.totalPrice}"></a></th>
+        <th th:text="${order.orderStatus}"></th>
+        <th th:text="${{order.updatedTime}}"></th>
+        <th>
+          <a th:if="${order.orderStatus == 'WAIT'}" href="#" th:href="'javascript:cancel('+${order.id}+')'"
+             class="btn btn-danger">CANCEL</a>
+        </th>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="PageMaker">
+      <ul>
+        <li class="row" th:if="${pageMaker.startPage > 1}">
+          <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${orderSearch}" method="get">
+            <input type="hidden" name="page" th:value="${pageMaker.startPage -1}" />
+            <input type="hidden" th:name="memberNickname" th:field="*{memberNickname}"/>
+            <input type="hidden" th:name="productName" th:field="*{productName}"/>
+            <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
+            <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>
+            <input type="hidden" th:name="maxCreatedTime" th:field="*{maxCreatedTime}"/>
+            <input type="hidden" th:name="orderStatus" th:field="*{orderStatus}"/>
+            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+            <input type="hidden" th:name="sort" th:field="*{sort}"/>
+            <button type="submit">&lt;</button>
+          </form>
+        </li>
+
+        <li class="row" th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+          <form th:action="@{${#httpServletRequest.requestURI}}" th:object="${orderSearch}" method="get">
+            <input type="hidden" name="page" th:value="${page}" />
+            <input type="hidden" th:name="memberNickname" th:field="*{memberNickname}"/>
+            <input type="hidden" th:name="productName" th:field="*{productName}"/>
+            <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
+            <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>
+            <input type="hidden" th:name="maxCreatedTime" th:field="*{maxCreatedTime}"/>
+            <input type="hidden" th:name="orderStatus" th:field="*{orderStatus}"/>
+            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+            <input type="hidden" th:name="sort" th:field="*{sort}"/>
+            <button type="submit">[[${page}]]</button>
+          </form>
+        </li>
+
+        <li class="row" th:if="${pageMaker.endPage < pageMaker.totalPages}">
+          <form th:action="@{|${#httpServletRequest.requestURI}}" th:object="${orderSearch}" method="get">
+            <input type="hidden" name="page" th:value="${pageMaker.endPage + 1}" />
+            <input type="hidden" th:name="memberNickname" th:field="*{memberNickname}"/>
+            <input type="hidden" th:name="productName" th:field="*{productName}"/>
+            <input type="hidden" th:name="productCategory" th:field="*{productCategory}"/>
+            <input type="hidden" th:name="minCreatedTime" th:field="*{minCreatedTime}"/>
+            <input type="hidden" th:name="maxCreatedTime" th:field="*{maxCreatedTime}"/>
+            <input type="hidden" th:name="orderStatus" th:field="*{orderStatus}"/>
+            <input type="hidden" th:name="perPageNum" th:field="*{perPageNum}"/>
+            <input type="hidden" th:name="sort" th:field="*{sort}"/>
+            <button type="submit">&gt;</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+
+    <div style="float: right;"> <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-secondary mb-2">메인 화면</button> </div>
+  </section>
+</div>
+</body>
+</html>
