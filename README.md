@@ -19,6 +19,7 @@ studycafe_renewal -> studycafe_final
 - Gradle
 ### Database
 - Mysql
+- H2
 
 ### 프론트엔드
 - Javascript
