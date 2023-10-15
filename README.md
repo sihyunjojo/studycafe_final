@@ -1,4 +1,4 @@
-# Studycafe_Final
+# Studycafe_final
 studycafe_renewal -> studycafe_final  
 
 ## 📋 개발환경
