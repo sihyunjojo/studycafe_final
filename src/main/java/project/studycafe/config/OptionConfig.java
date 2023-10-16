@@ -37,7 +37,6 @@ import java.util.List;
 
 @Configuration
 //BaseTimeEntity 클래스를 사용하는 패키지의 Configuration 클래스에서 @EnableJpaAuditing 어노테이션을 추가하여 Auditing 기능을 활성화해야 합니다.
-@EnableJpaAuditing
 @RequiredArgsConstructor
 public class OptionConfig implements WebMvcConfigurer {
 
@@ -74,7 +73,7 @@ public class OptionConfig implements WebMvcConfigurer {
                                 "/", "/login", "/logout", "/oauth/**", "/download/**",
                                 "/board", "/board/?",
                                 "/product", "/product/?",
-                                "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
+                                "/js/**","/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
                                 "/member/new", "/member/find/**",
                                 "/handler/**"
                         );
@@ -83,7 +82,7 @@ public class OptionConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
-                                "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
+                                "/js/**", "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
                                 "/handler/**"
                         );
         registry.addInterceptor(new PreAddressInterceptor())
@@ -91,7 +90,7 @@ public class OptionConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
-                                "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html"
+                                "/js/**", "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html"
                         );
         registry.addInterceptor(new PersonalAccessControlInterceptor(new BoardService(boardRepository, boardQueryRepository, memberRepository), new OrderService(orderRepository, orderQueryRepository, memberRepository, productRepository, deliveryRepository, orderItemRepository), new CartService(cartRepository, cartProductRepository, productRepository), new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
                 .order(4)

@@ -28,8 +28,8 @@ import static project.studycafe.app.domain.Cart.createCart;
 //})
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@NamedEntityGraph(name = "Member.withCart", attributeNodes = {
-        @NamedAttributeNode("cart")})
+@NamedEntityGraph(name = "Member.withCart",
+        attributeNodes = {@NamedAttributeNode("cart")})
 public class Member extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,7 +54,8 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private Address address;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // jpa로 db로 저장할때 어떤 형태로 저장할지 결정
+    @Column(nullable = false)
     private MemberLevel memberLevel;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -73,7 +74,12 @@ public class Member extends BaseTimeEntity {
     @PrePersist
     public void setting() {
         if (this.memberLevel == null) {
-            this.memberLevel = MemberLevel.USER;
+            if (this.userLoginId == null) {
+                this.memberLevel = MemberLevel.GUEST;
+            }
+            else {
+                this.memberLevel = MemberLevel.USER;
+            }
         }
         if (this.address == null) {
             this.address = createAddress("", "", "");
@@ -99,6 +105,7 @@ public class Member extends BaseTimeEntity {
         this.provider = provider;
         this.nickname = nickname;
         this.cart = createCart(this);
+        this.memberLevel = MemberLevel.GUEST;
     }
 
     @Builder(builderMethodName = "commonBuilder", buildMethodName = "buildCommonMember")

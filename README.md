@@ -336,12 +336,30 @@ git에서 properties(key정보있는거) 없애기 완료
 3. 테스트가 통과하면 프로덕션 코드를 리팩토링합니다.(Refactor)
 
 
+# 10/14
+#### 페이지 로딩 속도를 높이기 위해 css는 header에 js는 footer에 두는게 좋다.
+js의 용량이 클 수록 body부분의 실행이 늦어지기 떄문에 js는 body하단에 두어 화면이 다 그려진 뒤에 호출하는게 좋습니다.  
+반면 css는 화면을 그리는 역할 이므로 head에서 불러오는게 좋습니다. 그렇지 않으면 깨진 화면을 사용자가 볼 수 있기 떄문에.
+bootstrap은 jqurey에 의존하므로 jqurey를 먼저 불러오는게 좋다.
+
+OauthMember를 session에 잠깐 사용할때는 member로 바로 사용하는 것보다  
+sessionUser이라는 인증된 사용자 정보만으로 만든 객체를 만들어서 사용하는게 좋다.  
+- Member클래스를 그대로 사용했가는 Member에 직렬화 코드를 넣어야하는데, 그럼 엔티티인 Member가 추후 다른 엔티티와 관계를 형성할때 직렬화 코드에 종속되기 떄문에 좋지 않다.
+- 그래서 직렬화 기능을 가진(implements Serializable) 세션 Dto를 만드는게 유지보수에 더 도움이 된다.
+
+# 10/15
+
+
 ### 해야할 것들
 controllertest 작성(클라이언트와의 교류에서 오류가 나는 것도 서버 코드에 잘못이 있을 수 있다)
 bulid패턴 이용하기.(생성자로 생성하는거에 비해 명시성이 뛰어남)  
-controller에서만 form을 사용하는게 이름적으로 맞지않나?? service단에서 까지 form을 쓰는건 dto라고 이름을 해야할거 같은데...
+controller에서만 form을 사용하는게 이름적으로 맞지않나?? service단에서 까지 form을 쓰는건 dto라고 이름을 해야할거 같은데...  
+(res/req dto 따로 만들기) 쓰임이 다르니까.
 #### entity클래스를 절대로 req/res클래스로 사용하면 안된다. (각 엔티티에가서 service나 controller에 있는거 고치기)
 - 그치만 너무 먼길을 온거 같다. 다음부터 이걸 꼭 지키자.
+
+json을 활용한 api식 코딩 -p141,p105,p106
+commonMember,OauthMember를 member를 중심으로 나눠야할꺼같기도?
 
 테스트코드(각 기능별)
 

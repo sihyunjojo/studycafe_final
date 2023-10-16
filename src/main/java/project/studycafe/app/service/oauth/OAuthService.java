@@ -44,6 +44,8 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName(); // OAuth 로그인 시 키(pk)가 되는 값
+        // 구글의 경우 기본적으로 코드를 지원하지만, 네이버 카카오는 기본 지원하지 않는다.
+        // 네이버 구글 동시 지원할떄 사용됨.
         Map<String, Object> attributes = oAuth2User.getAttributes(); // OAuth 서비스의 유저 정보들
 
         log.info("oAuth2User ={}", oAuth2User);
@@ -55,6 +57,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, attributes); // registrationId에 따라 유저 정보를 통해 공통된 UserProfile 객체로 만들어 줌
         memberProfile.setProvider(registrationId);
         log.info("memberProfile ={}", memberProfile);
+
         Member member = saveOrUpdate(memberProfile);
         log.info("member = {}", member);
 

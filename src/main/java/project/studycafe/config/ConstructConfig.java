@@ -3,6 +3,7 @@ package project.studycafe.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import project.studycafe.app.domain.board.Board;
 import project.studycafe.helper.aop.logging.trace.LogTraceAspect;
 import project.studycafe.app.repository.board.board.JpaQueryBoardRepository;
@@ -19,6 +20,7 @@ import project.studycafe.helper.aop.logging.trace.LogTrace;
 import javax.persistence.EntityManager;
 
 @Configuration
+@EnableJpaAuditing // application에 있으면 springBoot
 @RequiredArgsConstructor
 public class ConstructConfig {
 
