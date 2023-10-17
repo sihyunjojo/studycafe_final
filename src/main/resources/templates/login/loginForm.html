@@ -7,7 +7,6 @@
 </head>
 <script src="/js/createPopup.js"></script>
 <script>
-
     var currentURL = window.location.href;
 
     if (currentURL.indexOf('?') !== -1) {
@@ -18,7 +17,6 @@
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/handler/please/login', true); // 마지막 매개변수 true는 비동기적인 요청을 수행
             xhr.setRequestHeader('Accept', 'application/json'); // 받아올 타입을 정해줌.
-            var resultElement = document.getElementById('result');
 
             // 이 이벤트 핸들러는 XMLHttpRequest 객체의 readyState 속성의 변화를 감지합니다.
             xhr.onreadystatechange = function () {

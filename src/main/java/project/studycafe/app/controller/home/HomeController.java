@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.studycafe.app.controller.form.board.BoardForm;
 import project.studycafe.app.domain.board.Board;
+import project.studycafe.app.domain.enums.MemberLevel;
 import project.studycafe.app.domain.member.Member;
 import project.studycafe.app.domain.product.Product;
+import project.studycafe.app.service.member.MemberService;
 import project.studycafe.helper.resolver.argumentresolver.Login;
 import project.studycafe.app.service.dto.searchDto.ProductSearchCond;
 import project.studycafe.app.service.board.BoardService;
@@ -18,6 +20,7 @@ import project.studycafe.app.service.product.ProductService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 import static project.studycafe.SessionConst.LOGIN_MEMBER;
 
@@ -29,7 +32,7 @@ public class HomeController {
     private final BoardService boardService;
     private final ProductService productService;
     private final ApplicationContext applicationContext;
-
+    private final MemberService memberService;
 
     public void printAllBeans() {
         String[] beanNames = applicationContext.getBeanDefinitionNames();
@@ -41,8 +44,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(HttpServletRequest request, @Login Member loginMember, @ModelAttribute("productSearch") ProductSearchCond productSearch, Model model) {
-//        printAllBeans();
-
         setupPopup(request);
 
         if (loginMember != null) {

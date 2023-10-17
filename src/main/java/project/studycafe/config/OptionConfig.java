@@ -85,15 +85,8 @@ public class OptionConfig implements WebMvcConfigurer {
                                 "/js/**", "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
                                 "/handler/**"
                         );
-        registry.addInterceptor(new PreAddressInterceptor())
-                .order(3)
-                .addPathPatterns("/**")
-                .excludePathPatterns
-                        (
-                                "/js/**", "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html"
-                        );
         registry.addInterceptor(new PersonalAccessControlInterceptor(new BoardService(boardRepository, boardQueryRepository, memberRepository), new OrderService(orderRepository, orderQueryRepository, memberRepository, productRepository, deliveryRepository, orderItemRepository), new CartService(cartRepository, cartProductRepository, productRepository), new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
-                .order(4)
+                .order(3)
                 .addPathPatterns(
                         // 멤버 수정, 삭제는 애초에 세션에 있는 정보를 가지고 수정해주는 거여서 로그인된 회원말고 접근이 안됨.
                         "/board/?/edit", "/order/?/edit", "/**/delete"
@@ -102,7 +95,7 @@ public class OptionConfig implements WebMvcConfigurer {
                         "/member/delete"
                 );
         registry.addInterceptor(new AccessControlByLevelInterceptor(new ObjectMapper()))
-                .order(5)
+                .order(4)
                 .addPathPatterns(
                         "/product/add", "/product/?/edit", "/product/?/delete",
                         "/order/?/delete"

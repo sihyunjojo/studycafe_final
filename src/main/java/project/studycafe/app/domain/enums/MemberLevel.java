@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum MemberLevel {
-    MASTER("ROLE_GUEST","마스터"),
+    MASTER("ROLE_MASTER","마스터"),
     USER("ROLE_USER", "일반 사용자"),
     GUEST("ROLE_GUEST","손님");
 

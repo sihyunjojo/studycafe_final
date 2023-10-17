@@ -23,12 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500 클라이언트측 에러를 발생시켜줘라
-//    @ExceptionHandler(RuntimeException.class) // 런타임에러.
-//    public ModelAndView RunTimeExceptionHandler(RuntimeException e) {
-//        log.error("[RunTimeExceptionHandler] ex", e);
-//        return new ModelAndView("error/500");
-//    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500 클라이언트측 에러를 발생시켜줘라
+    @ExceptionHandler(RuntimeException.class) // 런타임에러.
+    public ModelAndView RunTimeExceptionHandler(RuntimeException e) {
+        log.error("[RunTimeExceptionHandler] ex", e);
+        return new ModelAndView("error/500");
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400 클라이언트측 에러를 발생시켜줘라
     @ExceptionHandler(BadRequestException.class) // 의도하지 않은 요청이 받아들여졌을시 에러가 발생한다. 2개이상 가능
@@ -76,12 +76,12 @@ public class ExceptionControllerAdvice {
         return new ModelAndView("error/400");
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler
-    public ErrorResult exHandler(Exception e) {
-        log.error("[exceptionHandler] ex", e);
-        return new ErrorResult("EX", "내부 오류입니다. 어떤 오류인지 알려주세요.");
-    }
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ExceptionHandler
+//    public ErrorResult exHandler(Exception e) {
+//        log.error("[exceptionHandler] ex", e);
+//        return new ErrorResult("EX", "내부 오류입니다. 어떤 오류인지 알려주세요.");
+//    }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    @ExceptionHandler(IllegalArgumentException.class) // 2개이상 가능

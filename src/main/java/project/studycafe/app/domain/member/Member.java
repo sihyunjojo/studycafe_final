@@ -27,7 +27,6 @@ import static project.studycafe.app.domain.Cart.createCart;
 //		@UniqueConstraint(name = "member_id_unique", columnNames = {"nickname"})
 //})
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @NamedEntityGraph(name = "Member.withCart",
         attributeNodes = {@NamedAttributeNode("cart")})
 public class Member extends BaseTimeEntity {
@@ -96,6 +95,9 @@ public class Member extends BaseTimeEntity {
         map.put("nickname", nickname);
         return map;
     }
+
+    protected Member(){}
+
 
     @Builder //생성을 Builder 패턴으로 하기 위해서
     public Member(Long id, String name, String email, String provider, String nickname) {
