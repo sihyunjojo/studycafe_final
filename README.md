@@ -1,6 +1,42 @@
-# Studycafe_Renewal
+# Studycafe_final
+studycafe_renewal -> studycafe_final  
 
-2년동안 공부하면서 기존에 studycafe 프로젝트의 심각성을 깨닫고 renewal해보려한다.     
+## 📋 개발환경
+- IntelliJ
+- Postman
+- MySQL Workbench
+- GitHub
+
+## 📋 사용 기술
+### 백엔드
+### Spring boot
+- JAVA 12
+- Spring MVC
+- Spring Boot Security
+- Spring Data JPA
+- Spring AOP
+### Build tool
+- Gradle
+### Database
+- Mysql
+- H2
+
+### 프론트엔드
+- Javascript
+- Thymeleaf
+
+📋 주요 키워드
+- RESTFUL API
+- 시큐리티
+- JPA
+- 페이징
+- 트랜잭션
+- 예외처리
+- Oauth 2.0
+- 테스트
+- Git 버전관리
+- 클린코드
+
 
 ## 5/2
 form에서 객체가 넘어오질 않는다. 타임리프 submit공부 필요.  
