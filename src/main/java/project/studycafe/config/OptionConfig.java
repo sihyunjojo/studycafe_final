@@ -105,7 +105,6 @@ public class OptionConfig implements WebMvcConfigurer {
 
     }
 
-
     @Bean
     public LogTrace logTrace() {
         return new LogTrace();
