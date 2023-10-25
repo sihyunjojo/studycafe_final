@@ -3,7 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 
-	/* 10-2. querydsl plugin 추가 */
+//	querydsl plugin 추가
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
@@ -11,64 +11,78 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
-//sourceCompatibility = '1.8'
 
 // 하이버네이트 5.6.5로 바꿈.(하이버네이트 5.6.7버전 버그때문에)
 ext["hibernate.version"] = "5.6.5.Final"
+ext["queryDslVersion"] = "5.0.0"
 
-ext{
-	queryDslVersion = "4.1.4";
-}//추가
 
-/* 10-3. querydsl */
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
+///* 10-3. querydsl */
+//configurations {
+//	compileOnly {
+//		extendsFrom annotationProcessor
+//	}
+//}
 
 repositories {
+	//	각종 의존성들을 어떤 원격 저장소에서 받을건지
 	mavenCentral()
-//	각종 의존성들을 어떤 원격 저장소에서 받을건지
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation' //@valid 사용
+	implementation 'org.springframework.boot:spring-boot-starter-aop' //aop 사용(자동 빈 후처리기(advisor)
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
 	//websocket json
 	implementation group: 'org.json', name: 'json', version: '20230227'
 
 	//JPA, 스프링 데이터 JPA 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+
 	//Querydsl 추가
 //	implementation 'com.querydsl:querydsl-jpa' // 기존
 //	implementation 'com.querydsl:querydsl-apt' //추가
-	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" //추가추가
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}" //추가추가
-	testImplementation 'junit:junit:4.13.1'
-    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
+//    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+//	annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
+//	annotationProcessor "jakarta.persistence:jakarta.persistence-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
+
+
+//	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" //추가추가
+//	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}" //추가추가
+
+
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" //추추가
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}" //추추가
+	implementation "com.querydsl:querydsl-core:${queryDslVersion}" //추추가
+
+//	compile(
+//			"com.querydsl:querydsl-core:${queryDslVersion}",
+//			"com.querydsl:querydsl-jpa:${queryDslVersion}"
+//	)
+//
+//	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jpa",
+//			"org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final",
+//			"javax.annotation:javax.annotation-api:1.3.2",
+
+
+
 
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	testImplementation 'org.springframework.security:spring-security-test'
+	testCompileOnly 'org.springframework.security:spring-security-test'
 
 	//oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-	//aop 사용(자동 빈 후처리기(advisor)
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 //	//h2 database
 //	runtimeOnly 'com.h2database:h2'
@@ -80,8 +94,13 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	//테스트에서 lombok 사용
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	//test junit
+	testImplementation 'junit:junit:4.13.1'
+
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
@@ -90,60 +109,82 @@ dependencies {
 	}
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
-
-
-	//테스트에서 lombok 사용
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
-
-	testCompileOnly("org.springframework.security:spring-security-test")
-
 }
-
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
 
+
+// 부트 2.6이상 쿼리 버전 5.0.0
+def qureydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = qureydslDir
+}
+
+sourceSets {
+	main.java.srcDir qureydslDir
+}
+
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	compileOnly{
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+
+
+
+
+// 아돈노
 //// Querydsl 설정부
 //def generated = 'src/main/generated'
-
+//
 //// querydsl QClass 파일 생성 위치를 지정
 //// 이 코드가 없으면 에러가 난다.
 //tasks.withType(JavaCompile) {
 //	options.getGeneratedSourceOutputDirectory().set(file(generated))
 //}
 //
-//// 그냥 그대로 따오면서 나온 주석코드.
 //// java source set 에 querydsl QClass 위치 추가
 //sourceSets {
 //	main.java.srcDirs += [ generated ]
 //}
 //
-////gradle clean 시에 QClass 디렉토리 삭제
+//gradle clean 시에 QClass 디렉토리 삭제
 //clean {
 //	delete file(generated)
 //}
 
-/* 10-5. querydsl에서 사용할 경로 지정*/
-def querydslDir = "src/main/generated"
 
-/* 10-6. JPA사용 여부와 사용할 경로를 지정*/
 
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
 
-/* 10-7. build시 사용할 SourceSet 추가 */
-sourceSets {
-	main.java.srcDir querydslDir
-}
-/* 10-8. querydsl이 complieClasspath를 상속하도록 설정 */
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
-/* 10-9. querydsl 컴파일시 사용할 옵션 설정 */
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
+///* 자바 8 에서 사용한 qureydsl설정 */
+///* 10-5. querydsl에서 사용할 경로 지정*/
+//def querydslDir = "src/main/generated"
+//
+///* 10-6. JPA사용 여부와 사용할 경로를 지정*/
+//
+//querydsl {
+//	jpa = true
+//	querydslSourcesDir = querydslDir
+//}
+//
+///* 10-7. build시 사용할 SourceSet 추가 */
+//sourceSets {
+//	main.java.srcDir querydslDir
+//}
+///* 10-8. querydsl이 complieClasspath를 상속하도록 설정 */
+//configurations {
+//	querydsl.extendsFrom compileClasspath
+//}
+///* 10-9. querydsl 컴파일시 사용할 옵션 설정 */
+//compileQuerydsl {
+//	options.annotationProcessorPath = configurations.querydsl
+//}
