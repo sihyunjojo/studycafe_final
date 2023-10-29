@@ -411,22 +411,29 @@ Java 8에서는 Supplier를 사용하여 예외를 지정해야 했지만, Java 
 그 후 쿼리dsl 에러 발생하여 gradle설정 변경
 
 ### 해야할 것들
+mock 객체 통한 controllerTEST 마무리하기.  
+controllertest 작성(클라이언트와의 교류에서 오류가 나는 것도 서버 코드에 잘못이 있을 수 있다)  
+
+bulider패턴 이용하기.(생성자로 생성하는거에 비해 명시성이 뛰어남)  
+
+Oauth 로 바로 로그인한 사람은 MemberLevel을 손님으로 분류해서 권한처리    
+
+json을 활용한 api식 코딩 -p141,p105,p106  
+commonMember,OauthMember를 member를 중심으로 나눠야할꺼같기도?  
+---
 
 springSecurity로 권한 설정은 잠시 보류 후, 책을 통해서 배우고 해야할듯함.  
-//// 로그인이 되어 있어도 Oauth으로 로그인이 안되어 있으니까 이 방법으로 로그인하라고 login으로 넘겨줌.  
+  // oauthTest도 미루기.  
+ //// 로그인이 되어 있어도 Oauth으로 로그인이 안되어 있으니까 이 방법으로 로그인하라고 login으로 넘겨줌.    
 
-Oauth 로 바로 로그인한 사람은 MemberLevel을 손님으로 분류해서 권한처리  
+**그치만 너무 먼길을 온거 같다. 다음부터 이걸 꼭 지키자.**
 
-controllertest 작성(클라이언트와의 교류에서 오류가 나는 것도 서버 코드에 잘못이 있을 수 있다)
-bulider패턴 이용하기.(생성자로 생성하는거에 비해 명시성이 뛰어남)  
-controller에서만 form을 사용하는게 이름적으로 맞지않나?? service단에서 까지 form을 쓰는건 dto라고 이름을 해야할거 같은데...  
+- controller에서만 form을 사용하는게 이름적으로 맞지않나?? service단에서 까지 form을 쓰는건 dto라고 이름을 해야할거 같은데...  
 (res/req dto 따로 만들기) 쓰임이 다르니까.  
 
-**entity클래스를 절대로 req/res클래스로 사용하면 안된다. (각 엔티티에가서 service나 controller에 있는거 고치기)**
-- 그치만 너무 먼길을 온거 같다. 다음부터 이걸 꼭 지키자.
+- **entity클래스를 절대로 req/res클래스로 사용하면 안된다. (각 엔티티에가서 service나 controller에 있는거 고치기)**
 
-json을 활용한 api식 코딩 -p141,p105,p106
-commonMember,OauthMember를 member를 중심으로 나눠야할꺼같기도?
+
 
 ---
 

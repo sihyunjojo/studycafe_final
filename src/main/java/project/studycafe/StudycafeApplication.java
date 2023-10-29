@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 @SpringBootApplication
 public class StudycafeApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(StudycafeApplication.class, args);
     }
