@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class) // 테스트를 진행할 때 Junit에 내장된 샐행자 외에 다른 실행자를 실행(여기서는 SpringRunner) -> 부트 테스트와 Junit사이의 연결자 역할
-//@WebMvcTest(controllers = LoginController.class) // Web에 집중할 수 있는 어노테이션 @Controller관련 어노테이션만 사용 가능해짐.
+//@WebMvcTest(controllers = LoginController.class) // Web에 집중할 수 있는 어노테이션 @Controller관련 어노테이션만 사용 가능해짐. JPA 기능이 작동하지 않음.
 public class LoginControllerTest {
 
     @Autowired

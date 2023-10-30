@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class OrderItemForm {
 
     //productId

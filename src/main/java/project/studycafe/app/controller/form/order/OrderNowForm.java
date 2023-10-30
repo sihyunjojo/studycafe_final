@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import lombok.Data;
 @Data
-@NoArgsConstructor
 public class OrderNowForm {
 
     private long id;

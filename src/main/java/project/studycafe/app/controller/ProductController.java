@@ -64,18 +64,27 @@ public class ProductController {
         }
 
         List<Product> findProducts = productService.findSearchedAndSortedProducts(productSearch);
-
         List<Product> productList = productService.getProductList(page, productSearch.getPerPageNum(), findProducts);
-        PageMaker pageMaker = new PageMaker(findProducts.size(), page, productSearch.getPerPageNum());
+        PageMaker pageMaker = PageMaker.builder()
+                .totalBoardCount(findProducts.size())
+                .currentPage(page)
+                .perPageNum(productSearch.getPerPageNum())
+                .build();
+
         if (productSearch.getSort() != null) {
-            if (productSearch.getSort().equals("productReadCountUp")) {
-                productSearch.setSort("productReadCountDown");
-            } else if (productSearch.getSort().equals("productReadCountDown")) {
-                productSearch.setSort("productReadCountUp");
-            } else if (productSearch.getSort().equals("productLikeCountUp")) {
-                productSearch.setSort("productLikeCountDown");
-            } else if (productSearch.getSort().equals("productLikeCountDown")) {
-                productSearch.setSort("productLikeCountUp");
+            switch (productSearch.getSort()) {
+                case "productReadCountUp":
+                    productSearch.setSort("productReadCountDown");
+                    break;
+                case "productReadCountDown":
+                    productSearch.setSort("productReadCountUp");
+                    break;
+                case "productLikeCountUp":
+                    productSearch.setSort("productLikeCountDown");
+                    break;
+                case "productLikeCountDown":
+                    productSearch.setSort("productLikeCountUp");
+                    break;
             }
         }
         log.info("productSearch = {}", productSearch);
@@ -101,7 +110,7 @@ public class ProductController {
             return "redirect:/login?redirectURL=/product/add";
         }
 
-        model.addAttribute("product", new Product());
+        model.addAttribute("product", Product.createEmptyProduct());
         model.addAttribute("loginMember", member);
         log.info("loginMember={}", member);
         return "product/addProductForm";

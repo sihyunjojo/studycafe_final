@@ -170,10 +170,19 @@ public class SpringDataJpaMemberService implements MemberService {
 
     @Override
     public OauthMemberForm memberToOauthMemberForm(Member member) {
-        return new OauthMemberForm(member.getEmail(), member.getProvider(),
-                member.getUserLoginId(), member.getUserPassword(),
-                member.getName(), member.getNickname(), member.getGender(), member.getPhone(),
-                member.getAddress().getCity(), member.getAddress().getStreet(), member.getAddress().getZipcode(),
-                member.getBirth());
+        return OauthMemberForm.builder()
+                .email(member.getEmail())
+                .provider(member.getProvider())
+                .userLoginId(member.getUserLoginId())
+                .userPassword(member.getUserPassword())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .gender(member.getGender())
+                .phone(member.getPhone())
+                .city(member.getAddress().getCity())
+                .street(member.getAddress().getStreet())
+                .zipcode(member.getAddress().getZipcode())
+                .birth(member.getBirth())
+                .build();
     }
 }

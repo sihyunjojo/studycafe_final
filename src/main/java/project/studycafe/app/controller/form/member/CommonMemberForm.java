@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter @Setter
-@NoArgsConstructor
 @EqualsAndHashCode
 public class CommonMemberForm implements MemberForm {
 
@@ -34,6 +33,13 @@ public class CommonMemberForm implements MemberForm {
     private String email;
     private String birth;
 
+    private CommonMemberForm() {
+    }
+
+    public static CommonMemberForm createEmptyCommonMemberForm(){
+        return new CommonMemberForm();
+    }
+    @Builder(builderMethodName = "easyBuilder", buildMethodName = "buildEasyCommonMemberForm")
     public CommonMemberForm(String userLoginId, String userPassword, String name, String nickname, String phone) {
         this.userLoginId = userLoginId;
         this.userPassword = userPassword;
@@ -42,6 +48,7 @@ public class CommonMemberForm implements MemberForm {
         this.phone = phone;
     }
 
+    @Builder
     public CommonMemberForm(String userLoginId, String userPassword, String name, String nickname, String gender, String phone, String city, String street, String zipcode, String email, String birth) {
         this.userLoginId = userLoginId;
         this.userPassword = userPassword;

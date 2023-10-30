@@ -15,8 +15,8 @@ import java.util.Map;
 //통계
 @ToString
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Statistics {
     @NotNull
     private Integer readCount;

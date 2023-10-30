@@ -65,15 +65,17 @@ public class OptionConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor(new CommentService(commentRepository, memberRepository, boardRepository), new ReplyService(replyRepository, memberRepository, commentRepository)))
+        registry.addInterceptor(
+                        new LoginCheckInterceptor(new CommentService(commentRepository, memberRepository, boardRepository),
+                                new ReplyService(replyRepository, memberRepository, commentRepository)))
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns
                         (
                                 "/", "/login", "/logout", "/oauth/**", "/download/**",
-                                "/board", "/board/?",
-                                "/product", "/product/?",
-                                "/js/**","/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
+                                "/board", "/board/?", "/board/search/**",
+                                "/product", "/product/?", "/product/search/**",
+                                "/js/**", "/popup/**", "/css/**", "/*.ico", "/error/**", "/img/**", "/**/*.html",
                                 "/member/new", "/member/find/**",
                                 "/handler/**"
                         );

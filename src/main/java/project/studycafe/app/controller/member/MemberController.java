@@ -30,7 +30,7 @@ public class MemberController {
 
     @GetMapping("/new")
     public String JoinForm(Model model) {
-        model.addAttribute("member", new CommonMemberForm());
+        model.addAttribute("member", CommonMemberForm.createEmptyCommonMemberForm());
         return "member/addMemberForm";
     }
 

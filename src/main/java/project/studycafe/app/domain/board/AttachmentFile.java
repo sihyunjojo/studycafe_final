@@ -8,8 +8,8 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AttachmentFile extends BaseTimeEntity {
     @Id
     private String uniqueFileName;

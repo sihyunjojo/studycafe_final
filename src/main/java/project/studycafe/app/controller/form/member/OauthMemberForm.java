@@ -1,6 +1,7 @@
 package project.studycafe.app.controller.form.member;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,8 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class OauthMemberForm implements MemberForm {
 
     @Email
@@ -34,4 +34,23 @@ public class OauthMemberForm implements MemberForm {
 
     private String birth;
 
+
+
+    @Builder
+    public OauthMemberForm(String email, String provider, String userLoginId, String userPassword, String name,
+                           String nickname, String gender, String phone, String city, String street, String zipcode,
+                           String birth) {
+        this.email = email;
+        this.provider = provider;
+        this.userLoginId = userLoginId;
+        this.userPassword = userPassword;
+        this.name = name;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.phone = phone;
+        this.city = city;
+        this.street = street;
+        this.zipcode = zipcode;
+        this.birth = birth;
+    }
 }

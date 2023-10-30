@@ -1,5 +1,7 @@
 package project.studycafe.app.domain.product;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +18,7 @@ import java.util.List;
 @Slf4j
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -63,6 +65,10 @@ public class Product extends BaseTimeEntity {
         this.quantity = restStock;
     }
 
+    public static Product createEmptyProduct() {
+        return new Product();
+    }
+    @Builder(builderMethodName = "easyBuilder", buildMethodName = "buildEasyProduct")
     public Product(String name, String category, int price, int quantity) {
         this.name = name;
         this.category = category;
