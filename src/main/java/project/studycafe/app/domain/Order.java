@@ -162,10 +162,6 @@ public class Order extends BaseTimeEntity {
         log.info("addOrderItem -> orderTotalPrice = {}", totalPrice);
     }
 
-    public Long getId(){
-        return id;
-    }
-
     public OrderStatus getOrderStatus() {
         return orderstatus;
     }

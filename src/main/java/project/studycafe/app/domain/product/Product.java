@@ -1,9 +1,7 @@
 package project.studycafe.app.domain.product;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import project.studycafe.app.domain.base.BaseTimeEntity;
@@ -64,7 +62,10 @@ public class Product extends BaseTimeEntity {
         this.quantity = restStock;
     }
 
-    private Product() {
+    //private로 하면 타임리프에서 에러가 남.
+    //NoSuchMethod
+    //Caused by: org.hibernate.HibernateException: HHH000143:
+    protected Product() {
     }
 
     public static Product createEmptyProduct() {
