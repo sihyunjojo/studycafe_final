@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 @Entity
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -63,6 +62,9 @@ public class Product extends BaseTimeEntity {
             throw new NotEnoughStockException("need more stock");
         }
         this.quantity = restStock;
+    }
+
+    private Product() {
     }
 
     public static Product createEmptyProduct() {
