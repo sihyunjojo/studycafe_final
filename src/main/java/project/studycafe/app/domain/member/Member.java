@@ -126,10 +126,6 @@ public class Member extends BaseTimeEntity {
 
 
     //==연관관계 메서드==//
-    public Long getId(){
-        return id;
-    }
-
     public void addBoard(Board board) {
         this.boards.add(board);
     }

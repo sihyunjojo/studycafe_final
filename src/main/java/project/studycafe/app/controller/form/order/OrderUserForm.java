@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class OrderUserForm {
 
     private long id;

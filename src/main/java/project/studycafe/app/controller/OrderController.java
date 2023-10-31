@@ -46,7 +46,11 @@ public class OrderController {
         orderSearch.setPerPageNum(BASIC_PER_PAGE_NUM);
 
         List<Order> orderList = orderService.getOrderList(page, BASIC_PER_PAGE_NUM, orders);
-        PageMaker pageMaker = new PageMaker(orders.size(), page, BASIC_PER_PAGE_NUM);
+        PageMaker pageMaker = PageMaker.builder()
+                .totalBoardCount(orders.size())
+                .currentPage(page)
+                .perPageNum(BASIC_PER_PAGE_NUM)
+                .build();
 
 
         model.addAttribute("orders", orderList);
@@ -61,17 +65,26 @@ public class OrderController {
 
         List<Order> findOrderList = orderService.getOrderList(page, orderSearch.getPerPageNum(), findOrders);
 
-        PageMaker pageMaker = new PageMaker(findOrders.size(), page, orderSearch.getPerPageNum());
+        PageMaker pageMaker = PageMaker.builder()
+                .totalBoardCount(findOrders.size())
+                .currentPage(page)
+                .perPageNum(orderSearch.getPerPageNum())
+                .build();
 
         if (orderSearch.getSort() != null) {
-            if (orderSearch.getSort().equals("orderIdUp")) {
-                orderSearch.setSort("orderIdDown");
-            } else if (orderSearch.getSort().equals("orderIdDown")) {
-                orderSearch.setSort("orderIdUp");
-            } else if (orderSearch.getSort().equals("orderStatusDown")) {
-                orderSearch.setSort("orderStatusUp");
-            } else if (orderSearch.getSort().equals("orderStatusUp")) {
-                orderSearch.setSort("orderStatusDown");
+            switch (orderSearch.getSort()) {
+                case "orderIdUp":
+                    orderSearch.setSort("orderIdDown");
+                    break;
+                case "orderIdDown":
+                    orderSearch.setSort("orderIdUp");
+                    break;
+                case "orderStatusDown":
+                    orderSearch.setSort("orderStatusUp");
+                    break;
+                case "orderStatusUp":
+                    orderSearch.setSort("orderStatusDown");
+                    break;
             }
         }
 

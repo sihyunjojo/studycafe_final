@@ -13,7 +13,6 @@ import static project.studycafe.app.domain.Address.createAddress;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +33,9 @@ public class Delivery extends BaseTimeEntity {
         if (address == null) {
             address = createAddress("", "", "");
         }
+    }
+
+    private Delivery() {
     }
 
     public static Delivery createDelivery(Member member, Address address) {

@@ -1,5 +1,6 @@
 package project.studycafe.app.domain.product;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CartProduct extends BaseTimeEntity {
 
     @Id

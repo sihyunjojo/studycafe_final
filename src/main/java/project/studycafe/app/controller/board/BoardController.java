@@ -32,7 +32,6 @@ public class BoardController {
 
     private final BoardService boardService;
     private final FileService fileService;
-//    @Autowired private ApplicationContext applicationContext;
 
 
     private static final int BASIC_PER_PAGE_NUM = 10;    // 페이지당 보여줄 게시판 개수
@@ -52,7 +51,12 @@ public class BoardController {
         List<Board> boardList = boardService.getBoardList(page, BASIC_PER_PAGE_NUM, boardsWithoutNotice);
         boardList.addAll(0, notices);
 
-        PageMaker pageMaker = new PageMaker(boardsWithoutNotice.size(), page, BASIC_PER_PAGE_NUM);
+        PageMaker pageMaker = PageMaker.builder()
+                .totalBoardCount(boardsWithoutNotice.size())
+                .currentPage(page)
+                .perPageNum(BASIC_PER_PAGE_NUM)
+                .build();
+
 
         // 클라이언트 처리
         List<BoardForm> boardForms = boardService.boardsToBoardForms(boardList);
@@ -64,28 +68,40 @@ public class BoardController {
 
     @GetMapping("/search")
     public String searchBoards(@ModelAttribute("boardSearch") BoardSearchCond boardSearch, @RequestParam(required = false, defaultValue = "1") int page, Model model) {
-        List<Board> findBoards = boardService.getSearchedAndSortedBoards(boardSearch);
+        List<Board> findSortedBoards = boardService.getSearchedAndSortedBoards(boardSearch);
         List<Board> notices = boardService.getBoardsByCategoryByCreatedTimeDesc("공지사항");
 
-        List<Board> findBoardList = boardService.getBoardList(page, boardSearch.getPerPageNum(), findBoards);
+        List<Board> findBoardList = boardService.getBoardList(page, boardSearch.getPerPageNum(), findSortedBoards);
+
+        log.info("findboard = {}, notices = {}", findSortedBoards.size(), notices.size());
+        PageMaker pageMaker = PageMaker.builder()
+                .totalBoardCount(findSortedBoards.size())
+                .currentPage(page)
+                .perPageNum(boardSearch.getPerPageNum())
+                .build();
+
+        log.info("{}", pageMaker);
 
         // 공지사항을 검색했을 시에 2번 안 띄우게
         if (!boardSearch.getCategory().equals("공지사항")) {
             findBoardList.addAll(0, notices);
         }
 
-        PageMaker pageMaker = new PageMaker(findBoards.size()- notices.size(), page, boardSearch.getPerPageNum());
-
 
         if (boardSearch.getSort() != null) {
-            if (boardSearch.getSort().equals("boardReadCountUp")) {
-                boardSearch.setSort("boardReadCountDown");
-            } else if (boardSearch.getSort().equals("boardReadCountDown")) {
-                boardSearch.setSort("boardReadCountUp");
-            } else if (boardSearch.getSort().equals("boardLikeCountUp")) {
-                boardSearch.setSort("boardLikeCountDown");
-            } else if (boardSearch.getSort().equals("boardLikeCountDown")) {
-                boardSearch.setSort("boardLikeCountUp");
+            switch (boardSearch.getSort()) {
+                case "boardReadCountUp":
+                    boardSearch.setSort("boardReadCountDown");
+                    break;
+                case "boardReadCountDown":
+                    boardSearch.setSort("boardReadCountUp");
+                    break;
+                case "boardLikeCountUp":
+                    boardSearch.setSort("boardLikeCountDown");
+                    break;
+                case "boardLikeCountDown":
+                    boardSearch.setSort("boardLikeCountUp");
+                    break;
             }
         }
 
@@ -112,7 +128,7 @@ public class BoardController {
 
     @GetMapping("/add")
     public String addForm(@Login Member loginMember, Model model) {
-        model.addAttribute("board", new BoardCreateForm());
+        model.addAttribute("board", BoardCreateForm.createEmptyBoardCreateForm());
         model.addAttribute("loginMember", loginMember);
         return "board/addBoardForm";
     }
@@ -122,7 +138,8 @@ public class BoardController {
         Long boardId = boardService.addBoard(form);
 
         if (form.getAttachmentFiles() != null) {
-            List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
+            fileService.storeFiles(form.getAttachmentFiles(), boardId);
+//            List<AttachmentFile> storeFiles = fileService.storeFiles(form.getAttachmentFiles(), boardId);
         }
 
         return "redirect:/board";
@@ -143,7 +160,8 @@ public class BoardController {
     @PostMapping("/{boardId}/edit")
     public String edit(BoardUpdateForm form, @PathVariable Long boardId) throws IOException, NoSuchAlgorithmException {
         if (!form.getNewAttachmentFiles().isEmpty()) {
-            List<AttachmentFile> storeFiles = fileService.storeFiles(form.getNewAttachmentFiles(), boardId);
+            fileService.storeFiles(form.getNewAttachmentFiles(), boardId);
+//            List<AttachmentFile> storeFiles = fileService.storeFiles(form.getNewAttachmentFiles(), boardId);
         }
         boardService.updateBoard(boardId, form);
 

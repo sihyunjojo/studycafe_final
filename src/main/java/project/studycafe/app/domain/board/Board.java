@@ -18,7 +18,7 @@ import static project.studycafe.app.domain.base.Statistics.createStatistics;
 @Slf4j
 @Entity
 @Setter(AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @NamedEntityGraph(name = "Board.withMember", attributeNodes = {
         @NamedAttributeNode("member")})
 public class Board extends BaseTimeEntity {

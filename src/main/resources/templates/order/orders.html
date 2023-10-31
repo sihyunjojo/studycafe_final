@@ -60,7 +60,6 @@
             <option th:value="음료" th:selected="음료">음료</option>
           </select>
         </div>
-
         <div class="col">
           <input type="date" th:field="*{minCreatedTime}" class="form-control" style="margin-right: 0" placeholder="yyyy-MM-dd" />
         </div>
@@ -85,14 +84,6 @@
             <option th:value="50" th:selected="${perPageNum == 50}">50개씩</option>
           </select>
         </div>
-
-<!--        <div class="col">-->
-<!--          <select class="form-select" id="sort" th:field="*{sort}">-->
-<!--            <option th:value>정렬순</option>-->
-<!--            <option th:value="readCount">주문번호순</option>-->
-<!--            <option th:value="likeCount">주문상태순</option>-->
-<!--          </select>-->
-<!--        </div>-->
 
         <div class="col">
           <button type="submit" class="btn btn-secondary mb-2">검색</button>
@@ -152,7 +143,7 @@
       <tr th:each="order : ${orders}">
         <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.id}">주문번호</a></th>
         <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.member.nickname != null ? order.member.nickname : order.member.name}"> 작성자 </a></th>
-        <th><a href="order.html" th:href="@{|/order/${order.id}|}"th:text="${order.orderItems.isEmpty() ? '' : order.orderItems[0].product.name}"></a></th>
+        <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.orderItems.isEmpty() ? '' : order.orderItems[0].product.name}"></a></th>
         <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.orderItems.isEmpty() ? '' : order.orderItems[0].count}"></a></th>
         <th><a href="order.html" th:href="@{|/order/${order.id}|}" th:text="${order.totalPrice}"></a></th>
         <th th:text="${order.orderStatus}"></th>

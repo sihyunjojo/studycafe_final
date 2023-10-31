@@ -13,11 +13,9 @@ import java.util.List;
 
 @Entity
 @Getter @Setter(AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @NamedEntityGraph(name = "Cart.withMember", attributeNodes = {
         @NamedAttributeNode("member")})
 public class Cart extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +26,10 @@ public class Cart extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CartProduct> cartProductList;
+
+
+    private Cart() {
+    }
 
     public static Cart createCart(Member member) {
         Cart cart = new Cart();

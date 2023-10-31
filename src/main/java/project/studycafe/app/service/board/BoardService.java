@@ -128,20 +128,21 @@ public class BoardService {
 
     public BoardForm boardToBoardForm(Board board) {
         Map<String, Object> boardMap = board.toMap();
-        return new BoardForm(
-                (Long) boardMap.get("id"),
-                (Long) boardMap.get("memberId"),
-                (String) boardMap.get("memberName"),
-                (String) boardMap.get("memberNickname"),
-                (String) boardMap.get("title"),
-                (String) boardMap.get("category"),
-                (String) boardMap.get("content"),
-                (LocalDateTime) boardMap.get("createdTime"),
-                AttachmentFileForm.createAttachmentFileForms((List<AttachmentFile>) boardMap.get("attachmentFiles")),
-                CommentForm.createCommentForms((List<Comment>) boardMap.get("comments")),
-                (Integer) boardMap.get("readCount"),
-                (Integer) boardMap.get("likeCount")
-        );
+        return BoardForm.builder()
+                .id((Long) boardMap.get("id"))
+                .memberId((Long) boardMap.get("memberId"))
+                .memberName((String) boardMap.get("memberName"))
+                .memberNickname((String) boardMap.get("memberNickname"))
+                .title((String) boardMap.get("title"))
+                .category((String) boardMap.get("category"))
+                .content((String) boardMap.get("content"))
+                .createdTime((LocalDateTime) boardMap.get("createdTime"))
+                .attachmentFiles(AttachmentFileForm.createAttachmentFileForms(
+                        (List<AttachmentFile>) boardMap.get("attachmentFiles")))
+                .comments(CommentForm.createCommentForms(
+                        (List<Comment>) boardMap.get("comments")))
+                .likeCount((Integer) boardMap.get("likeCount"))
+                .readCount((Integer) boardMap.get("readCount")).build();
     }
 
     public List<BoardForm> boardsToBoardForms(List<Board> boards) {

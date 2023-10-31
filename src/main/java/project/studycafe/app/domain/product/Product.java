@@ -1,7 +1,7 @@
 package project.studycafe.app.domain.product;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import project.studycafe.app.domain.base.BaseTimeEntity;
@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 @Entity
 @Getter @Setter
-@NoArgsConstructor
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -63,6 +62,16 @@ public class Product extends BaseTimeEntity {
         this.quantity = restStock;
     }
 
+    //private로 하면 타임리프에서 에러가 남.
+    //NoSuchMethod
+    //Caused by: org.hibernate.HibernateException: HHH000143:
+    protected Product() {
+    }
+
+    public static Product createEmptyProduct() {
+        return new Product();
+    }
+    @Builder(builderMethodName = "easyBuilder", buildMethodName = "buildEasyProduct")
     public Product(String name, String category, int price, int quantity) {
         this.name = name;
         this.category = category;

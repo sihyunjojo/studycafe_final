@@ -1,5 +1,6 @@
 package project.studycafe.app.service.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -17,6 +18,7 @@ public class PageMaker {
     private int displayPageNum;
 
 
+    @Builder
     public PageMaker(int totalBoardCount, int currentPage, Integer perPageNum) {
         this.totalBoardCount = totalBoardCount;
         this.currentPage = currentPage;
@@ -42,5 +44,18 @@ public class PageMaker {
         if (startPage < 1) {
             startPage = 1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "PageMaker{" +
+                "totalBoardCount=" + totalBoardCount +
+                ", currentPage=" + currentPage +
+                ", startPage=" + startPage +
+                ", endPage=" + endPage +
+                ", totalPages=" + totalPages +
+                ", perPageNum=" + perPageNum +
+                ", displayPageNum=" + displayPageNum +
+                '}';
     }
 }

@@ -8,8 +8,7 @@ import org.springframework.format.annotation.NumberFormat;
 
 @Data
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class CartProductForm {
 
     private Long id;

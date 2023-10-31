@@ -36,15 +36,15 @@ public class FileService {
     }
 
     // 이미지 여러개 날라올때
-    public List<AttachmentFile> storeFiles(List<MultipartFile> multipartFiles, Long boardId){
-        List<AttachmentFile> storeFileResult = new ArrayList<>();
+    public void storeFiles(List<MultipartFile> multipartFiles, Long boardId){
+//        List<AttachmentFile> storeFileResult = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
                 AttachmentFile uploadFile = storeFile(multipartFile, boardId);
-                storeFileResult.add(uploadFile);
+//                storeFileResult.add(uploadFile);
             }
         }
-        return storeFileResult;
+//        return storeFileResult;
     }
 
     // 이미지 하나 날라올때

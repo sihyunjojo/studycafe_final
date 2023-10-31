@@ -21,20 +21,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @Slf4j
-@SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class) // 테스트를 진행할 때 Junit에 내장된 샐행자 외에 다른 실행자를 실행(여기서는 SpringRunner) -> 부트 테스트와 Junit사이의 연결자 역할
-class MemberControllerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class MemberControllerTest {
+    @LocalServerPort private int port;
 
+    @Autowired private MockMvc mvc; // 웹 api 를 테스트 할때 사용합니다. get,post 등에 대한 테스트 가능.
 
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private MockMvc mvc; // 웹 api 를 테스트 할때 사용합니다. get,post 등에 대한 테스트 가능.
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+    @Autowired private TestRestTemplate restTemplate;
 
     @Test
     public void Join() throws Exception {

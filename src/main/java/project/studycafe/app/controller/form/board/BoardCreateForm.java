@@ -1,5 +1,6 @@
 package project.studycafe.app.controller.form.board;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 public class BoardCreateForm {
     @NotNull
     private Long memberId;
@@ -21,6 +21,13 @@ public class BoardCreateForm {
     private String content;
     private List<MultipartFile> attachmentFiles;
 
+    private BoardCreateForm() {
+    }
+
+    public static BoardCreateForm createEmptyBoardCreateForm(){
+        return new BoardCreateForm();
+    }
+    @Builder(builderMethodName = "easyBuilder", buildMethodName = "buildEasyBoardCreateForm")
     public BoardCreateForm(Long memberId, String title, String category, String content) {
         this.memberId = memberId;
         this.title = title;
