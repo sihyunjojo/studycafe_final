@@ -15,7 +15,10 @@ studycafe_renewal -> studycafe_final
 - Spring Boot Security
 - Spring Data JPA
 - Spring AOP
-- 
+- Interceptor, Filter
+- @ExceptionHandler, @ControllerAdvice
+- OAUTH 2.0
+  
 ### Build tool
 - Gradle 8
 ### Database
